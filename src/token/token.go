@@ -68,6 +68,7 @@ const (
 	CONTINUE = "CONTINUE"
 	NULL     = "NULL"
 	IMPORT   = "IMPORT"
+	FROM     = "FROM"
 )
 
 type Position struct {
@@ -99,6 +100,7 @@ var keywords = map[string]TokenType{
 	"pitirizani": CONTINUE,
 	"palibe":     NULL,
 	"tenga":      IMPORT,
+	"kuchokera":  FROM,
 }
 
 var variableTypes = map[TokenType]TokenType{

@@ -1460,13 +1460,48 @@ func TestClassPropertyAccess(t *testing.T) {
 }
 
 func TestImport(t *testing.T) {
-	input := `tenga "fmt";`
-	l := lexer.New([]byte(input))
-	p := New(l)
-	program := p.ParseProgram()
-	checkParserErrors(t, p)
-	stmt := program.Statements[0].(*ast.ImportExpression)
-	if stmt.Path.Value != "fmt" {
-		t.Fatalf("stmt.Path is not 'fmt'. got=%q", stmt.Path)
+	tests := []struct {
+		input      string
+		module     string
+		importType ast.ImportType
+		Exports    map[string]string
+	}{
+		{`tenga fmt kuchokera "fmt";`, "fmt", ast.DefaultImport, nil},
+		{`tenga { export1, export2 } kuchokera "fmt";`, "fmt", ast.NamedImport, map[string]string{"export1": "export1", "export2": "export2"}},
+	}
+	for _, tt := range tests {
+		l := lexer.New([]byte(tt.input))
+		p := New(l)
+		program := p.ParseProgram()
+		checkParserErrors(t, p)
+		expression, ok := program.Statements[0].(*ast.ExpressionStatement)
+		if !ok {
+			t.Fatalf("expression is not ast.ExpressionStatement. got=%T", program.Statements[0])
+		}
+		stmt, ok := expression.Expression.(*ast.ImportExpression)
+		if !ok {
+			t.Fatalf("stmt is not ast.ImportExpression. got=%T", expression.Expression)
+		}
+		if stmt.Module.Value != tt.module {
+			t.Fatalf("stmt.Module is not '%s'. got=%q", tt.module, stmt.Module)
+		}
+		if stmt.Type != tt.importType {
+			t.Fatalf("stmt.Type is not '%s'. got=%s", tt.importType, stmt.Type)
+		}
+
+		if stmt.Type == ast.NamedImport {
+			if len(stmt.Exports) != len(tt.Exports) {
+				t.Fatalf("stmt.Exports has wrong length. got=%d", len(stmt.Exports))
+			}
+			for key, value := range stmt.Exports {
+				if tt.Exports[key] != value.Value {
+					t.Errorf("stmt.Exports[%s] is not %s. got=%s", key, tt.Exports[key], value.Value)
+				}
+			}
+		} else {
+			if stmt.Exports == nil && len(stmt.Exports) == 0 {
+				t.Fatalf("stmt.Exports is not nil. got=%v", stmt.Exports)
+			}
+		}
 	}
 }
