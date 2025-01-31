@@ -39,12 +39,12 @@ func (c *Duwa) Run(data string) object.Object {
 func (c *Duwa) run(data []byte) object.Object {
 	l := lexer.New(data)
 	p := parser.New(l)
-	program := p.ParseProgram()
+	file := p.ParseFile()
 	if len(p.Errors()) != 0 {
 		utils.PrintParserErrors(c.Environment.Logger, p.Errors())
 		return nil
 	}
-	return evaluator.Eval(program, c.Environment)
+	return evaluator.Eval(file, c.Environment)
 }
 
 func (c *Duwa) registerEvaluator() {

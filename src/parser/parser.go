@@ -144,20 +144,25 @@ func (p *Parser) nextToken() {
 	p.peekToken = p.l.NextToken()
 }
 
-func (p *Parser) ParseProgram() *ast.Program {
-	program := &ast.Program{}
-	program.Statements = []ast.Statement{}
+func (p *Parser) ParseFile() *ast.File {
+	file := &ast.File{}
+	file.Statements = []ast.Statement{}
+	file.Imports = []ast.ImportExpression{}
 
 	for p.curToken.Type != token.EOF {
 		stmt := p.parseStatement()
 		if stmt != nil {
-			program.Statements = append(program.Statements, stmt)
+			file.Statements = append(file.Statements, stmt)
+			importStmt, ok := stmt.(*ast.ImportExpression)
+			if ok {
+				file.Imports = append(file.Imports, *importStmt)
+			}
 		}
 		p.nextToken()
 
 	}
 
-	return program
+	return file
 }
 
 func (p *Parser) curTokenIs(t token.TokenType) bool {

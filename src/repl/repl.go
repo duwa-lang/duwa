@@ -30,12 +30,12 @@ func Start(in io.Reader, out io.Writer) {
 		line := scanner.Text()
 		l := lexer.New([]byte(line))
 		p := parser.New(l)
-		program := p.ParseProgram()
+		file := p.ParseFile()
 		if len(p.Errors()) != 0 {
 			utils.PrintParserErrors(log, p.Errors())
 			continue
 		}
-		evaluated := evaluator.Eval(program, env)
+		evaluated := evaluator.Eval(file, env)
 		if evaluated != nil {
 			io.WriteString(out, evaluated.String())
 			io.WriteString(out, "\n")

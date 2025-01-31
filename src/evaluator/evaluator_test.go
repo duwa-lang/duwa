@@ -13,13 +13,13 @@ import (
 func testEval(input string) object.Object {
 	l := lexer.New([]byte(input))
 	p := parser.New(l)
-	program := p.ParseProgram()
+	file := p.ParseFile()
 	env := object.Default()
 
 	evaluatorInstance := Eval
 	object.RegisterEvaluator(evaluatorInstance)
 
-	return Eval(program, env)
+	return Eval(file, env)
 }
 
 func testIntegerObject(t *testing.T, obj object.Object, expected decimal.Decimal) bool {

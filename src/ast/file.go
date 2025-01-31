@@ -2,11 +2,12 @@ package ast
 
 import "bytes"
 
-type Program struct {
+type File struct {
 	Statements []Statement
+	Imports    []ImportExpression
 }
 
-func (p *Program) TokenLiteral() string {
+func (p *File) TokenLiteral() string {
 	if len(p.Statements) > 0 {
 		return p.Statements[0].TokenLiteral()
 	} else {
@@ -14,7 +15,7 @@ func (p *Program) TokenLiteral() string {
 	}
 }
 
-func (p *Program) String() string {
+func (p *File) String() string {
 	var out bytes.Buffer
 	for _, s := range p.Statements {
 		out.WriteString(s.String())

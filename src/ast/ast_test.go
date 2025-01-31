@@ -7,7 +7,7 @@ import (
 )
 
 func TestString(t *testing.T) {
-	program := &Program{
+	file := &File{
 		Statements: []Statement{
 			&VariableDeclarationStatement{
 				Type: token.Token{Type: token.INTEGER, Literal: "nambala"},
@@ -22,7 +22,7 @@ func TestString(t *testing.T) {
 			},
 		},
 	}
-	if program.String() != "nambala myVar = anotherVar;" {
-		t.Errorf("program.String() wrong. got=%q", program.String())
+	if file.String() != "nambala myVar = anotherVar;" {
+		t.Errorf("file.String() wrong. got=%q", file.String())
 	}
 }

@@ -5,9 +5,9 @@ import (
 	"github.com/sevenreup/duwa/src/object"
 )
 
-func evalProgram(program *ast.Program, env *object.Environment) object.Object {
+func evalFile(file *ast.File, env *object.Environment) object.Object {
 	var result object.Object
-	for _, statement := range program.Statements {
+	for _, statement := range file.Statements {
 		result = Eval(statement, env)
 		switch result := result.(type) {
 		case *object.ReturnValue:
