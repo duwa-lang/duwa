@@ -8,16 +8,20 @@ import (
 )
 
 func NewEnclosedEnvironment(outer *Environment) *Environment {
-	env := Default()
+	env := NewDefaultEnvironment()
 	env.outer = outer
 	return env
 }
 
-func Default() *Environment {
+func NewDefaultEnvironment() *Environment {
 	logger := slog.Default()
-	s := make(map[string]Object)
+	store := make(map[string]Object)
 	console := native.NewConsole()
-	return &Environment{store: s, outer: nil, Logger: logger, Console: console}
+	return &Environment{store: store, outer: nil, Logger: logger, Console: console}
+}
+
+func CopyEnvironmentDefaults(outer *Environment) *Environment {
+	return &Environment{store: make(map[string]Object), outer: nil, Logger: outer.Logger, Console: outer.Console}
 }
 
 func New(logger *slog.Logger, console runtime.Console) *Environment {
@@ -26,8 +30,10 @@ func New(logger *slog.Logger, console runtime.Console) *Environment {
 }
 
 type Environment struct {
-	store   map[string]Object
-	outer   *Environment
+	store     map[string]Object
+	outer     *Environment
+	directory string
+
 	Logger  *slog.Logger
 	Console runtime.Console
 }
@@ -39,6 +45,7 @@ func (e *Environment) Get(name string) (Object, bool) {
 	}
 	return obj, ok
 }
+
 func (e *Environment) Set(name string, val Object) Object {
 	// TODO: Make sure we dont accidentally mutate data that is not in the current scope
 	_, ok := e.store[name]
@@ -56,6 +63,10 @@ func (e *Environment) Has(name string) bool {
 		return e.outer.Has(name)
 	}
 	return ok
+}
+
+func (environment *Environment) All() map[string]Object {
+	return environment.store
 }
 
 func (e *Environment) Delete(name string) {

@@ -9,8 +9,8 @@ const (
 	NamedImport   = "named"
 )
 
-type ImportExpression struct {
-	Expression
+type ImportStatement struct {
+	Statement
 	Token token.Token
 
 	Type ImportType

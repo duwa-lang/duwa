@@ -19,7 +19,7 @@ const PROMPT = ">> "
 func Start(in io.Reader, out io.Writer) {
 	object.RegisterEvaluator(evaluator.Eval)
 	scanner := bufio.NewScanner(in)
-	env := object.Default()
+	env := object.NewDefaultEnvironment()
 	log := slog.Default()
 	for {
 		fmt.Print(PROMPT)

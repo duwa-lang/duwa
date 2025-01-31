@@ -14,7 +14,7 @@ func testEval(input string) object.Object {
 	l := lexer.New([]byte(input))
 	p := parser.New(l)
 	file := p.ParseFile()
-	env := object.Default()
+	env := object.NewDefaultEnvironment()
 
 	evaluatorInstance := Eval
 	object.RegisterEvaluator(evaluatorInstance)

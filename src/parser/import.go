@@ -8,7 +8,7 @@ import (
 )
 
 func (p *Parser) importStatement() ast.Expression {
-	statement := &ast.ImportExpression{Token: p.curToken, Exports: make(map[string]ast.Identifier)}
+	statement := &ast.ImportStatement{Token: p.curToken, Exports: make(map[string]ast.Identifier)}
 
 	p.nextToken()
 

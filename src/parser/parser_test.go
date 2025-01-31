@@ -1479,7 +1479,7 @@ func TestImport(t *testing.T) {
 		if !ok {
 			t.Fatalf("expression is not ast.ExpressionStatement. got=%T", file.Statements[0])
 		}
-		stmt, ok := expression.Expression.(*ast.ImportExpression)
+		stmt, ok := expression.Expression.(*ast.ImportStatement)
 		if !ok {
 			t.Fatalf("stmt is not ast.ImportExpression. got=%T", expression.Expression)
 		}

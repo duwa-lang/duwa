@@ -4,7 +4,7 @@ import "bytes"
 
 type File struct {
 	Statements []Statement
-	Imports    []ImportExpression
+	Imports    []ImportStatement
 }
 
 func (p *File) TokenLiteral() string {
