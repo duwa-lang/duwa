@@ -735,12 +735,19 @@ func TestClasses(t *testing.T) {
 
 func TestImport(t *testing.T) {
 	tests := []struct {
-		input string
+		input    string
+		expected interface{}
 	}{
-		{`tenga fmt kuchokera "fmt";`},
-		{`tenga { export1, export2 } kuchokera "fmt";`},
+		{`tenga masamu kuchokera "masamu";
+		masamu.yochepa(5, 10);`, 5},
 	}
 	for _, tt := range tests {
-		testEval(tt.input)
+		evaluated := testEval(tt.input)
+		integer, ok := tt.expected.(int)
+		if ok {
+			testIntegerObject(t, evaluated, decimal.NewFromInt(int64(integer)))
+		} else {
+			testNullObject(t, evaluated)
+		}
 	}
 }

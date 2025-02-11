@@ -20,11 +20,11 @@ func (i *Instance) Method(method string, args []Object) (Object, bool) {
 func (i *Instance) Call(method string, args []Object) Object {
 	function, ok := i.Env.Get(method)
 	if !ok {
-		return NewError("undefined method %s for %s", method, i.Class.Name.String())
+		return NewError("undefined instance method call %s for %s", method, i.Class.Name.String())
 	}
 	methodFunction, ok := function.(*Function)
 	if !ok {
-		return NewError("undefined method %s for %s", method, i.Class.Name.String())
+		return NewError("Could not call instance method %s for %s", method, i.Class.Name.String())
 	}
 
 	methodEnv := createNewMethodInstanceEnvironment(methodFunction, args)
