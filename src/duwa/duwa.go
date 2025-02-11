@@ -3,6 +3,7 @@ package duwa
 import (
 	"log"
 	"os"
+	"path/filepath"
 
 	"github.com/sevenreup/duwa/src/evaluator"
 	"github.com/sevenreup/duwa/src/object"
@@ -29,6 +30,7 @@ func (c *Duwa) RunFile(filePath string) object.Object {
 	if err != nil {
 		log.Fatal(err)
 	}
+	c.Environment.SetDirectory(filepath.Dir(filePath))
 	return c.run(file)
 }
 

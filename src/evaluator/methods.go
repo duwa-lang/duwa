@@ -75,7 +75,9 @@ func evaluatePackageMethod(node *ast.MethodExpression, receiver *object.Package,
 		return newError("%d:%d:%s: runtime error: %s", node.Token.Pos.Line, node.Token.Pos.Column, node.Token.File, err.Error())
 	}
 
-	return Eval(function.Body, extendFunctionEnv(function, arguments))
+	evaluated := Eval(function.Body, extendFunctionEnv(function, arguments))
+
+	return unwrapReturn(evaluated)
 }
 
 func unwrapReturn(obj object.Object) object.Object {

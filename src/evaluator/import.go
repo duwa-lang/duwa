@@ -2,6 +2,7 @@ package evaluator
 
 import (
 	"os"
+	"path/filepath"
 
 	"github.com/sevenreup/duwa/src/ast"
 	"github.com/sevenreup/duwa/src/lexer"
@@ -19,7 +20,7 @@ func isImported(path string) bool {
 }
 
 func evaluateImportStatement(node *ast.ImportStatement, env *object.Environment) object.Object {
-	path, err := resolveFilePath(node)
+	path, err := resolveFilePath(node, env)
 	if err != nil {
 		return object.NewError("%s", err.Error())
 	}
@@ -76,14 +77,29 @@ func evaluateFile(filePath string, node *ast.ImportStatement, env *object.Enviro
 	return nil
 }
 
-func resolveFilePath(node *ast.ImportStatement) (string, error) {
-	if isStdImport(node.Module.Value) {
-		return std.GetFilePath(node.Module.Value)
+func resolveFilePath(node *ast.ImportStatement, env *object.Environment) (string, error) {
+	path := node.Module.Value
+	if isStdImport(path) {
+		return std.GetFilePath(path)
 	}
-	return "", nil
+	if filepath.Ext(path) != ".duwa" {
+		path += ".duwa"
+	}
+	if filepath.IsAbs(path) {
+		return path, nil
+	}
+
+	filename, err := filepath.Abs(filepath.Join(env.GetDirectory(), path))
+	if err != nil {
+		return "", err
+	}
+	return filename, nil
 }
 
 func isStdImport(path string) bool {
+	if filepath.Ext(path) == ".duwa" {
+		path = path[:len(path)-len(".duwa")]
+	}
 	for _, stdPath := range std.BuiltinFiles {
 		if path == stdPath {
 			return true

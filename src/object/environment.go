@@ -65,18 +65,32 @@ func (e *Environment) Has(name string) bool {
 	return ok
 }
 
-func (environment *Environment) All() map[string]Object {
-	return environment.store
+func (e *Environment) All() map[string]Object {
+	return e.store
 }
 
 func (e *Environment) Delete(name string) {
 	delete(e.store, name)
 }
 
-func (environment *Environment) Call(function string, args []Object) Object {
-	if object, ok := environment.Get(function); ok {
+func (e *Environment) SetDirectory(directory string) {
+	e.directory = directory
+}
+
+func (e *Environment) GetDirectory() string {
+	directory := e.directory
+
+	if directory == "" && e.outer != nil {
+		directory = e.outer.GetDirectory()
+	}
+
+	return directory
+}
+
+func (e *Environment) Call(function string, args []Object) Object {
+	if object, ok := e.Get(function); ok {
 		if function, ok := object.(*Function); ok {
-			return function.Evaluate(environment, args)
+			return function.Evaluate(e, args)
 		}
 	}
 

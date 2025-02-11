@@ -1,0 +1,8 @@
+tenga masamu kuchokera "./imports/masamu";
+
+nambala a = masamu.phatikiza(1, 2); // 3
+lembanzr(a);
+nambala b = masamu.chotsera(1, 2); // -1
+lembanzr(b);
+
+masamu.phatikiza(a, b); // 2
