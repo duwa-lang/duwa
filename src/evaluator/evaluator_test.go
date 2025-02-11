@@ -1,11 +1,13 @@
 package evaluator
 
 import (
+	"path/filepath"
 	"testing"
 
 	"github.com/sevenreup/duwa/src/lexer"
 	"github.com/sevenreup/duwa/src/object"
 	"github.com/sevenreup/duwa/src/parser"
+	"github.com/sevenreup/duwa/src/utils/environment"
 	"github.com/sevenreup/duwa/src/values"
 	"github.com/shopspring/decimal"
 )
@@ -17,6 +19,8 @@ func testEval(input string) object.Object {
 	env := object.NewDefaultEnvironment()
 
 	evaluatorInstance := Eval
+	filename, _ := filepath.Abs("../../")
+	environment.SetCompilationSettings(filename)
 	object.RegisterEvaluator(evaluatorInstance)
 
 	return Eval(file, env)
@@ -726,5 +730,17 @@ func TestClasses(t *testing.T) {
 		} else {
 			testNullObject(t, evaluated)
 		}
+	}
+}
+
+func TestImport(t *testing.T) {
+	tests := []struct {
+		input string
+	}{
+		{`tenga fmt kuchokera "fmt";`},
+		{`tenga { export1, export2 } kuchokera "fmt";`},
+	}
+	for _, tt := range tests {
+		testEval(tt.input)
 	}
 }

@@ -5,6 +5,7 @@ import (
 
 	"github.com/sevenreup/duwa/src/ast"
 	"github.com/sevenreup/duwa/src/lexer"
+	"github.com/sevenreup/duwa/src/library/std"
 	"github.com/sevenreup/duwa/src/object"
 	"github.com/sevenreup/duwa/src/parser"
 )
@@ -12,12 +13,9 @@ import (
 var searchPaths []string
 var imported map[string]*object.Environment
 
-func resolveFilePath(node *ast.ImportStatement) (string, error) {
-	return "", nil
-}
-
 func isImported(path string) bool {
-	return false
+	_, ok := imported[path]
+	return ok
 }
 
 func evaluateImportStatement(node *ast.ImportStatement, env *object.Environment) object.Object {
@@ -76,4 +74,20 @@ func evaluateFile(filePath string, node *ast.ImportStatement, env *object.Enviro
 	}
 
 	return nil
+}
+
+func resolveFilePath(node *ast.ImportStatement) (string, error) {
+	if isStdImport(node.Module.Value) {
+		return std.GetFilePath(node.Module.Value)
+	}
+	return "", nil
+}
+
+func isStdImport(path string) bool {
+	for _, stdPath := range std.BuiltinFiles {
+		if path == stdPath {
+			return true
+		}
+	}
+	return false
 }
