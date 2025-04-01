@@ -3,6 +3,7 @@ package duwa
 import (
 	"log"
 	"os"
+	"path/filepath"
 
 	"github.com/sevenreup/duwa/src/evaluator"
 	"github.com/sevenreup/duwa/src/object"
@@ -29,6 +30,7 @@ func (c *Duwa) RunFile(filePath string) object.Object {
 	if err != nil {
 		log.Fatal(err)
 	}
+	c.Environment.SetDirectory(filepath.Dir(filePath))
 	return c.run(file)
 }
 
@@ -37,14 +39,14 @@ func (c *Duwa) Run(data string) object.Object {
 }
 
 func (c *Duwa) run(data []byte) object.Object {
-	l := lexer.New(data)
-	p := parser.New(l)
-	program := p.ParseProgram()
-	if len(p.Errors()) != 0 {
-		utils.PrintParserErrors(c.Environment.Logger, p.Errors())
+	lexer := lexer.New(data)
+	parser := parser.New(lexer)
+	file := parser.ParseFile()
+	if len(parser.Errors()) != 0 {
+		utils.PrintParserErrors(c.Environment.Logger, parser.Errors())
 		return nil
 	}
-	return evaluator.Eval(program, c.Environment)
+	return evaluator.Eval(file, c.Environment)
 }
 
 func (c *Duwa) registerEvaluator() {

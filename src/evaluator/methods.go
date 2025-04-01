@@ -33,7 +33,7 @@ func evaluateMethod(node *ast.MethodExpression, env *object.Environment) object.
 			return applyFunction(node.Token, function, arguments, env)
 		}
 
-		return newError("%d:%d:%s: runtime error: undefined method %s for Library %s", node.Token.Pos.Line, node.Token.Pos.Column, node.Token.File, method.Value, receiver.Name)
+		return newError("%d:%d:%s: runtime error: undefined library %s for Library %s", node.Token.Pos.Line, node.Token.Pos.Column, node.Token.File, method.Value, receiver.Name)
 	case *object.Instance:
 		method := node.Method.(*ast.Identifier)
 		evaluated := evaluateInstanceMethod(node, receiver, method.Value, arguments)
@@ -43,6 +43,8 @@ func evaluateMethod(node *ast.MethodExpression, env *object.Environment) object.
 		}
 
 		return unwrapReturn(evaluated)
+	case *object.Package:
+		return evaluatePackageMethod(node, receiver, node.Method.(*ast.Identifier).Value, arguments)
 	default:
 		if !found {
 			return newError("%d:%d:%s: runtime error: undefined method %s for %s", node.Token.Pos.Line, node.Token.Pos.Column, node.Token.File, node.Method.(*ast.Identifier).Value, node.Left.String())
@@ -56,7 +58,7 @@ func evaluateInstanceMethod(node *ast.MethodExpression, receiverInstance *object
 	method, ok := receiverInstance.Class.Env.Get(name)
 
 	if !ok {
-		return newError("%d:%d:%s: runtime error: undefined method %s for class %s", node.Token.Pos.Line, node.Token.Pos.Column, node.Token.File, name, receiverInstance.Class.Name.Value)
+		return newError("%d:%d:%s: runtime error: undefined instance method %s for class %s", node.Token.Pos.Line, node.Token.Pos.Column, node.Token.File, name, receiverInstance.Class.Name.Value)
 	}
 
 	if method, ok := method.(*object.Function); ok {
@@ -65,6 +67,17 @@ func evaluateInstanceMethod(node *ast.MethodExpression, receiverInstance *object
 	} else {
 		return newError("not a method: %s", name)
 	}
+}
+
+func evaluatePackageMethod(node *ast.MethodExpression, receiver *object.Package, name string, arguments []object.Object) object.Object {
+	function, err := receiver.GetPackageFunction(name)
+	if err != nil {
+		return newError("%d:%d:%s: runtime error: %s", node.Token.Pos.Line, node.Token.Pos.Column, node.Token.File, err.Error())
+	}
+
+	evaluated := Eval(function.Body, extendFunctionEnv(function, arguments))
+
+	return unwrapReturn(evaluated)
 }
 
 func unwrapReturn(obj object.Object) object.Object {

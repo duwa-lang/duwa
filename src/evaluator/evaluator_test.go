@@ -1,11 +1,14 @@
 package evaluator
 
 import (
+	"path/filepath"
 	"testing"
 
 	"github.com/sevenreup/duwa/src/lexer"
 	"github.com/sevenreup/duwa/src/object"
 	"github.com/sevenreup/duwa/src/parser"
+	"github.com/sevenreup/duwa/src/utils"
+	"github.com/sevenreup/duwa/src/utils/environment"
 	"github.com/sevenreup/duwa/src/values"
 	"github.com/shopspring/decimal"
 )
@@ -13,114 +16,15 @@ import (
 func testEval(input string) object.Object {
 	l := lexer.New([]byte(input))
 	p := parser.New(l)
-	program := p.ParseProgram()
-	env := object.Default()
+	file := p.ParseFile()
+	env := object.NewDefaultEnvironment()
 
 	evaluatorInstance := Eval
+	filename, _ := filepath.Abs("../../")
+	environment.SetCompilationSettings(filename)
 	object.RegisterEvaluator(evaluatorInstance)
 
-	return Eval(program, env)
-}
-
-func testIntegerObject(t *testing.T, obj object.Object, expected decimal.Decimal) bool {
-	result, ok := obj.(*object.Integer)
-	if !ok {
-		t.Errorf("object is not Integer. got=%T (%+v)", obj, obj)
-		return false
-	}
-	if !result.Value.Equal(expected) {
-		t.Errorf("object has wrong value. got=%d, want=%d",
-			result.Value, expected)
-		return false
-	}
-	return true
-}
-
-func testStringObject(t *testing.T, obj object.Object, expected string) bool {
-	result, ok := obj.(*object.String)
-	if !ok {
-		t.Errorf("object is not String. got=%T (%+v)", obj, obj)
-		return false
-	}
-	if result.Value != expected {
-		t.Errorf("object has wrong value. got=%s, want=%s",
-			result.Value, expected)
-		return false
-	}
-	return true
-}
-
-func testBooleanObject(t *testing.T, obj object.Object, expected bool) bool {
-	result, ok := obj.(*object.Boolean)
-	if !ok {
-		t.Errorf("object is not Boolean. got=%T (%+v)", obj, obj)
-		return false
-	}
-	if result.Value != expected {
-		t.Errorf("object has wrong value. got=%t, want=%t",
-			result.Value, expected)
-		return false
-	}
-	return true
-}
-
-func testLiteralExpression(
-	t *testing.T,
-	obj object.Object,
-	expected interface{},
-) bool {
-	switch v := expected.(type) {
-	case int:
-		return testIntegerObject(t, obj, decimal.NewFromInt(int64(v)))
-	case int64:
-		return testIntegerObject(t, obj, decimal.NewFromInt(v))
-	case bool:
-		return testBooleanObject(t, obj, v)
-	case string:
-		return testStringObject(t, obj, v)
-	}
-	t.Errorf("type of exp not handled. got=%T", expected)
-	return false
-}
-
-func testNullObject(t *testing.T, obj object.Object) bool {
-	if obj != values.NULL {
-		t.Errorf("object is not NULL. got=%T (%+v)", obj, obj)
-		return false
-	}
-	return true
-}
-
-func isErrorObject(t *testing.T, obj object.Object, expected string) bool {
-	err, ok := obj.(*object.Error)
-
-	if !ok {
-		t.Errorf("object is not Error. got=%T (%+v", obj, obj)
-		return false
-	}
-
-	if err.Message != expected {
-		t.Errorf("error has wrong message. got=%s, expected=%s", err.Message, expected)
-		return false
-	}
-
-	return true
-}
-
-func isNumberObject(t *testing.T, obj object.Object, expected int64) bool {
-	number, ok := obj.(*object.Integer)
-
-	if !ok {
-		t.Errorf("object is not Number. got=%T (%+v", obj, obj)
-		return false
-	}
-
-	if number.Value.IntPart() != expected {
-		t.Errorf("object has wrong value. got=%d, expected=%d", number.Value.IntPart(), expected)
-		return false
-	}
-
-	return true
+	return Eval(file, env)
 }
 
 func TestEvalIntegerExpression(t *testing.T) {
@@ -155,7 +59,7 @@ func TestEvalIntegerExpression(t *testing.T) {
 	}
 	for _, tt := range tests {
 		evaluated := testEval(tt.input)
-		testIntegerObject(t, evaluated, decimal.NewFromInt(tt.expected))
+		utils.TestIntegerObject(t, evaluated, decimal.NewFromInt(tt.expected))
 	}
 }
 
@@ -197,7 +101,7 @@ func TestEvalBooleanExpression(t *testing.T) {
 	}
 	for _, tt := range tests {
 		evaluated := testEval(tt.input)
-		testBooleanObject(t, evaluated, tt.expected)
+		utils.TestBooleanObject(t, evaluated, tt.expected)
 	}
 }
 
@@ -214,7 +118,7 @@ func TestBangOperator(t *testing.T) {
 		{"!!5", true}}
 	for _, tt := range tests {
 		evaluated := testEval(tt.input)
-		testBooleanObject(t, evaluated, tt.expected)
+		utils.TestBooleanObject(t, evaluated, tt.expected)
 	}
 }
 
@@ -235,9 +139,9 @@ func TestIfElseExpressions(t *testing.T) {
 		evaluated := testEval(tt.input)
 		integer, ok := tt.expected.(int)
 		if ok {
-			testIntegerObject(t, evaluated, decimal.NewFromInt(int64(integer)))
+			utils.TestIntegerObject(t, evaluated, decimal.NewFromInt(int64(integer)))
 		} else {
-			testNullObject(t, evaluated)
+			utils.TestNullObject(t, evaluated)
 		}
 	}
 }
@@ -268,7 +172,7 @@ func TestReturnStatements(t *testing.T) {
 	}
 	for _, tt := range tests {
 		evaluated := testEval(tt.input)
-		testIntegerObject(t, evaluated, decimal.NewFromInt(tt.expected))
+		utils.TestIntegerObject(t, evaluated, decimal.NewFromInt(tt.expected))
 	}
 }
 
@@ -353,7 +257,7 @@ func TestAssignmentStatements(t *testing.T) {
 		{`mawu a = "5"; mawu b = a; mawu c = a + b + "5"; c;`, "555"},
 	}
 	for _, tt := range tests {
-		testLiteralExpression(t, testEval(tt.input), tt.expected)
+		utils.TestLiteralExpression(t, testEval(tt.input), tt.expected)
 	}
 }
 
@@ -390,7 +294,7 @@ func TestFunctionApplication(t *testing.T) {
 		{"ndondomeko zina(x) { x; }(5)", 5},
 	}
 	for _, tt := range tests {
-		testIntegerObject(t, testEval(tt.input), decimal.NewFromInt(tt.expected))
+		utils.TestIntegerObject(t, testEval(tt.input), decimal.NewFromInt(tt.expected))
 	}
 }
 
@@ -413,7 +317,7 @@ func TestWhileExpressions(t *testing.T) {
 		number, ok := tt.expected.(int)
 
 		if ok {
-			isNumberObject(t, result, int64(number))
+			utils.IsNumberObject(t, result, int64(number))
 		} else {
 			if result != nil {
 				t.Errorf("object is not NULL. got=%T (nil)", number)
@@ -437,9 +341,9 @@ func TestForExpressions(t *testing.T) {
 		number, ok := tt.expected.(int64)
 
 		if ok {
-			isNumberObject(t, result, number)
+			utils.IsNumberObject(t, result, number)
 		} else {
-			isErrorObject(t, result, tt.expected.(string))
+			utils.IsErrorObject(t, result, tt.expected.(string))
 		}
 	}
 }
@@ -451,7 +355,7 @@ func TestClosures(t *testing.T) {
  	};
  	nambala addTwo = newAdder(2);
  	addTwo(2);`
-	testIntegerObject(t, testEval(input), decimal.NewFromInt(4))
+	utils.TestIntegerObject(t, testEval(input), decimal.NewFromInt(4))
 }
 
 func TestStrings(t *testing.T) {
@@ -500,9 +404,9 @@ func TestArrayLiterals(t *testing.T) {
 		t.Fatalf("array has wrong num of elements. got=%d",
 			len(result.Elements))
 	}
-	testIntegerObject(t, result.Elements[0], decimal.NewFromInt(1))
-	testIntegerObject(t, result.Elements[1], decimal.NewFromInt(4))
-	testIntegerObject(t, result.Elements[2], decimal.NewFromInt(6))
+	utils.TestIntegerObject(t, result.Elements[0], decimal.NewFromInt(1))
+	utils.TestIntegerObject(t, result.Elements[1], decimal.NewFromInt(4))
+	utils.TestIntegerObject(t, result.Elements[2], decimal.NewFromInt(6))
 }
 
 func TestArrayIndexExpressions(t *testing.T) {
@@ -563,9 +467,9 @@ func TestArrayIndexExpressions(t *testing.T) {
 		evaluated := testEval(tt.input)
 		integer, ok := tt.expected.(int)
 		if ok {
-			testIntegerObject(t, evaluated, decimal.NewFromInt(int64(integer)))
+			utils.TestIntegerObject(t, evaluated, decimal.NewFromInt(int64(integer)))
 		} else {
-			testNullObject(t, evaluated)
+			utils.TestNullObject(t, evaluated)
 		}
 	}
 }
@@ -598,9 +502,9 @@ func TestMethodCalls(t *testing.T) {
 		evaluated := testEval(tt.input)
 		integer, ok := tt.expected.(int)
 		if ok {
-			testIntegerObject(t, evaluated, decimal.NewFromInt(int64(integer)))
+			utils.TestIntegerObject(t, evaluated, decimal.NewFromInt(int64(integer)))
 		} else {
-			testNullObject(t, evaluated)
+			utils.TestNullObject(t, evaluated)
 		}
 	}
 }
@@ -636,7 +540,7 @@ func TestHashLiterals(t *testing.T) {
 		if !ok {
 			t.Errorf("no pair for given key in Pairs")
 		}
-		testLiteralExpression(t, pair.Value, expectedValue)
+		utils.TestLiteralExpression(t, pair.Value, expectedValue)
 	}
 }
 
@@ -678,9 +582,9 @@ func TestHashIndexExpressions(t *testing.T) {
 		evaluated := testEval(tt.input)
 		integer, ok := tt.expected.(int)
 		if ok {
-			testLiteralExpression(t, evaluated, int64(integer))
+			utils.TestLiteralExpression(t, evaluated, int64(integer))
 		} else {
-			testNullObject(t, evaluated)
+			utils.TestNullObject(t, evaluated)
 		}
 	}
 }
@@ -722,9 +626,28 @@ func TestClasses(t *testing.T) {
 		evaluated := testEval(tt.input)
 		integer, ok := tt.expected.(int)
 		if ok {
-			testIntegerObject(t, evaluated, decimal.NewFromInt(int64(integer)))
+			utils.TestIntegerObject(t, evaluated, decimal.NewFromInt(int64(integer)))
 		} else {
-			testNullObject(t, evaluated)
+			utils.TestNullObject(t, evaluated)
+		}
+	}
+}
+
+func TestImport(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected interface{}
+	}{
+		{`tenga masamu kuchokera "masamu";
+		masamu.yochepa(5, 10);`, 5},
+	}
+	for _, tt := range tests {
+		evaluated := testEval(tt.input)
+		integer, ok := tt.expected.(int)
+		if ok {
+			utils.TestIntegerObject(t, evaluated, decimal.NewFromInt(int64(integer)))
+		} else {
+			utils.TestNullObject(t, evaluated)
 		}
 	}
 }

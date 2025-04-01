@@ -67,10 +67,12 @@ type Parser struct {
 	prefixParseFns   map[token.TokenType]prefixParseFn
 	infixParseFns    map[token.TokenType]infixParseFn
 	postfixParserFns map[token.TokenType]postfixParserFn
+
+	imports []*ast.ImportStatement
 }
 
 func New(l *lexer.Lexer) *Parser {
-	p := &Parser{l: l, errors: []string{}}
+	p := &Parser{l: l, errors: []string{}, imports: []*ast.ImportStatement{}}
 
 	p.prefixParseFns = make(map[token.TokenType]prefixParseFn)
 	p.registerPrefix(token.INT, p.parseIntegerLiteral)
@@ -89,6 +91,7 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.CLASS, p.classStatement)
 	p.registerPrefix(token.BREAK, p.breakStatement)
 	p.registerPrefix(token.CONTINUE, p.continueStatement)
+	p.registerPrefix(token.IMPORT, p.importStatement)
 
 	p.registerPrefix(token.OPENING_BRACE, p.mapLiteral)
 	p.registerPrefix(token.OPENING_PAREN, p.parseGroupedExpression)
@@ -141,20 +144,25 @@ func (p *Parser) nextToken() {
 	p.peekToken = p.l.NextToken()
 }
 
-func (p *Parser) ParseProgram() *ast.Program {
-	program := &ast.Program{}
-	program.Statements = []ast.Statement{}
+func (p *Parser) ParseFile() *ast.File {
+	file := &ast.File{}
+	file.Statements = []ast.Statement{}
+	file.Imports = []ast.ImportStatement{}
 
 	for p.curToken.Type != token.EOF {
 		stmt := p.parseStatement()
 		if stmt != nil {
-			program.Statements = append(program.Statements, stmt)
+			file.Statements = append(file.Statements, stmt)
+			importStmt, ok := stmt.(*ast.ImportStatement)
+			if ok {
+				file.Imports = append(file.Imports, *importStmt)
+			}
 		}
 		p.nextToken()
 
 	}
 
-	return program
+	return file
 }
 
 func (p *Parser) curTokenIs(t token.TokenType) bool {

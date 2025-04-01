@@ -33,4 +33,7 @@ test-report:
 
 
 docs-json:
-	@go run src/cmd/tools/*
+	@go run src/cmd/tools/* gen docs
+
+gen-std:
+	@go run src/cmd/tools/* gen std-types

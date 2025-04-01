@@ -167,13 +167,13 @@ func TestDeclerationAndAssignmentStatements(t *testing.T) {
 	for _, tt := range tests {
 		l := lexer.New([]byte(tt.input))
 		p := New(l)
-		program := p.ParseProgram()
+		file := p.ParseFile()
 		checkParserErrors(t, p)
-		if len(program.Statements) != 1 {
-			t.Fatalf("program.Statements does not contain 1 statements. got=%d",
-				len(program.Statements))
+		if len(file.Statements) != 1 {
+			t.Fatalf("file.Statements does not contain 1 statements. got=%d",
+				len(file.Statements))
 		}
-		stmt := program.Statements[0]
+		stmt := file.Statements[0]
 		if !testDeclarationOrAssignmentStatement(t, stmt, tt.expectedIdentifier, tt.expectedType, tt.expectedValue) {
 			return
 		}
@@ -254,12 +254,12 @@ func TestReturnStatements(t *testing.T) {
 	`
 	l := lexer.New([]byte(input))
 	p := New(l)
-	program := p.ParseProgram()
+	file := p.ParseFile()
 	checkParserErrors(t, p)
-	if len(program.Statements) != 3 {
-		t.Fatalf("program.Statements does not contain 3 statements. got=%d", len(program.Statements))
+	if len(file.Statements) != 3 {
+		t.Fatalf("file.Statements does not contain 3 statements. got=%d", len(file.Statements))
 	}
-	for _, stmt := range program.Statements {
+	for _, stmt := range file.Statements {
 		returnStmt, ok := stmt.(*ast.ReturnStatement)
 		if !ok {
 			t.Errorf("stmt not *ast.returnStatement. got=%T", stmt)
@@ -276,16 +276,16 @@ func TestIdentifierExpression(t *testing.T) {
 	input := "foobar;"
 	l := lexer.New([]byte(input))
 	p := New(l)
-	program := p.ParseProgram()
+	file := p.ParseFile()
 	checkParserErrors(t, p)
-	if len(program.Statements) != 1 {
-		t.Fatalf("program has not enough statements. got=%d",
-			len(program.Statements))
+	if len(file.Statements) != 1 {
+		t.Fatalf("file has not enough statements. got=%d",
+			len(file.Statements))
 	}
-	stmt, ok := program.Statements[0].(*ast.ExpressionStatement)
+	stmt, ok := file.Statements[0].(*ast.ExpressionStatement)
 	if !ok {
-		t.Fatalf("program.Statements[0] is not ast.ExpressionStatement. got=%T",
-			program.Statements[0])
+		t.Fatalf("file.Statements[0] is not ast.ExpressionStatement. got=%T",
+			file.Statements[0])
 	}
 	ident, ok := stmt.Expression.(*ast.Identifier)
 	if !ok {
@@ -304,16 +304,16 @@ func TestIntegerLiteralExpression(t *testing.T) {
 	input := "5;"
 	l := lexer.New([]byte(input))
 	p := New(l)
-	program := p.ParseProgram()
+	file := p.ParseFile()
 	checkParserErrors(t, p)
-	if len(program.Statements) != 1 {
-		t.Fatalf("program has not enough statements. got=%d",
-			len(program.Statements))
+	if len(file.Statements) != 1 {
+		t.Fatalf("file has not enough statements. got=%d",
+			len(file.Statements))
 	}
-	stmt, ok := program.Statements[0].(*ast.ExpressionStatement)
+	stmt, ok := file.Statements[0].(*ast.ExpressionStatement)
 	if !ok {
-		t.Fatalf("program.Statements[0] is not ast.ExpressionStatement. got=%T",
-			program.Statements[0])
+		t.Fatalf("file.Statements[0] is not ast.ExpressionStatement. got=%T",
+			file.Statements[0])
 	}
 	literal, ok := stmt.Expression.(*ast.IntegerLiteral)
 	if !ok {
@@ -332,9 +332,9 @@ func TestStringLiteralExpression(t *testing.T) {
 	input := `"hello world";`
 	l := lexer.New([]byte(input))
 	p := New(l)
-	program := p.ParseProgram()
+	file := p.ParseFile()
 	checkParserErrors(t, p)
-	stmt := program.Statements[0].(*ast.ExpressionStatement)
+	stmt := file.Statements[0].(*ast.ExpressionStatement)
 	literal, ok := stmt.Expression.(*ast.StringLiteral)
 	if !ok {
 		t.Fatalf("exp not *ast.StringLiteral. got=%T", stmt.Expression)
@@ -358,16 +358,16 @@ func TestPrefixExpressions(t *testing.T) {
 	for _, tt := range prefixTests {
 		l := lexer.New([]byte(tt.input))
 		p := New(l)
-		program := p.ParseProgram()
+		file := p.ParseFile()
 		checkParserErrors(t, p)
-		if len(program.Statements) != 1 {
-			t.Fatalf("program.Statements does not contain %d statements. got=%d\n",
-				1, len(program.Statements))
+		if len(file.Statements) != 1 {
+			t.Fatalf("file.Statements does not contain %d statements. got=%d\n",
+				1, len(file.Statements))
 		}
-		stmt, ok := program.Statements[0].(*ast.ExpressionStatement)
+		stmt, ok := file.Statements[0].(*ast.ExpressionStatement)
 		if !ok {
-			t.Fatalf("program.Statements[0] is not ast.ExpressionStatement. got=%T",
-				program.Statements[0])
+			t.Fatalf("file.Statements[0] is not ast.ExpressionStatement. got=%T",
+				file.Statements[0])
 		}
 		exp, ok := stmt.Expression.(*ast.PrefixExpression)
 		if !ok {
@@ -411,16 +411,16 @@ func TestInfixExpressions(t *testing.T) {
 	for _, tt := range infixTests {
 		l := lexer.New([]byte(tt.input))
 		p := New(l)
-		program := p.ParseProgram()
+		file := p.ParseFile()
 		checkParserErrors(t, p)
-		if len(program.Statements) != 1 {
-			t.Fatalf("program.Statements does not contain %d statements. got=%d\n",
-				1, len(program.Statements))
+		if len(file.Statements) != 1 {
+			t.Fatalf("file.Statements does not contain %d statements. got=%d\n",
+				1, len(file.Statements))
 		}
-		stmt, ok := program.Statements[0].(*ast.ExpressionStatement)
+		stmt, ok := file.Statements[0].(*ast.ExpressionStatement)
 		if !ok {
-			t.Fatalf("program.Statements[0] is not ast.ExpressionStatement. got=%T",
-				program.Statements[0])
+			t.Fatalf("file.Statements[0] is not ast.ExpressionStatement. got=%T",
+				file.Statements[0])
 		}
 		exp, ok := stmt.Expression.(*ast.InfixExpression)
 		if !ok {
@@ -557,9 +557,9 @@ func TestOperatorPrecedence(t *testing.T) {
 	for _, tt := range tests {
 		l := lexer.New([]byte(tt.input))
 		p := New(l)
-		program := p.ParseProgram()
+		file := p.ParseFile()
 		checkParserErrors(t, p)
-		actual := program.String()
+		actual := file.String()
 		if actual != tt.expected {
 			t.Errorf("expected=%q, got=%q", tt.expected, actual)
 		}
@@ -570,16 +570,16 @@ func TestBooleanExpression(t *testing.T) {
 	input := "zoona;"
 	l := lexer.New([]byte(input))
 	p := New(l)
-	program := p.ParseProgram()
+	file := p.ParseFile()
 	checkParserErrors(t, p)
-	if len(program.Statements) != 1 {
-		t.Fatalf("program has not enough statements. got=%d",
-			len(program.Statements))
+	if len(file.Statements) != 1 {
+		t.Fatalf("file has not enough statements. got=%d",
+			len(file.Statements))
 	}
-	stmt, ok := program.Statements[0].(*ast.ExpressionStatement)
+	stmt, ok := file.Statements[0].(*ast.ExpressionStatement)
 	if !ok {
-		t.Fatalf("program.Statements[0] is not ast.ExpressionStatement. got=%T",
-			program.Statements[0])
+		t.Fatalf("file.Statements[0] is not ast.ExpressionStatement. got=%T",
+			file.Statements[0])
 	}
 	ident, ok := stmt.Expression.(*ast.Boolean)
 	if !ok {
@@ -605,16 +605,16 @@ func TestIfExpression(t *testing.T) {
 	for _, tt := range tests {
 		l := lexer.New([]byte(tt.input))
 		p := New(l)
-		program := p.ParseProgram()
+		file := p.ParseFile()
 		checkParserErrors(t, p)
-		if len(program.Statements) != 1 {
-			t.Fatalf("program.Body does not contain %d statements. got=%d\n",
-				1, len(program.Statements))
+		if len(file.Statements) != 1 {
+			t.Fatalf("file.Body does not contain %d statements. got=%d\n",
+				1, len(file.Statements))
 		}
-		stmt, ok := program.Statements[0].(*ast.ExpressionStatement)
+		stmt, ok := file.Statements[0].(*ast.ExpressionStatement)
 		if !ok {
-			t.Fatalf("program.Statements[0] is not ast.ExpressionStatement. got=%T",
-				program.Statements[0])
+			t.Fatalf("file.Statements[0] is not ast.ExpressionStatement. got=%T",
+				file.Statements[0])
 		}
 		exp, ok := stmt.Expression.(*ast.IfExpression)
 		if !ok {
@@ -648,18 +648,18 @@ func TestIfElseExpression(t *testing.T) {
 
 	l := lexer.New([]byte(input))
 	p := New(l)
-	program := p.ParseProgram()
+	file := p.ParseFile()
 	checkParserErrors(t, p)
 
-	if len(program.Statements) != 1 {
-		t.Fatalf("program.Statements does not contain %d statements. got=%d\n",
-			1, len(program.Statements))
+	if len(file.Statements) != 1 {
+		t.Fatalf("file.Statements does not contain %d statements. got=%d\n",
+			1, len(file.Statements))
 	}
 
-	stmt, ok := program.Statements[0].(*ast.ExpressionStatement)
+	stmt, ok := file.Statements[0].(*ast.ExpressionStatement)
 	if !ok {
-		t.Fatalf("program.Statements[0] is not ast.ExpressionStatement. got=%T",
-			program.Statements[0])
+		t.Fatalf("file.Statements[0] is not ast.ExpressionStatement. got=%T",
+			file.Statements[0])
 	}
 
 	exp, ok := stmt.Expression.(*ast.IfExpression)
@@ -706,16 +706,16 @@ func TestFunctionLiteral(t *testing.T) {
 	input := `ndondomeko phatikiza(x, y) { x + y; }`
 	l := lexer.New([]byte(input))
 	p := New(l)
-	program := p.ParseProgram()
+	file := p.ParseFile()
 	checkParserErrors(t, p)
-	if len(program.Statements) != 1 {
-		t.Fatalf("program.Body does not contain %d statements. got=%d\n",
-			1, len(program.Statements))
+	if len(file.Statements) != 1 {
+		t.Fatalf("file.Body does not contain %d statements. got=%d\n",
+			1, len(file.Statements))
 	}
-	stmt, ok := program.Statements[0].(*ast.ExpressionStatement)
+	stmt, ok := file.Statements[0].(*ast.ExpressionStatement)
 	if !ok {
-		t.Fatalf("program.Statements[0] is not ast.ExpressionStatement. got=%T",
-			program.Statements[0])
+		t.Fatalf("file.Statements[0] is not ast.ExpressionStatement. got=%T",
+			file.Statements[0])
 	}
 	function, ok := stmt.Expression.(*ast.FunctionLiteral)
 	if !ok {
@@ -755,9 +755,9 @@ func TestFunctionParameter(t *testing.T) {
 	for _, tt := range tests {
 		l := lexer.New([]byte(tt.input))
 		p := New(l)
-		program := p.ParseProgram()
+		file := p.ParseFile()
 		checkParserErrors(t, p)
-		stmt := program.Statements[0].(*ast.ExpressionStatement)
+		stmt := file.Statements[0].(*ast.ExpressionStatement)
 		function := stmt.Expression.(*ast.FunctionLiteral)
 		if len(function.Parameters) != len(tt.expectedParams) {
 			t.Errorf("length parameters wrong. want %d, got=%d\n",
@@ -804,16 +804,16 @@ func TestCallExpression(t *testing.T) {
 	for _, tt := range tests {
 		l := lexer.New([]byte(tt.input))
 		p := New(l)
-		program := p.ParseProgram()
+		file := p.ParseFile()
 		checkParserErrors(t, p)
-		if len(program.Statements) != 1 {
-			t.Fatalf("program.Statements does not contain %d statements. got=%d\n",
-				1, len(program.Statements))
+		if len(file.Statements) != 1 {
+			t.Fatalf("file.Statements does not contain %d statements. got=%d\n",
+				1, len(file.Statements))
 		}
-		stmt, ok := program.Statements[0].(*ast.ExpressionStatement)
+		stmt, ok := file.Statements[0].(*ast.ExpressionStatement)
 		if !ok {
 			t.Fatalf("stmt is not ast.ExpressionStatement. got=%T",
-				program.Statements[0])
+				file.Statements[0])
 		}
 		exp, ok := stmt.Expression.(*ast.CallExpression)
 		if !ok {
@@ -860,9 +860,9 @@ func TestArrayLiterals(t *testing.T) {
 	input := "[1, 2 * 2, 3 + 3]"
 	l := lexer.New([]byte(input))
 	p := New(l)
-	program := p.ParseProgram()
+	file := p.ParseFile()
 	checkParserErrors(t, p)
-	stmt, ok := program.Statements[0].(*ast.ExpressionStatement)
+	stmt, ok := file.Statements[0].(*ast.ExpressionStatement)
 	array, ok := stmt.Expression.(*ast.ArrayLiteral)
 	if !ok {
 		t.Fatalf("exp not ast.ArrayLiteral. got=%T", stmt.Expression)
@@ -879,9 +879,9 @@ func TestArrayIndexExpressions(t *testing.T) {
 	input := "myArray[1 + 1]"
 	l := lexer.New([]byte(input))
 	p := New(l)
-	program := p.ParseProgram()
+	file := p.ParseFile()
 	checkParserErrors(t, p)
-	stmt, ok := program.Statements[0].(*ast.ExpressionStatement)
+	stmt, ok := file.Statements[0].(*ast.ExpressionStatement)
 	indexExp, ok := stmt.Expression.(*ast.IndexExpression)
 	if !ok {
 		t.Fatalf("exp not *ast.IndexExpression. got=%T", stmt.Expression)
@@ -908,9 +908,9 @@ func TestMethodCall(t *testing.T) {
 	for _, tt := range tests {
 		l := lexer.New([]byte(tt.input))
 		p := New(l)
-		program := p.ParseProgram()
+		file := p.ParseFile()
 		checkParserErrors(t, p)
-		stmt := program.Statements[0].(*ast.ExpressionStatement)
+		stmt := file.Statements[0].(*ast.ExpressionStatement)
 		method := stmt.Expression.(*ast.MethodExpression)
 		if len(method.Arguments) != len(tt.expectedArguments) {
 			t.Errorf("length parameters wrong. want %d, got=%d\n",
@@ -955,20 +955,20 @@ func TestForExpression(t *testing.T) {
 	for _, tt := range tests {
 		l := lexer.New([]byte(tt.input))
 		p := New(l)
-		program := p.ParseProgram()
+		file := p.ParseFile()
 
 		checkParserErrors(t, p)
 
 		loopIndex := 0
 
-		if len(program.Statements) != 1 {
+		if len(file.Statements) != 1 {
 			loopIndex = 1
 		}
 
-		statement, ok := program.Statements[loopIndex].(*ast.ExpressionStatement)
+		statement, ok := file.Statements[loopIndex].(*ast.ExpressionStatement)
 
 		if !ok {
-			t.Fatalf("program.Statements[%T] is not ast.Expression. got=%T", loopIndex, program.Statements[0])
+			t.Fatalf("file.Statements[%T] is not ast.Expression. got=%T", loopIndex, file.Statements[0])
 		}
 
 		expression, ok := statement.Expression.(*ast.ForExpression)
@@ -1012,9 +1012,9 @@ func TestWhileExpressions(t *testing.T) {
 	input := `pamene (x < 10) { x = x + 1; }`
 	l := lexer.New([]byte(input))
 	p := New(l)
-	program := p.ParseProgram()
+	file := p.ParseFile()
 	checkParserErrors(t, p)
-	stmt := program.Statements[0].(*ast.ExpressionStatement)
+	stmt := file.Statements[0].(*ast.ExpressionStatement)
 	whileExp, ok := stmt.Expression.(*ast.WhileExpression)
 	if !ok {
 		t.Fatalf("exp not *ast.WhileExpression. got=%T", stmt.Expression)
@@ -1080,10 +1080,10 @@ func TestMapExpressionsWithStringKeys(t *testing.T) {
 	for _, tt := range tests {
 		l := lexer.New([]byte(tt.input))
 		p := New(l)
-		program := p.ParseProgram()
+		file := p.ParseFile()
 		checkParserErrors(t, p)
 		var mapLiteral *ast.MapExpression
-		switch stmt := program.Statements[0].(type) {
+		switch stmt := file.Statements[0].(type) {
 		case *ast.VariableDeclarationStatement:
 			{
 				expression, ok := stmt.Value.(*ast.MapExpression)
@@ -1134,14 +1134,14 @@ func TestMapLiteralsWithStringKeys(t *testing.T) {
 
 	l := lexer.New([]byte(input))
 	p := New(l)
-	program := p.ParseProgram()
+	file := p.ParseFile()
 
 	checkParserErrors(t, p)
 
-	statement, ok := program.Statements[0].(*ast.ExpressionStatement)
+	statement, ok := file.Statements[0].(*ast.ExpressionStatement)
 
 	if !ok {
-		t.Fatalf("program.Statements[0] is not ast.Expression. got=%T", program.Statements[0])
+		t.Fatalf("file.Statements[0] is not ast.Expression. got=%T", file.Statements[0])
 	}
 
 	mapLiteral, ok := statement.Expression.(*ast.MapExpression)
@@ -1178,14 +1178,14 @@ func TestMapLiteralsWithBooleanKeys(t *testing.T) {
 
 	l := lexer.New([]byte(input))
 	p := New(l)
-	program := p.ParseProgram()
+	file := p.ParseFile()
 
 	checkParserErrors(t, p)
 
-	statement, ok := program.Statements[0].(*ast.ExpressionStatement)
+	statement, ok := file.Statements[0].(*ast.ExpressionStatement)
 
 	if !ok {
-		t.Fatalf("program.Statements[0] is not ast.Expression. got=%T", program.Statements[0])
+		t.Fatalf("file.Statements[0] is not ast.Expression. got=%T", file.Statements[0])
 	}
 
 	mapLiteral, ok := statement.Expression.(*ast.MapExpression)
@@ -1221,14 +1221,14 @@ func TestMapLiteralsWithIntegerKeys(t *testing.T) {
 
 	l := lexer.New([]byte(input))
 	p := New(l)
-	program := p.ParseProgram()
+	file := p.ParseFile()
 
 	checkParserErrors(t, p)
 
-	statement, ok := program.Statements[0].(*ast.ExpressionStatement)
+	statement, ok := file.Statements[0].(*ast.ExpressionStatement)
 
 	if !ok {
-		t.Fatalf("program.Statements[0] is not ast.Expression. got=%T", program.Statements[0])
+		t.Fatalf("file.Statements[0] is not ast.Expression. got=%T", file.Statements[0])
 	}
 
 	mapLiteral, ok := statement.Expression.(*ast.MapExpression)
@@ -1265,14 +1265,14 @@ func TestMapLiteralsWithVariableKeys(t *testing.T) {
 
 	l := lexer.New([]byte(input))
 	p := New(l)
-	program := p.ParseProgram()
+	file := p.ParseFile()
 
 	checkParserErrors(t, p)
 
-	statement, ok := program.Statements[0].(*ast.ExpressionStatement)
+	statement, ok := file.Statements[0].(*ast.ExpressionStatement)
 
 	if !ok {
-		t.Fatalf("program.Statements[0] is not ast.Expression. got=%T", program.Statements[0])
+		t.Fatalf("file.Statements[0] is not ast.Expression. got=%T", file.Statements[0])
 	}
 
 	mapLiteral, ok := statement.Expression.(*ast.MapExpression)
@@ -1308,9 +1308,9 @@ func TestParsingHashLiteralsWithExpressions(t *testing.T) {
 	input := `{"one": 0 + 1, "two": 10- 8, "three": 15 / 5}`
 	l := lexer.New([]byte(input))
 	p := New(l)
-	program := p.ParseProgram()
+	file := p.ParseFile()
 	checkParserErrors(t, p)
-	stmt := program.Statements[0].(*ast.ExpressionStatement)
+	stmt := file.Statements[0].(*ast.ExpressionStatement)
 	hash, ok := stmt.Expression.(*ast.MapExpression)
 	if !ok {
 		t.Fatalf("exp is not ast.HashLiteral. got=%T", stmt.Expression)
@@ -1351,9 +1351,9 @@ func TestParsingClassExpressions(t *testing.T) {
 		}`
 	l := lexer.New([]byte(input))
 	p := New(l)
-	program := p.ParseProgram()
+	file := p.ParseFile()
 	checkParserErrors(t, p)
-	stmt := program.Statements[0].(*ast.ExpressionStatement)
+	stmt := file.Statements[0].(*ast.ExpressionStatement)
 	classStatement := stmt.Expression.(*ast.ClassStatement)
 	if classStatement.Name.Value != "Munthu" {
 		t.Fatalf("stmt.Name.Value not 'Munthu'. got=%q", classStatement.Name.Value)
@@ -1385,13 +1385,13 @@ func TestInstanceCreation(t *testing.T) {
 	for _, tt := range tests {
 		l := lexer.New([]byte(tt.input))
 		p := New(l)
-		program := p.ParseProgram()
+		file := p.ParseFile()
 		checkParserErrors(t, p)
-		if len(program.Statements) != 1 {
-			t.Fatalf("program.Statements does not contain 1 statements. got=%d",
-				len(program.Statements))
+		if len(file.Statements) != 1 {
+			t.Fatalf("file.Statements does not contain 1 statements. got=%d",
+				len(file.Statements))
 		}
-		stmt := program.Statements[0]
+		stmt := file.Statements[0]
 		switch statement := stmt.(type) {
 		case *ast.AssigmentStatement:
 			{
@@ -1433,12 +1433,12 @@ func TestClassPropertyAccess(t *testing.T) {
 	input := `Munthu maria = Munthu(); maria.zaka;`
 	l := lexer.New([]byte(input))
 	p := New(l)
-	program := p.ParseProgram()
+	file := p.ParseFile()
 	checkParserErrors(t, p)
-	if len(program.Statements) != 2 {
-		t.Fatalf("program.Statements does not contain 2 statements. got=%d", len(program.Statements))
+	if len(file.Statements) != 2 {
+		t.Fatalf("file.Statements does not contain 2 statements. got=%d", len(file.Statements))
 	}
-	stmt := program.Statements[1]
+	stmt := file.Statements[1]
 
 	expression, ok := stmt.(*ast.ExpressionStatement)
 	if !ok {
@@ -1456,5 +1456,59 @@ func TestClassPropertyAccess(t *testing.T) {
 
 	if !testIdentifier(t, propertyExp.Property, "zaka") {
 		return
+	}
+}
+
+func TestImport(t *testing.T) {
+	tests := []struct {
+		input         string
+		module        string
+		importType    ast.ImportType
+		Exports       map[string]string
+		defaultImport string
+	}{
+		{`tenga fmt kuchokera "fmt";`, "fmt", ast.DefaultImport, nil, "fmt"},
+		{`tenga { export1, export2 } kuchokera "fmt";`, "fmt", ast.NamedImport, map[string]string{"export1": "export1", "export2": "export2"}, ""},
+	}
+	for _, tt := range tests {
+		l := lexer.New([]byte(tt.input))
+		p := New(l)
+		file := p.ParseFile()
+		checkParserErrors(t, p)
+		expression, ok := file.Statements[0].(*ast.ExpressionStatement)
+		if !ok {
+			t.Fatalf("expression is not ast.ExpressionStatement. got=%T", file.Statements[0])
+		}
+		stmt, ok := expression.Expression.(*ast.ImportStatement)
+		if !ok {
+			t.Fatalf("stmt is not ast.ImportExpression. got=%T", expression.Expression)
+		}
+		if stmt.Module.Value != tt.module {
+			t.Fatalf("stmt.Module is not '%s'. got=%q", tt.module, stmt.Module)
+		}
+		if stmt.Type != tt.importType {
+			t.Fatalf("stmt.Type is not '%s'. got=%s", tt.importType, stmt.Type)
+		}
+
+		if stmt.Type == ast.NamedImport {
+			if stmt.DefaultAlias != nil {
+				t.Fatalf("stmt.DefaultAlias is not empty. got=%s", stmt.DefaultAlias.Value)
+			}
+			if len(stmt.Exports) != len(tt.Exports) {
+				t.Fatalf("stmt.Exports has wrong length. got=%d", len(stmt.Exports))
+			}
+			for key, value := range stmt.Exports {
+				if tt.Exports[key] != value.Value {
+					t.Errorf("stmt.Exports[%s] is not %s. got=%s", key, tt.Exports[key], value.Value)
+				}
+			}
+		} else {
+			if stmt.Exports == nil && len(stmt.Exports) == 0 {
+				t.Fatalf("stmt.Exports is not nil. got=%v", stmt.Exports)
+			}
+			if stmt.DefaultAlias.Value != tt.defaultImport {
+				t.Fatalf("stmt.DefaultAlias is not %s. got=%s", tt.defaultImport, stmt.DefaultAlias.Value)
+			}
+		}
 	}
 }

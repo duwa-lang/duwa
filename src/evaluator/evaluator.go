@@ -12,8 +12,8 @@ type Evaluator func(node ast.Node, env *object.Environment) object.Object
 
 func Eval(node ast.Node, env *object.Environment) object.Object {
 	switch node := node.(type) {
-	case *ast.Program:
-		return evalProgram(node, env)
+	case *ast.File:
+		return evalFile(node, env)
 	case *ast.ExpressionStatement:
 		return Eval(node.Expression, env)
 	case *ast.PrefixExpression:
@@ -85,6 +85,8 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		return evaluateContinue(node, env)
 	case *ast.NullLiteral:
 		return evaluateNull(node, env)
+	case *ast.ImportStatement:
+		return evaluateImportStatement(node, env)
 	}
 	return nil
 }

@@ -1,0 +1,54 @@
+package chewa
+
+import (
+	"log"
+	"os"
+	"path/filepath"
+	"testing"
+
+	"github.com/sevenreup/duwa/src/evaluator"
+	"github.com/sevenreup/duwa/src/lexer"
+	"github.com/sevenreup/duwa/src/object"
+	"github.com/sevenreup/duwa/src/parser"
+	"github.com/sevenreup/duwa/src/utils"
+	"github.com/sevenreup/duwa/src/utils/environment"
+	"github.com/shopspring/decimal"
+)
+
+func testEval(input string) object.Object {
+	fileBytes, err := os.ReadFile(input)
+	if err != nil {
+		log.Fatal(err)
+	}
+	l := lexer.New(fileBytes)
+	p := parser.New(l)
+	file := p.ParseFile()
+	env := object.NewDefaultEnvironment()
+
+	env.SetDirectory(filepath.Dir(input))
+
+	evaluatorInstance := evaluator.Eval
+	filename, _ := filepath.Abs("./")
+	environment.SetCompilationSettings(filename)
+	object.RegisterEvaluator(evaluatorInstance)
+
+	return evaluator.Eval(file, env)
+}
+
+func TestImportExamples(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected interface{}
+	}{
+		{`./examples/imports.duwa`, 2},
+	}
+	for _, tt := range tests {
+		evaluated := testEval(tt.input)
+		integer, ok := tt.expected.(int)
+		if ok {
+			utils.TestIntegerObject(t, evaluated, decimal.NewFromInt(int64(integer)))
+		} else {
+			utils.TestNullObject(t, evaluated)
+		}
+	}
+}

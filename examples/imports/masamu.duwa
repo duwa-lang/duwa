@@ -1,0 +1,7 @@
+ndondomeko phatikiza(a, b) {
+    bweza a + b;
+}
+
+ndondomeko chotsera(a, b) {
+    bweza a - b;
+}
