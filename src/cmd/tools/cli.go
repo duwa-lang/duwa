@@ -5,6 +5,8 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
+
+	_ "github.com/tliron/commonlog/simple"
 )
 
 var rootCmd = &cobra.Command{
@@ -24,6 +26,7 @@ var generate = &cobra.Command{
 }
 
 func init() {
+	rootCmd.AddCommand(lspCommand)
 	rootCmd.AddCommand(generate)
 	generate.AddCommand(generateDocs)
 	generate.AddCommand(generateStdTypes)

@@ -43,7 +43,8 @@ func TestNextToken(t *testing.T) {
 		{token.SEMICOLON, ";"},
 		{token.EOF, ""},
 	}
-	l := New([]byte(input))
+	l := NewLexel()
+	l.Handle([]byte(input))
 	for i, tt := range tests {
 		tok := l.NextToken()
 		if tok.Type != tt.expectedType {

@@ -15,6 +15,9 @@ build-docker:
 
 build-all: build build-wasm
 
+build-tools:
+	@go build -C src/cmd/tools -o ../../../bin/duwa-tools.exe
+
 dev:
 	@go run ./src/cmd/duwa/duwa.go
 
@@ -37,3 +40,7 @@ docs-json:
 
 gen-std:
 	@go run src/cmd/tools/* gen std-types
+
+
+lsp:
+	@go run src/cmd/tools/* lsp -v -p websocket

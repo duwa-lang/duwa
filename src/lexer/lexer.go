@@ -22,11 +22,13 @@ type TokenInfo struct {
 	Literal  string
 }
 
-func New(value []byte) *Lexer {
-	return &Lexer{
-		r:   bufio.NewReader(bytes.NewReader(value)),
-		pos: token.Position{Line: 1, Column: 0},
-	}
+func NewLexel() *Lexer {
+	return &Lexer{}
+}
+
+func (l *Lexer) Handle(value []byte) {
+	l.r = bufio.NewReader(bytes.NewReader(value))
+	l.pos = token.Position{Line: 1, Column: 0}
 }
 
 func (l *Lexer) NextToken() token.Token {

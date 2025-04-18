@@ -9,7 +9,6 @@ import (
 	"github.com/sevenreup/duwa/src/object"
 	"github.com/sevenreup/duwa/src/utils"
 
-	"github.com/sevenreup/duwa/src/lexer"
 	"github.com/sevenreup/duwa/src/parser"
 )
 
@@ -39,9 +38,8 @@ func (c *Duwa) Run(data string) object.Object {
 }
 
 func (c *Duwa) run(data []byte) object.Object {
-	lexer := lexer.New(data)
-	parser := parser.New(lexer)
-	file := parser.ParseFile()
+	parser := parser.NewParser()
+	file := parser.ParseFile(data)
 	if len(parser.Errors()) != 0 {
 		utils.PrintParserErrors(c.Environment.Logger, parser.Errors())
 		return nil

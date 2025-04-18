@@ -5,7 +5,6 @@ import (
 	"path/filepath"
 
 	"github.com/sevenreup/duwa/src/ast"
-	"github.com/sevenreup/duwa/src/lexer"
 	"github.com/sevenreup/duwa/src/library/std"
 	"github.com/sevenreup/duwa/src/object"
 	"github.com/sevenreup/duwa/src/parser"
@@ -38,9 +37,9 @@ func evaluateFile(filePath string, node *ast.ImportStatement, env *object.Enviro
 	if err != nil {
 		return newError("%d:%d:%s: runtime error: %s", node.Token.Pos.Line, node.Token.Pos.Column, node.Token.File, err.Error())
 	}
-	lexer := lexer.New(source)
-	parser := parser.New(lexer)
-	file := parser.ParseFile()
+
+	parser := parser.NewParser()
+	file := parser.ParseFile([]byte(source))
 
 	if len(parser.Errors()) != 0 {
 		for _, err := range parser.Errors() {
