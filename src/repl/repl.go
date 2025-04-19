@@ -10,8 +10,6 @@ import (
 	"github.com/sevenreup/duwa/src/object"
 	"github.com/sevenreup/duwa/src/parser"
 	"github.com/sevenreup/duwa/src/utils"
-
-	"github.com/sevenreup/duwa/src/lexer"
 )
 
 const PROMPT = ">> "
@@ -28,11 +26,10 @@ func Start(in io.Reader, out io.Writer) {
 			return
 		}
 		line := scanner.Text()
-		l := lexer.New([]byte(line))
-		p := parser.New(l)
-		file := p.ParseFile()
-		if len(p.Errors()) != 0 {
-			utils.PrintParserErrors(log, p.Errors())
+		parser := parser.NewParser()
+		file := parser.ParseFile([]byte(line))
+		if len(parser.Errors()) != 0 {
+			utils.PrintParserErrors(log, parser.Errors())
 			continue
 		}
 		evaluated := evaluator.Eval(file, env)
