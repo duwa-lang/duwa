@@ -1,31 +1,36 @@
 package main
 
 import (
-	"fmt"
+	"context"
+	"log"
+
 	"github.com/sevenreup/duwa/src/tools/lsp"
+	"github.com/sevenreup/duwa/src/tools/lsp/transport"
+	"go.uber.org/zap"
 
 	"github.com/spf13/cobra"
-	"github.com/tliron/commonlog"
-	serverpkg "github.com/tliron/glsp/server"
 	"github.com/tliron/kutil/util"
 	versionpkg "github.com/tliron/kutil/version"
+	"go.lsp.dev/jsonrpc2"
+	"go.lsp.dev/protocol"
 )
 
 var (
-	address  string
-	protocol string
+	address     string
+	protocolSVR string
 
-	version bool
-	verbose int
-	logTo   string
+	version  bool
+	verbose  int
+	logFile  string
+	logLevel int
 )
 
 func init() {
-	lspCommand.Flags().StringVarP(&logTo, "log", "l", "", "log to file (defaults to stderr)")
-	lspCommand.Flags().CountVarP(&verbose, "verbose", "v", "add a log verbosity level (can be used twice)")
+	lspCommand.Flags().StringVarP(&logFile, "logFile", "f", "", "log to file (defaults to stderr)")
+	lspCommand.Flags().IntVarP(&logLevel, "logLevel", "l", int(zap.DebugLevel), "log level")
 	lspCommand.Flags().BoolVar(&version, "version", false, "print version")
 
-	lspCommand.Flags().StringVarP(&protocol, "protocol", "p", "stdio", "protocol (\"stdio\", \"tcp\", \"websocket\", or \"nodejs\"")
+	lspCommand.Flags().StringVarP(&protocolSVR, "protocol", "p", "stdio", "protocol (\"stdio\", \"tcp\", \"websocket\", or \"nodejs\"")
 	lspCommand.Flags().StringVarP(&address, "address", "a", ":4389", "address (for \"tcp\" and \"websocket\"")
 
 }
@@ -34,16 +39,6 @@ var lspCommand = &cobra.Command{
 	Use:   "lsp",
 	Short: "Duwa LSP",
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
-		if logTo == "" {
-			commonlog.Configure(verbose, nil)
-		} else {
-			commonlog.Configure(verbose, &logTo)
-		}
-
-		if verbose > 0 {
-			// Reduce Puccini logging even in verbose mode
-			commonlog.SetMaxLevel(commonlog.Warning, "duwa")
-		}
 
 		if version {
 			versionpkg.Print()
@@ -52,32 +47,30 @@ var lspCommand = &cobra.Command{
 		}
 	},
 	Run: func(cmd *cobra.Command, args []string) {
-		if err := startSever(); err != nil {
-			log.Errorf("failed to start LSP server: %s", err)
-			util.Exit(1)
-		}
+		startSever()
 	},
 }
 
-func startSever() error {
-	log.Infof("version %s", versionpkg.GitVersion)
+func startSever() {
+	lsp.InitLog(logLevel, logFile)
+	server := lsp.NewServer("duwa-lsp", verbose > 0)
+	server.Logger.Sugar().Info("version %s", versionpkg.GitVersion)
 
-	server := serverpkg.NewServer(&lsp.Handler, toolName, verbose > 0)
+	var conn jsonrpc2.Conn
 
-	switch protocol {
+	switch protocolSVR {
 	case "stdio":
-		return server.RunStdio()
-
+		server.Logger.Sugar().Info("Starting with stdio")
+		conn = transport.CreateTransport()
 	case "tcp":
-		return server.RunTCP(address)
-
 	case "websocket":
-		return server.RunWebSocket(address)
-
 	case "nodejs":
-		return server.RunNodeJs()
-
 	default:
-		return fmt.Errorf("unsupported protocol: %s", protocol)
+		server.Logger.Sugar().Error("unsupported protocol: %s", protocolSVR)
+		util.Exit(1)
 	}
+	ctx := protocol.WithLogger(context.Background(), server.Logger)
+	conn.Go(ctx, protocol.ServerHandler(server, nil))
+	<-ctx.Done()
+	log.Println("exit")
 }

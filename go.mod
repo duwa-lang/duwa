@@ -5,6 +5,12 @@ go 1.23.0
 require (
 	github.com/shopspring/decimal v1.3.1
 	github.com/spf13/cobra v1.8.1
+	github.com/tliron/commonlog v0.2.18
+	github.com/tliron/exturl v0.4.4
+	go.lsp.dev/jsonrpc2 v0.10.0
+	go.lsp.dev/protocol v0.12.0
+	go.uber.org/multierr v1.11.0
+	go.uber.org/zap v1.27.0
 )
 
 require (
@@ -25,7 +31,6 @@ require (
 	github.com/go-git/go-git/v5 v5.11.0 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/google/go-containerregistry v0.19.1 // indirect
-	github.com/gorilla/websocket v1.5.1 // indirect
 	github.com/iancoleman/strcase v0.3.0 // indirect
 	github.com/jbenet/go-context v0.0.0-20150711004518-d14ea06fba99 // indirect
 	github.com/kevinburke/ssh_config v1.2.0 // indirect
@@ -47,8 +52,7 @@ require (
 	github.com/sergi/go-diff v1.1.0 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/skeema/knownhosts v1.2.1 // indirect
-	github.com/sourcegraph/jsonrpc2 v0.2.0 // indirect
-	github.com/tliron/kutil v0.3.26 // indirect
+	github.com/tliron/kutil v0.3.26
 	github.com/vbatts/tar-split v0.11.3 // indirect
 	github.com/xanzy/ssh-agent v0.3.3 // indirect
 	golang.org/x/crypto v0.26.0 // indirect
@@ -63,8 +67,9 @@ require (
 
 require (
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
+	github.com/segmentio/asm v1.1.3 // indirect
+	github.com/segmentio/encoding v0.3.4 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
-	github.com/tliron/commonlog v0.2.19
-	github.com/tliron/exturl v0.4.4
-	github.com/tliron/glsp v0.2.2
+	go.lsp.dev/pkg v0.0.0-20210717090340-384b27a52fb2 // indirect
+	go.lsp.dev/uri v0.3.0 // indirect
 )

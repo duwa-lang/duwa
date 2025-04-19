@@ -48,7 +48,12 @@
             "program": "${workspaceRoot}\\src\\cmd\\tools",
             "console": "integratedTerminal",
             "cwd": "${workspaceRoot}",
-            "args": ["lsp"]
+            "args": [
+                "lsp",
+                "-p",
+                "websocket",
+                "-v"
+            ]
         },
     ]
 }

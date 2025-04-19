@@ -41,6 +41,5 @@ docs-json:
 gen-std:
 	@go run src/cmd/tools/* gen std-types
 
-
 lsp:
-	@go run src/cmd/tools/* lsp -v -p websocket
+	@go run src/cmd/tools/* lsp -p stdio

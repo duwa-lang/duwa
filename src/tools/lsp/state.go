@@ -4,24 +4,24 @@ import (
 	"sync"
 
 	"github.com/sevenreup/duwa/src/parser"
-	"github.com/tliron/glsp"
-	protocol "github.com/tliron/glsp/protocol_3_16"
 	"github.com/tliron/kutil/problems"
+
+	"go.lsp.dev/protocol"
 )
 
-var documentStates sync.Map // protocol.DocumentUri to DocumentState
+var documentStates sync.Map // protocol.DocumentURI to DocumentState
 
 type DocumentState struct {
 	Content       string
 	ParserContext *parser.Context
 	Problems      *problems.Problems
 
-	DocumentURI protocol.DocumentUri
+	DocumentURI protocol.DocumentURI
 	Symbols     []protocol.SymbolInformation
 	Diagnostics []protocol.Diagnostic
 }
 
-func getDocumentState(documentUri protocol.DocumentUri) *DocumentState {
+func getDocumentState(documentUri protocol.DocumentURI) *DocumentState {
 	if documentState, ok := documentStates.Load(documentUri); ok {
 		return documentState.(*DocumentState)
 	} else {
@@ -29,20 +29,20 @@ func getDocumentState(documentUri protocol.DocumentUri) *DocumentState {
 	}
 }
 
-func validateDocumentState(documentUri protocol.DocumentUri, notify glsp.NotifyFunc) *DocumentState {
-	documentState, created := _getOrCreateDocumentState(documentUri)
+// func validateDocumentState(documentUri protocol.DocumentURI, notify glsp.NotifyFunc) *DocumentState {
+// 	documentState, _ := _getOrCreateDocumentState(documentUri)
 
-	if created {
-		go notify(protocol.ServerTextDocumentPublishDiagnostics, &protocol.PublishDiagnosticsParams{
-			URI:         documentUri,
-			Diagnostics: documentState.Diagnostics,
-		})
-	}
+// 	// if created {
+// 	// 	go notify(protocol.ServerTextDocumentPublishDiagnostics, &protocol.PublishDiagnosticsParams{
+// 	// 		URI:         documentUri,
+// 	// 		Diagnostics: documentState.Diagnostics,
+// 	// 	})
+// 	// }
 
-	return documentState
-}
+// 	return documentState
+// }
 
-func _getOrCreateDocumentState(documentUri protocol.DocumentUri) (*DocumentState, bool) {
+func _getOrCreateDocumentState(documentUri protocol.DocumentURI) (*DocumentState, bool) {
 	if documentState, ok := documentStates.Load(documentUri); ok {
 		return documentState.(*DocumentState), false
 	} else {
@@ -55,7 +55,7 @@ func _getOrCreateDocumentState(documentUri protocol.DocumentUri) (*DocumentState
 	}
 }
 
-func NewDocumentState(documentUri protocol.DocumentUri) *DocumentState {
+func NewDocumentState(documentUri protocol.DocumentURI) *DocumentState {
 	self := DocumentState{DocumentURI: documentUri}
 	content, err := getDocument(documentUri)
 	if err != nil {
@@ -69,8 +69,8 @@ func NewDocumentState(documentUri protocol.DocumentUri) *DocumentState {
 }
 
 func (docState *DocumentState) Fill() {
-	docState.Diagnostics = createDiagnostics(docState.Problems, docState.Content)
-	if docState.ParserContext != nil {
-		docState.Symbols = createSymbols(docState.ParserContext, docState.Content, docState.DocumentURI)
-	}
+	// docState.Diagnostics = createDiagnostics(docState.Problems, docState.Content)
+	// if docState.ParserContext != nil {
+	// 	docState.Symbols = createSymbols(docState.ParserContext, docState.Content, docState.DocumentURI)
+	// }
 }
