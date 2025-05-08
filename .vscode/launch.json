@@ -40,5 +40,20 @@
             "cwd": "${workspaceRoot}",
             "args": []
         },
+        {
+            "name": "Lsp",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceRoot}\\src\\cmd\\tools",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceRoot}",
+            "args": [
+                "lsp",
+                "-p",
+                "websocket",
+                "-v"
+            ]
+        },
     ]
 }

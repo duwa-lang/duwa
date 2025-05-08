@@ -7,7 +7,6 @@ import (
 	"github.com/shopspring/decimal"
 
 	"github.com/sevenreup/duwa/src/ast"
-	"github.com/sevenreup/duwa/src/lexer"
 	"github.com/sevenreup/duwa/src/token"
 )
 
@@ -165,9 +164,8 @@ func TestDeclerationAndAssignmentStatements(t *testing.T) {
 		{"result = linearSearch(arr, arr.kutalika(), x);", "result", "", "linearSearch"},
 	}
 	for _, tt := range tests {
-		l := lexer.New([]byte(tt.input))
-		p := New(l)
-		file := p.ParseFile()
+		p := NewParser()
+		file := p.ParseFile([]byte(tt.input))
 		checkParserErrors(t, p)
 		if len(file.Statements) != 1 {
 			t.Fatalf("file.Statements does not contain 1 statements. got=%d",
@@ -252,9 +250,8 @@ func TestReturnStatements(t *testing.T) {
 	bweza 10;
 	bweza 993322;
 	`
-	l := lexer.New([]byte(input))
-	p := New(l)
-	file := p.ParseFile()
+	p := NewParser()
+	file := p.ParseFile([]byte(input))
 	checkParserErrors(t, p)
 	if len(file.Statements) != 3 {
 		t.Fatalf("file.Statements does not contain 3 statements. got=%d", len(file.Statements))
@@ -274,9 +271,8 @@ func TestReturnStatements(t *testing.T) {
 
 func TestIdentifierExpression(t *testing.T) {
 	input := "foobar;"
-	l := lexer.New([]byte(input))
-	p := New(l)
-	file := p.ParseFile()
+	p := NewParser()
+	file := p.ParseFile([]byte(input))
 	checkParserErrors(t, p)
 	if len(file.Statements) != 1 {
 		t.Fatalf("file has not enough statements. got=%d",
@@ -302,9 +298,8 @@ func TestIdentifierExpression(t *testing.T) {
 
 func TestIntegerLiteralExpression(t *testing.T) {
 	input := "5;"
-	l := lexer.New([]byte(input))
-	p := New(l)
-	file := p.ParseFile()
+	p := NewParser()
+	file := p.ParseFile([]byte(input))
 	checkParserErrors(t, p)
 	if len(file.Statements) != 1 {
 		t.Fatalf("file has not enough statements. got=%d",
@@ -330,9 +325,8 @@ func TestIntegerLiteralExpression(t *testing.T) {
 
 func TestStringLiteralExpression(t *testing.T) {
 	input := `"hello world";`
-	l := lexer.New([]byte(input))
-	p := New(l)
-	file := p.ParseFile()
+	p := NewParser()
+	file := p.ParseFile([]byte(input))
 	checkParserErrors(t, p)
 	stmt := file.Statements[0].(*ast.ExpressionStatement)
 	literal, ok := stmt.Expression.(*ast.StringLiteral)
@@ -356,9 +350,8 @@ func TestPrefixExpressions(t *testing.T) {
 		{"!bodza;", "!", false},
 	}
 	for _, tt := range prefixTests {
-		l := lexer.New([]byte(tt.input))
-		p := New(l)
-		file := p.ParseFile()
+		p := NewParser()
+		file := p.ParseFile([]byte(tt.input))
 		checkParserErrors(t, p)
 		if len(file.Statements) != 1 {
 			t.Fatalf("file.Statements does not contain %d statements. got=%d\n",
@@ -409,9 +402,8 @@ func TestInfixExpressions(t *testing.T) {
 		{"bodza || bodza", false, "||", false},
 	}
 	for _, tt := range infixTests {
-		l := lexer.New([]byte(tt.input))
-		p := New(l)
-		file := p.ParseFile()
+		p := NewParser()
+		file := p.ParseFile([]byte(tt.input))
 		checkParserErrors(t, p)
 		if len(file.Statements) != 1 {
 			t.Fatalf("file.Statements does not contain %d statements. got=%d\n",
@@ -555,9 +547,8 @@ func TestOperatorPrecedence(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		l := lexer.New([]byte(tt.input))
-		p := New(l)
-		file := p.ParseFile()
+		p := NewParser()
+		file := p.ParseFile([]byte(tt.input))
 		checkParserErrors(t, p)
 		actual := file.String()
 		if actual != tt.expected {
@@ -568,9 +559,8 @@ func TestOperatorPrecedence(t *testing.T) {
 
 func TestBooleanExpression(t *testing.T) {
 	input := "zoona;"
-	l := lexer.New([]byte(input))
-	p := New(l)
-	file := p.ParseFile()
+	p := NewParser()
+	file := p.ParseFile([]byte(input))
 	checkParserErrors(t, p)
 	if len(file.Statements) != 1 {
 		t.Fatalf("file has not enough statements. got=%d",
@@ -603,9 +593,8 @@ func TestIfExpression(t *testing.T) {
 		{input: `ngati (x[i] == y) { x }`, expectedOperation: "=="},
 	}
 	for _, tt := range tests {
-		l := lexer.New([]byte(tt.input))
-		p := New(l)
-		file := p.ParseFile()
+		p := NewParser()
+		file := p.ParseFile([]byte(tt.input))
 		checkParserErrors(t, p)
 		if len(file.Statements) != 1 {
 			t.Fatalf("file.Body does not contain %d statements. got=%d\n",
@@ -646,9 +635,8 @@ func TestIfExpression(t *testing.T) {
 func TestIfElseExpression(t *testing.T) {
 	input := `ngati (x < y) { x } kapena { y }`
 
-	l := lexer.New([]byte(input))
-	p := New(l)
-	file := p.ParseFile()
+	p := NewParser()
+	file := p.ParseFile([]byte(input))
 	checkParserErrors(t, p)
 
 	if len(file.Statements) != 1 {
@@ -704,9 +692,8 @@ func TestIfElseExpression(t *testing.T) {
 
 func TestFunctionLiteral(t *testing.T) {
 	input := `ndondomeko phatikiza(x, y) { x + y; }`
-	l := lexer.New([]byte(input))
-	p := New(l)
-	file := p.ParseFile()
+	p := NewParser()
+	file := p.ParseFile([]byte(input))
 	checkParserErrors(t, p)
 	if len(file.Statements) != 1 {
 		t.Fatalf("file.Body does not contain %d statements. got=%d\n",
@@ -753,9 +740,8 @@ func TestFunctionParameter(t *testing.T) {
 		{input: "ndondomeko palibeKanthu(x, y, z) {};", expectedParams: []string{"x", "y", "z"}},
 	}
 	for _, tt := range tests {
-		l := lexer.New([]byte(tt.input))
-		p := New(l)
-		file := p.ParseFile()
+		p := NewParser()
+		file := p.ParseFile([]byte(tt.input))
 		checkParserErrors(t, p)
 		stmt := file.Statements[0].(*ast.ExpressionStatement)
 		function := stmt.Expression.(*ast.FunctionLiteral)
@@ -802,9 +788,8 @@ func TestCallExpression(t *testing.T) {
 		}},
 	}
 	for _, tt := range tests {
-		l := lexer.New([]byte(tt.input))
-		p := New(l)
-		file := p.ParseFile()
+		p := NewParser()
+		file := p.ParseFile([]byte(tt.input))
 		checkParserErrors(t, p)
 		if len(file.Statements) != 1 {
 			t.Fatalf("file.Statements does not contain %d statements. got=%d\n",
@@ -858,9 +843,8 @@ func TestCallExpression(t *testing.T) {
 
 func TestArrayLiterals(t *testing.T) {
 	input := "[1, 2 * 2, 3 + 3]"
-	l := lexer.New([]byte(input))
-	p := New(l)
-	file := p.ParseFile()
+	p := NewParser()
+	file := p.ParseFile([]byte(input))
 	checkParserErrors(t, p)
 	stmt, ok := file.Statements[0].(*ast.ExpressionStatement)
 	array, ok := stmt.Expression.(*ast.ArrayLiteral)
@@ -877,9 +861,8 @@ func TestArrayLiterals(t *testing.T) {
 
 func TestArrayIndexExpressions(t *testing.T) {
 	input := "myArray[1 + 1]"
-	l := lexer.New([]byte(input))
-	p := New(l)
-	file := p.ParseFile()
+	p := NewParser()
+	file := p.ParseFile([]byte(input))
 	checkParserErrors(t, p)
 	stmt, ok := file.Statements[0].(*ast.ExpressionStatement)
 	indexExp, ok := stmt.Expression.(*ast.IndexExpression)
@@ -906,9 +889,8 @@ func TestMethodCall(t *testing.T) {
 		{input: "myClass.doStuff(\"String\",2);", expectedArguments: []interface{}{"String", 2}, expectedIdentifier: "myClass", expectedMethodName: "doStuff"},
 	}
 	for _, tt := range tests {
-		l := lexer.New([]byte(tt.input))
-		p := New(l)
-		file := p.ParseFile()
+		p := NewParser()
+		file := p.ParseFile([]byte(tt.input))
 		checkParserErrors(t, p)
 		stmt := file.Statements[0].(*ast.ExpressionStatement)
 		method := stmt.Expression.(*ast.MethodExpression)
@@ -953,9 +935,8 @@ func TestForExpression(t *testing.T) {
 		},
 	}
 	for _, tt := range tests {
-		l := lexer.New([]byte(tt.input))
-		p := New(l)
-		file := p.ParseFile()
+		p := NewParser()
+		file := p.ParseFile([]byte(tt.input))
 
 		checkParserErrors(t, p)
 
@@ -1010,9 +991,8 @@ func TestForExpression(t *testing.T) {
 
 func TestWhileExpressions(t *testing.T) {
 	input := `pamene (x < 10) { x = x + 1; }`
-	l := lexer.New([]byte(input))
-	p := New(l)
-	file := p.ParseFile()
+	p := NewParser()
+	file := p.ParseFile([]byte(input))
 	checkParserErrors(t, p)
 	stmt := file.Statements[0].(*ast.ExpressionStatement)
 	whileExp, ok := stmt.Expression.(*ast.WhileExpression)
@@ -1078,9 +1058,8 @@ func TestMapExpressionsWithStringKeys(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		l := lexer.New([]byte(tt.input))
-		p := New(l)
-		file := p.ParseFile()
+		p := NewParser()
+		file := p.ParseFile([]byte(tt.input))
 		checkParserErrors(t, p)
 		var mapLiteral *ast.MapExpression
 		switch stmt := file.Statements[0].(type) {
@@ -1132,9 +1111,8 @@ func TestMapExpressionsWithStringKeys(t *testing.T) {
 func TestMapLiteralsWithStringKeys(t *testing.T) {
 	input := `{"one": 1, "two": 2, "three": 3}`
 
-	l := lexer.New([]byte(input))
-	p := New(l)
-	file := p.ParseFile()
+	p := NewParser()
+	file := p.ParseFile([]byte(input))
 
 	checkParserErrors(t, p)
 
@@ -1176,9 +1154,8 @@ func TestMapLiteralsWithStringKeys(t *testing.T) {
 func TestMapLiteralsWithBooleanKeys(t *testing.T) {
 	input := `{zoona: 1, bodza: 2}`
 
-	l := lexer.New([]byte(input))
-	p := New(l)
-	file := p.ParseFile()
+	p := NewParser()
+	file := p.ParseFile([]byte(input))
 
 	checkParserErrors(t, p)
 
@@ -1219,9 +1196,8 @@ func TestMapLiteralsWithBooleanKeys(t *testing.T) {
 func TestMapLiteralsWithIntegerKeys(t *testing.T) {
 	input := `{1: 1, 2: 2, 3: 3}`
 
-	l := lexer.New([]byte(input))
-	p := New(l)
-	file := p.ParseFile()
+	p := NewParser()
+	file := p.ParseFile([]byte(input))
 
 	checkParserErrors(t, p)
 
@@ -1263,9 +1239,8 @@ func TestMapLiteralsWithIntegerKeys(t *testing.T) {
 func TestMapLiteralsWithVariableKeys(t *testing.T) {
 	input := `{foo: 1, bar: 2, baz: 3}`
 
-	l := lexer.New([]byte(input))
-	p := New(l)
-	file := p.ParseFile()
+	p := NewParser()
+	file := p.ParseFile([]byte(input))
 
 	checkParserErrors(t, p)
 
@@ -1306,9 +1281,8 @@ func TestMapLiteralsWithVariableKeys(t *testing.T) {
 
 func TestParsingHashLiteralsWithExpressions(t *testing.T) {
 	input := `{"one": 0 + 1, "two": 10- 8, "three": 15 / 5}`
-	l := lexer.New([]byte(input))
-	p := New(l)
-	file := p.ParseFile()
+	p := NewParser()
+	file := p.ParseFile([]byte(input))
 	checkParserErrors(t, p)
 	stmt := file.Statements[0].(*ast.ExpressionStatement)
 	hash, ok := stmt.Expression.(*ast.MapExpression)
@@ -1349,9 +1323,8 @@ func TestParsingClassExpressions(t *testing.T) {
 		kalasi Munthu {
 			nambala age = 5;
 		}`
-	l := lexer.New([]byte(input))
-	p := New(l)
-	file := p.ParseFile()
+	p := NewParser()
+	file := p.ParseFile([]byte(input))
 	checkParserErrors(t, p)
 	stmt := file.Statements[0].(*ast.ExpressionStatement)
 	classStatement := stmt.Expression.(*ast.ClassStatement)
@@ -1383,9 +1356,8 @@ func TestInstanceCreation(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		l := lexer.New([]byte(tt.input))
-		p := New(l)
-		file := p.ParseFile()
+		p := NewParser()
+		file := p.ParseFile([]byte(tt.input))
 		checkParserErrors(t, p)
 		if len(file.Statements) != 1 {
 			t.Fatalf("file.Statements does not contain 1 statements. got=%d",
@@ -1431,9 +1403,8 @@ func TestInstanceCreation(t *testing.T) {
 
 func TestClassPropertyAccess(t *testing.T) {
 	input := `Munthu maria = Munthu(); maria.zaka;`
-	l := lexer.New([]byte(input))
-	p := New(l)
-	file := p.ParseFile()
+	p := NewParser()
+	file := p.ParseFile([]byte(input))
 	checkParserErrors(t, p)
 	if len(file.Statements) != 2 {
 		t.Fatalf("file.Statements does not contain 2 statements. got=%d", len(file.Statements))
@@ -1471,9 +1442,8 @@ func TestImport(t *testing.T) {
 		{`tenga { export1, export2 } kuchokera "fmt";`, "fmt", ast.NamedImport, map[string]string{"export1": "export1", "export2": "export2"}, ""},
 	}
 	for _, tt := range tests {
-		l := lexer.New([]byte(tt.input))
-		p := New(l)
-		file := p.ParseFile()
+		p := NewParser()
+		file := p.ParseFile([]byte(tt.input))
 		checkParserErrors(t, p)
 		expression, ok := file.Statements[0].(*ast.ExpressionStatement)
 		if !ok {

@@ -69,10 +69,12 @@ type Parser struct {
 	postfixParserFns map[token.TokenType]postfixParserFn
 
 	imports []*ast.ImportStatement
+
+	Context *Context
 }
 
-func New(l *lexer.Lexer) *Parser {
-	p := &Parser{l: l, errors: []string{}, imports: []*ast.ImportStatement{}}
+func NewParser() *Parser {
+	p := &Parser{l: lexer.NewLexel(), errors: []string{}, imports: []*ast.ImportStatement{}}
 
 	p.prefixParseFns = make(map[token.TokenType]prefixParseFn)
 	p.registerPrefix(token.INT, p.parseIntegerLiteral)
@@ -123,9 +125,6 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPostfix(token.PLUS_PLUS, p.parsePostfixExpression)
 	p.registerPostfix(token.MINUS_MINUS, p.parsePostfixExpression)
 
-	p.nextToken()
-	p.nextToken()
-
 	return p
 }
 
@@ -144,7 +143,12 @@ func (p *Parser) nextToken() {
 	p.peekToken = p.l.NextToken()
 }
 
-func (p *Parser) ParseFile() *ast.File {
+func (p *Parser) ParseFile(value []byte) *ast.File {
+	p.l.Handle(value)
+
+	p.nextToken()
+	p.nextToken()
+
 	file := &ast.File{}
 	file.Statements = []ast.Statement{}
 	file.Imports = []ast.ImportStatement{}

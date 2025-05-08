@@ -7,7 +7,6 @@ import (
 	"testing"
 
 	"github.com/sevenreup/duwa/src/evaluator"
-	"github.com/sevenreup/duwa/src/lexer"
 	"github.com/sevenreup/duwa/src/object"
 	"github.com/sevenreup/duwa/src/parser"
 	"github.com/sevenreup/duwa/src/utils"
@@ -20,9 +19,8 @@ func testEval(input string) object.Object {
 	if err != nil {
 		log.Fatal(err)
 	}
-	l := lexer.New(fileBytes)
-	p := parser.New(l)
-	file := p.ParseFile()
+	p := parser.NewParser()
+	file := p.ParseFile(fileBytes)
 	env := object.NewDefaultEnvironment()
 
 	env.SetDirectory(filepath.Dir(input))
