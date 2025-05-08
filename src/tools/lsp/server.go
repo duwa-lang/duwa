@@ -112,12 +112,6 @@ func (se *Server) Declaration(ctx context.Context, params *protocol.DeclarationP
 	return nil, nil
 }
 
-func (se *Server) Definition(ctx context.Context, params *protocol.DefinitionParams) (result []protocol.Location, err error) {
-	logger.Sugar().Debug("Definition", params.TextDocument.URI, params.Position)
-
-	return nil, nil
-}
-
 func (se *Server) DidChange(ctx context.Context, params *protocol.DidChangeTextDocumentParams) (err error) {
 	// For simplicity, we're assuming full content sync mode
 	if len(params.ContentChanges) > 0 {
