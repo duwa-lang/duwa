@@ -2,7 +2,7 @@ package evaluator
 
 import (
 	"github.com/sevenreup/duwa/src/ast"
-	"github.com/sevenreup/duwa/src/library"
+	"github.com/sevenreup/duwa/src/modules/all"
 	"github.com/sevenreup/duwa/src/object"
 )
 
@@ -10,11 +10,11 @@ func evalIdentifier(
 	node *ast.Identifier,
 	env *object.Environment,
 ) object.Object {
-	if libraryModule, ok := library.Modules[node.Value]; ok {
+	if libraryModule, ok := all.Modules[node.Value]; ok {
 		return libraryModule
 	}
 
-	if libraryFunction, ok := library.Functions[node.Value]; ok {
+	if libraryFunction, ok := all.Functions[node.Value]; ok {
 		return libraryFunction
 	}
 

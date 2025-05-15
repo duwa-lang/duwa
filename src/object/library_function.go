@@ -22,3 +22,8 @@ func (libraryFunction *LibraryFunction) Type() ObjectType {
 func (libraryFunction *LibraryFunction) Method(method string, args []Object) (Object, bool) {
 	return nil, false
 }
+
+func NewBuiltin(name string, function GoFunction) *LibraryFunction {
+	f := &LibraryFunction{Name: name, Function: function}
+	return f
+}
