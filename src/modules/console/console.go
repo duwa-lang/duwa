@@ -15,7 +15,7 @@ import (
 //
 // `Example`
 // ```
-// Khonso.lemba("Hello, World!") # prints "Hello, World!"
+// khonso.lemba("Hello, World!") # prints "Hello, World!"
 // ```
 func methodConsolePrint(env *object.Environment, tok token.Token, args ...object.Object) object.Object {
 	values := make([]string, 0)
@@ -34,7 +34,7 @@ func methodConsolePrint(env *object.Environment, tok token.Token, args ...object
 //
 // `Example`
 // ```
-// Khonso.landira() # returns the string entered by the user
+// khonso.landira() # returns the string entered by the user
 // ```
 func methodConsoleRead(scope *object.Environment, tok token.Token, args ...object.Object) object.Object {
 	if len(args) == 1 {
@@ -57,7 +57,7 @@ func methodConsoleRead(scope *object.Environment, tok token.Token, args ...objec
 //
 // `Example`
 // ```
-// Khonso.fufuta() # clears the console
+// khonso.fufuta() # clears the console
 // ```
 func methodConsoleClear(scope *object.Environment, tok token.Token, args ...object.Object) object.Object {
 	err := scope.Console.Clear()
@@ -111,12 +111,12 @@ func BuiltInPrintLine(env *object.Environment, tok token.Token, args ...object.O
 	return nil
 }
 
-// library=Khonso
+// library=khonso
 // This is the console module
 // It contains functions that interact with the console
 // It is used to read and write to the console
 func Module() *object.LibraryModule {
-	return object.NewBuiltInLibraryModule("Khonso", map[string]*object.LibraryFunction{
+	return object.NewBuiltInLibraryModule("khonso", map[string]*object.LibraryFunction{
 		"lemba":   object.NewBuiltin("lemba", methodConsolePrint),
 		"fufuta":  object.NewBuiltin("fufuta", methodConsoleClear),
 		"landira": object.NewBuiltin("landira", methodConsoleRead),

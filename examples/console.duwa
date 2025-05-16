@@ -1,4 +1,4 @@
 nambala x = 5;
 nambala y = 10;
 
-Khonso.lemba(x * y);
+khonso.lemba(x * y);

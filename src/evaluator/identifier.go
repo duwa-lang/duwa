@@ -10,10 +10,6 @@ func evalIdentifier(
 	node *ast.Identifier,
 	env *object.Environment,
 ) object.Object {
-	if libraryModule, ok := all.Modules[node.Value]; ok {
-		return libraryModule
-	}
-
 	if libraryFunction, ok := all.Functions[node.Value]; ok {
 		return libraryFunction
 	}

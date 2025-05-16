@@ -46,7 +46,7 @@ ndondomeko playGame() {
     pamene(isRunning) {
         printBoard();
         lembanzr("Player " + currentPlayer + " turn: ");
-        nambala playerMove = kuNambala(Khonso.landira());
+        nambala playerMove = kuNambala(khonso.landira());
         mawu moved = move(currentPlayer, playerMove - 1);
         ngati(moved == bodza) {
             lembanzr("Invalid move");
@@ -60,7 +60,7 @@ ndondomeko playGame() {
                 lembanzr("Game Over");
                 isRunning = bodza;
             } kapena {
-               Khonso.fufuta();
+               khonso.fufuta();
             }
         }
     }

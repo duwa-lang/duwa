@@ -634,9 +634,9 @@ func TestClasses(t *testing.T) {
 func TestImport(t *testing.T) {
 	tests := []struct {
 		input    string
-		expected interface{}
+		expected any
 	}{
-		{`tenga masamu kuchokera "masamu";
+		{`tenga masamu mu "masamu";
 		masamu.yochepa(5, 10);`, 5},
 	}
 	for _, tt := range tests {

@@ -11,11 +11,11 @@ import (
 //
 // `Example`
 // ```
-// Masamu.yochepa(5, 10) # returns 5
+// masamu.yochepa(5, 10) # returns 5
 // ```
 func methodMathMin(scope *object.Environment, tok token.Token, args ...object.Object) object.Object {
 	if len(args) < 2 {
-		panic("Masamu.yochepa requires at least two arguments")
+		panic("masamu.yochepa requires at least two arguments")
 	}
 
 	if args[0].Type() != object.INTEGER_OBJ {
@@ -41,11 +41,11 @@ func methodMathMin(scope *object.Environment, tok token.Token, args ...object.Ob
 //
 // `Example`
 // ```
-// Masamu.sqrt(25) # returns 5
+// masamu.sqrt(25) # returns 5
 // ```
 func methodMathSqrt(scope *object.Environment, tok token.Token, args ...object.Object) object.Object {
 	if len(args) != 1 {
-		panic("Masamu.sqrt requires one argument")
+		panic("masamu.sqrt requires one argument")
 	}
 
 	if args[0].Type() != object.INTEGER_OBJ {
@@ -63,11 +63,11 @@ func methodMathSqrt(scope *object.Environment, tok token.Token, args ...object.O
 //
 // `Example`
 // ```
-// Masamu.round(5.678, 2) # returns 5.68
+// masamu.round(5.678, 2) # returns 5.68
 // ```
 func methodRound(scope *object.Environment, tok token.Token, args ...object.Object) object.Object {
 	if len(args) < 2 {
-		panic("Masamu.yochepa requires at least two arguments")
+		panic("masamu.yochepa requires at least two arguments")
 	}
 
 	if args[0].Type() != object.INTEGER_OBJ {
@@ -89,7 +89,7 @@ func methodRound(scope *object.Environment, tok token.Token, args ...object.Obje
 //
 // `Example`
 // ```
-// Masamu.pansi(5.678) # returns 5
+// masamu.pansi(5.678) # returns 5
 // ```
 func methodFloor(scope *object.Environment, tok token.Token, args ...object.Object) object.Object {
 	if args[0].Type() != object.INTEGER_OBJ {
@@ -99,12 +99,12 @@ func methodFloor(scope *object.Environment, tok token.Token, args ...object.Obje
 	return &object.Integer{Value: number1.Value.Floor()}
 }
 
-// library=Masamu
+// library=masamu
 // This is the math module
 // It contains functions for performing mathematical operations
 // It is used to perform mathematical calculations
 func Module() *object.LibraryModule {
-	return object.NewBuiltInLibraryModule("Masamu", map[string]*object.LibraryFunction{
+	return object.NewBuiltInLibraryModule("masamu", map[string]*object.LibraryFunction{
 		"yochepa": object.NewBuiltin("yochepa", methodMathMin),
 		"sqrt":    object.NewBuiltin("sqrt", methodMathSqrt),
 		"round":   object.NewBuiltin("round", methodRound),

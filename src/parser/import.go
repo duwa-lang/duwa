@@ -30,7 +30,7 @@ func (p *Parser) importStatement() ast.Expression {
 				p.nextToken()
 				p.nextToken()
 			} else {
-				p.errors = append(p.errors, fmt.Sprintf("expected kuchokera after tenga but got %s", p.curToken.Literal))
+				p.errors = append(p.errors, fmt.Sprintf("expected mu after tenga but got %s", p.curToken.Literal))
 				return nil
 			}
 		}
@@ -42,7 +42,7 @@ func (p *Parser) importStatement() ast.Expression {
 	if p.curToken.Type == token.FROM && p.expectPeek(token.STR) {
 		statement.Module = &ast.StringLiteral{Token: p.curToken, Value: p.curToken.Literal}
 	} else {
-		p.errors = append(p.errors, fmt.Sprintf("expected kuchokera after tenga but got %s", p.curToken.Literal))
+		p.errors = append(p.errors, fmt.Sprintf("expected mu after tenga but got %s", p.curToken.Literal))
 		return nil
 	}
 
