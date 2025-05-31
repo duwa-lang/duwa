@@ -10,7 +10,6 @@ import (
 	"github.com/sevenreup/duwa/src/parser"
 )
 
-var searchPaths []string
 var imported map[string]*object.Environment
 
 func isImported(path string) bool {
@@ -30,19 +29,21 @@ func evaluateImportStatement(node *ast.ImportStatement, env *object.Environment)
 	}
 
 	if isStd {
-		return handleStdImport(path, node)
+		return handleStdImport(path, node, env)
 	}
 
 	return evaluateFile(path, node, env)
 }
 
-func handleStdImport(filePath string, node *ast.ImportStatement) object.Object {
+func handleStdImport(filePath string, node *ast.ImportStatement, env *object.Environment) object.Object {
 	module, ok := all.ImportModule(filePath)
 	if !ok {
 		return newError("%d:%d:%s: runtime error: %s", node.Token.Pos.Line, node.Token.Pos.Column, node.Token.File, "Failed to import std moduler")
 	}
 
-	return module
+	env.Set(filePath, module)
+
+	return nil
 }
 
 func evaluateFile(filePath string, node *ast.ImportStatement, env *object.Environment) object.Object {
@@ -68,8 +69,12 @@ func evaluateFile(filePath string, node *ast.ImportStatement, env *object.Enviro
 	if isError(result) {
 		return result
 	}
+	return addImportToEnvironment(node, env, newEnvironment)
+}
 
+func addImportToEnvironment(node *ast.ImportStatement, env *object.Environment, newEnvironment *object.Environment) object.Object {
 	if node.Type == ast.DefaultImport {
+		// Todo: fix this, instead pf have packages we should have modules
 		newPackage := object.NewPackageFromEnvironment(node.DefaultAlias.Value, newEnvironment)
 		env.Set(node.DefaultAlias.Value, newPackage)
 	} else if node.Type == ast.NamedImport {
