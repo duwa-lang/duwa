@@ -5,12 +5,11 @@ import (
 	"path/filepath"
 
 	"github.com/sevenreup/duwa/src/ast"
-	"github.com/sevenreup/duwa/src/library/std"
+	"github.com/sevenreup/duwa/src/modules/all"
 	"github.com/sevenreup/duwa/src/object"
 	"github.com/sevenreup/duwa/src/parser"
 )
 
-var searchPaths []string
 var imported map[string]*object.Environment
 
 func isImported(path string) bool {
@@ -19,7 +18,7 @@ func isImported(path string) bool {
 }
 
 func evaluateImportStatement(node *ast.ImportStatement, env *object.Environment) object.Object {
-	path, err := resolveFilePath(node, env)
+	isStd, path, err := resolveFilePath(node, env)
 	if err != nil {
 		return object.NewError("%s", err.Error())
 	}
@@ -29,7 +28,22 @@ func evaluateImportStatement(node *ast.ImportStatement, env *object.Environment)
 		return nil
 	}
 
+	if isStd {
+		return handleStdImport(path, node, env)
+	}
+
 	return evaluateFile(path, node, env)
+}
+
+func handleStdImport(filePath string, node *ast.ImportStatement, env *object.Environment) object.Object {
+	module, ok := all.ImportModule(filePath)
+	if !ok {
+		return newError("%d:%d:%s: runtime error: %s", node.Token.Pos.Line, node.Token.Pos.Column, node.Token.File, "Failed to import std moduler")
+	}
+
+	env.Set(filePath, module)
+
+	return nil
 }
 
 func evaluateFile(filePath string, node *ast.ImportStatement, env *object.Environment) object.Object {
@@ -55,8 +69,12 @@ func evaluateFile(filePath string, node *ast.ImportStatement, env *object.Enviro
 	if isError(result) {
 		return result
 	}
+	return addImportToEnvironment(node, env, newEnvironment)
+}
 
+func addImportToEnvironment(node *ast.ImportStatement, env *object.Environment, newEnvironment *object.Environment) object.Object {
 	if node.Type == ast.DefaultImport {
+		// Todo: fix this, instead pf have packages we should have modules
 		newPackage := object.NewPackageFromEnvironment(node.DefaultAlias.Value, newEnvironment)
 		env.Set(node.DefaultAlias.Value, newPackage)
 	} else if node.Type == ast.NamedImport {
@@ -76,33 +94,28 @@ func evaluateFile(filePath string, node *ast.ImportStatement, env *object.Enviro
 	return nil
 }
 
-func resolveFilePath(node *ast.ImportStatement, env *object.Environment) (string, error) {
+func resolveFilePath(node *ast.ImportStatement, env *object.Environment) (bool, string, error) {
 	path := node.Module.Value
 	if isStdImport(path) {
-		return std.GetFilePath(path)
+		return true, path, nil
 	}
 	if filepath.Ext(path) != ".duwa" {
 		path += ".duwa"
 	}
 	if filepath.IsAbs(path) {
-		return path, nil
+		return false, path, nil
 	}
 
 	filename, err := filepath.Abs(filepath.Join(env.GetDirectory(), path))
 	if err != nil {
-		return "", err
+		return false, "", err
 	}
-	return filename, nil
+	return false, filename, nil
 }
 
 func isStdImport(path string) bool {
 	if filepath.Ext(path) == ".duwa" {
 		path = path[:len(path)-len(".duwa")]
 	}
-	for _, stdPath := range std.BuiltinFiles {
-		if path == stdPath {
-			return true
-		}
-	}
-	return false
+	return all.IsValidModuleImport(path)
 }

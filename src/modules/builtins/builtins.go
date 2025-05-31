@@ -1,4 +1,4 @@
-package functions
+package builtins
 
 import (
 	"github.com/sevenreup/duwa/src/object"

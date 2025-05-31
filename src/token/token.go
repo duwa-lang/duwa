@@ -100,7 +100,7 @@ var keywords = map[string]TokenType{
 	"pitirizani": CONTINUE,
 	"palibe":     NULL,
 	"tenga":      IMPORT,
-	"kuchokera":  FROM,
+	"mu":  FROM,
 }
 
 var variableTypes = map[TokenType]TokenType{

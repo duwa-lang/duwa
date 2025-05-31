@@ -110,7 +110,7 @@ func (se *Server) getKeywords() []Keyword {
 			Description: "",
 		},
 		{
-			Text:        "kuchokera",
+			Text:        "mu",
 			Kind:        protocol.CompletionItemKindKeyword,
 			Detail:      "",
 			Description: "",

@@ -1,50 +1,52 @@
+tenga khonso mu "khonso";
+
 ndondomeko moni_kwa_munthu() {
 	mawu lopatsidwa = "";
 	mawu labambo = "";
 	nambala experience = 0;
 	pamene(zoona) {
-		Khonso.lemba("Dzina lako ndindani?");
-		mawu dzina = Khonso.landira();
+		khonso.lemba("Dzina lako ndindani?");
+		mawu dzina = khonso.landira();
 
 		mawu dzinaLonse = dzina.gawa(" ");
 
 		ngati (dzinaLonse.kutalika() != 2) {
-			Khonso.fufuta();
-			Khonso.lemba("Dzina lanu likhala ndi dzina lopatsidwa ndi labambo.");
+			khonso.fufuta();
+			khonso.lemba("Dzina lanu likhala ndi dzina lopatsidwa ndi labambo.");
 			pitirizani;
 		}
 		lopatsidwa = dzinaLonse[0];
 		labambo = dzinaLonse[1];
-		Khonso.lemba("Moni " + lopatsidwa + "!");
-		Khonso.lemba("Dzina lanu lopatsidwa ndi yotalika ndi mawu " + lopatsidwa.kutalika());
+		khonso.lemba("Moni " + lopatsidwa + "!");
+		khonso.lemba("Dzina lanu lopatsidwa ndi yotalika ndi mawu " + lopatsidwa.kutalika());
 		siya;
 	}
 
-	Khonso.lemba("Mwankhala mukupanga programming kwazaka zingati?");
+	khonso.lemba("Mwankhala mukupanga programming kwazaka zingati?");
 	pamene(zoona) {
-		nambala experience = kuNambala(Khonso.landira());
+		nambala experience = kuNambala(khonso.landira());
 		ngati(experience == palibe) {
-			Khonso.lemba("Simunayike nambala, lowetsaninso");
+			khonso.lemba("Simunayike nambala, lowetsaninso");
 			pitirizani;
 		}
 		siya;
 	}
 
 	ngati (experience < 0) {
-		Khonso.lemba("Mukhoza kulemba nambala yoposa zero?");
+		khonso.lemba("Mukhoza kulemba nambala yoposa zero?");
 		pitirizani;
 	}
 
 	ngati (experience <= 1) {
-		Khonso.lemba("Takulandirani, pa ulendo wanu wa programming!");
+		khonso.lemba("Takulandirani, pa ulendo wanu wa programming!");
 	}
 
 	ngati (experience > 1 && experience <= 5) {
-		Khonso.lemba("Pangono, pangono ntchito yikuyenda");
+		khonso.lemba("Pangono, pangono ntchito yikuyenda");
 	}
 
 	ngati (experience > 5) {
-		Khonso.lemba("Ndinu wodziwa zambiri. Mwina mundiphunzitsa posachedwa!");
+		khonso.lemba("Ndinu wodziwa zambiri. Mwina mundiphunzitsa posachedwa!");
 	}
 }
 

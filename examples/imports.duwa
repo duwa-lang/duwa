@@ -1,4 +1,4 @@
-tenga masamu kuchokera "./imports/masamu";
+tenga masamu mu "./imports/masamu";
 
 nambala a = masamu.phatikiza(1, 2); // 3
 lembanzr(a);

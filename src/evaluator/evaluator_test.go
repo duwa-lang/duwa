@@ -181,11 +181,11 @@ func TestErrorHandling(t *testing.T) {
 	}{
 		{
 			"5 + zoona;",
-			"type mismatch: INTEGER + BOOLEAN",
+			"(1:4:): type mismatch: INTEGER + BOOLEAN",
 		},
 		{
 			"5 + zoona; 5;",
-			"type mismatch: INTEGER + BOOLEAN",
+			"(1:4:): type mismatch: INTEGER + BOOLEAN",
 		},
 		{
 			"-zoona",
@@ -492,7 +492,7 @@ func TestMethodCalls(t *testing.T) {
 			2,
 		},
 		{
-			"nambala[] myArray = [1, 2, 3];myArray.Kankha(8);myArray[3];",
+			"nambala[] myArray = [1, 2, 3];myArray.kankha(8);myArray[3];",
 			8,
 		},
 	}
@@ -634,9 +634,9 @@ func TestClasses(t *testing.T) {
 func TestImport(t *testing.T) {
 	tests := []struct {
 		input    string
-		expected interface{}
+		expected any
 	}{
-		{`tenga masamu kuchokera "masamu";
+		{`tenga masamu mu "masamu";
 		masamu.yochepa(5, 10);`, 5},
 	}
 	for _, tt := range tests {

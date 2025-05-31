@@ -1438,8 +1438,8 @@ func TestImport(t *testing.T) {
 		Exports       map[string]string
 		defaultImport string
 	}{
-		{`tenga fmt kuchokera "fmt";`, "fmt", ast.DefaultImport, nil, "fmt"},
-		{`tenga { export1, export2 } kuchokera "fmt";`, "fmt", ast.NamedImport, map[string]string{"export1": "export1", "export2": "export2"}, ""},
+		{`tenga fmt mu "fmt";`, "fmt", ast.DefaultImport, nil, "fmt"},
+		{`tenga { export1, export2 } mu "fmt";`, "fmt", ast.NamedImport, map[string]string{"export1": "export1", "export2": "export2"}, ""},
 	}
 	for _, tt := range tests {
 		p := NewParser()

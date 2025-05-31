@@ -38,7 +38,7 @@ func evalInfixExpression(
 			}
 		}
 	case left.Type() != right.Type():
-		return newError("type mismatch: %s %s %s",
+		return newErrorNode(node.Token, "type mismatch: %s %s %s",
 			left.Type(), operator, right.Type())
 	}
 	return newError("unknown operator: %s %s %s",

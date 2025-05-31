@@ -1,3 +1,6 @@
+tenga khonso mu "khonso";
+tenga masamu mu "masamu";
+
 ndondomeko printArray(tag, arr) {
     nambala n = arr.kutalika();
     lemba(tag + ": [");
@@ -144,50 +147,60 @@ ndondomeko mergeSort(arr, l, r) {
 // Quick Sort
 
 
-// Heap Sort
 
-ndondomeko heapify(arr, n, i) {
-    nambala largest = i;
-    nambala l = 2*i + 1;
-    nambala r = 2*i + 2;
+// Heap Sort - This is dead, need to rewrite it
 
-    ngati (l < n && arr[l] > arr[largest]) {
-        largest = l;
-    }
+// ndondomeko heapify(arr, n, i) {
+//     nambala largest = i;
+//     nambala l = 2*i + 1;
+//     nambala r = 2*i + 2;
 
-    ngati (r < n && arr[r] > arr[largest]) {
-        largest = r;
-    }
+//     ngati (l < n && arr[l] > arr[largest]) {
+//         largest = l;
+//     }
 
-    ngati (largest != i) {
-        nambala temp = arr[i];
-        arr[i] = arr[largest];
-        arr[largest] = temp;
+//     ngati (r < n && arr[r] > arr[largest]) {
+//         largest = r;
+//     }
 
-        heapify(arr, n, largest);
-    }
-}
+//     ngati (largest != i) {
+//         nambala temp = arr[i];
+//         arr[i] = arr[largest];
+//         arr[largest] = temp;
 
-ndondomeko heapSort(arr) {
-    nambala n = arr.kutalika();
+//         heapify(arr, n, largest);
+//     }
+// }
 
-    za(nambala i = n/2 - 1; i >= 0; i--) {
-        heapify(arr, n, i);
-    }
+// ndondomeko heapSort(arr) {
+//     nambala n = arr.kutalika();
 
-    za(nambala i = n-1; i >= 0; i--) {
-        nambala temp = arr[0];
-        arr[0] = arr[i];
-        arr[i] = temp;
+//     // Build heap (rearrange array)
+//     za(nambala i = masamu.pansi(n/2) - 1; i >= 0; i--) {
+//         heapify(arr, n, i);
+//     }
 
-        heapify(arr, i, 0);
-    }
-}
+//     // One by one extract an element from heap
+//     za(nambala i = n-1; i > 0; i--) {  // Changed condition from i >= 0 to i > 0
+//         // Move current root to end
+//         nambala temp = arr[0];
+//         arr[0] = arr[i];
+//         arr[i] = temp;
 
-ndondomeko doHeapSort() {
-    nambala[] arr = [64,25,12,22,11];
-    heapSort(arr);
-    printArray("Heap Sort", arr);
-}
+//         // Call max heapify on the reduced heap
+//         heapify(arr, i, 0);
+//     }
+// }
 
-doHeapSort();
+// ndondomeko printArray(title, arr) {
+//     khonso.lemba(title + ": " + arr.phatikiza(", "));
+// }
+
+// ndondomeko doHeapSort() {
+//     nambala[] arr = [64,25,12,22,11];
+//     khonso.lemba("Original array: " + arr.phatikiza(", "));
+//     heapSort(arr);
+//     printArray("Heap Sort", arr);
+// }
+
+// doHeapSort();

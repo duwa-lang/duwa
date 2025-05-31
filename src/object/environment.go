@@ -3,7 +3,7 @@ package object
 import (
 	"log/slog"
 
-	"github.com/sevenreup/duwa/src/library/runtime"
+	"github.com/sevenreup/duwa/src/runtime"
 	"github.com/sevenreup/duwa/src/runtime/native"
 )
 

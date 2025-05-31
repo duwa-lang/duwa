@@ -1,3 +1,5 @@
+tenga masamu mu "masamu";
+
 // Linear Search
 ndondomeko linearSearch(arr, x) {
     za(nambala i = 0; i < arr.kutalika(); i++) {
@@ -59,18 +61,18 @@ doBinarySearch();
 
 ndondomeko jumpSearch(arr, x) {
     nambala n = arr.kutalika();
-    nambala step = Masamu.sqrt(n);
+    nambala step = masamu.sqrt(n);
     nambala prev = 0;
-    pamene (arr[Masamu.yochepa(step, n) - 1] < x) {
+    pamene (arr[masamu.yochepa(step, n) - 1] < x) {
         prev = step;
-        step += Masamu.sqrt(n);
+        step += masamu.sqrt(n);
         ngati (prev >= n) {
             bweza -1;
         }
     }
     pamene (arr[prev] < x) {
         prev++;
-        ngati (prev == Masamu.yochepa(step, n)) {
+        ngati (prev == masamu.yochepa(step, n)) {
             bweza -1;
         }
     }
@@ -159,7 +161,7 @@ ndondomeko exponentialSearch(arr, n, x) {
     }
  
     // Call binary search for the found range.
-    bweza binarySearch(arr, i / 2, Masamu.yochepa(i, n), x);
+    bweza binarySearch(arr, i / 2, masamu.yochepa(i, n), x);
 }
 
 ndondomeko doExponentialSearch() {
@@ -200,7 +202,7 @@ ndondomeko fibonacciSearch(arr, x, n) {
     // When fibM becomes 1, fibMm2 becomes 0
     pamene (fibM > 1) {
         // Check if fibMm2 is a valid location
-        nambala i = Masamu.yochepa(offset + fibMMm2, n - 1);
+        nambala i = masamu.yochepa(offset + fibMMm2, n - 1);
  
         // If x is greater than the value at
         // index fibMm2, cut the subarray array

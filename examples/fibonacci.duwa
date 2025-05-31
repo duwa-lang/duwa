@@ -1,5 +1,7 @@
+tenga khonso mu "khonso";
+
 // Iterative Algorithm
-Khonso.lemba("Here is the Fibonacci Series: ");
+khonso.lemba("Here is the Fibonacci Series: ");
 ndondomeko fibonacci(n) {
     nambala a = 0;
     nambala b = 1;
@@ -24,7 +26,7 @@ ndondomeko fibonacciRecursive(n) {
     bweza fibonacciRecursive(n - 1) + fibonacciRecursive(n - 2);
 }
 
-Khonso.lemba("\nIterative: \n");
-Khonso.lemba(fibonacci(9));
-Khonso.lemba("\nRecursive: \n");
-Khonso.lemba(fibonacciRecursive(9));
+khonso.lemba("\nIterative: \n");
+khonso.lemba(fibonacci(9));
+khonso.lemba("\nRecursive: \n");
+khonso.lemba(fibonacciRecursive(9));
