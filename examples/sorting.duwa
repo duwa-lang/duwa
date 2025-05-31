@@ -1,3 +1,6 @@
+tenga khonso mu "khonso";
+tenga masamu mu "masamu";
+
 ndondomeko printArray(tag, arr) {
     nambala n = arr.kutalika();
     lemba(tag + ": [");
@@ -144,7 +147,8 @@ ndondomeko mergeSort(arr, l, r) {
 // Quick Sort
 
 
-// Heap Sort
+
+// Heap Sort - Fixed Version
 
 ndondomeko heapify(arr, n, i) {
     nambala largest = i;
@@ -171,21 +175,30 @@ ndondomeko heapify(arr, n, i) {
 ndondomeko heapSort(arr) {
     nambala n = arr.kutalika();
 
-    za(nambala i = n/2 - 1; i >= 0; i--) {
+    // Build heap (rearrange array)
+    za(nambala i = masamu.pansi(n/2) - 1; i >= 0; i--) {
         heapify(arr, n, i);
     }
 
-    za(nambala i = n-1; i >= 0; i--) {
+    // One by one extract an element from heap
+    za(nambala i = n-1; i > 0; i--) {  // Changed condition from i >= 0 to i > 0
+        // Move current root to end
         nambala temp = arr[0];
         arr[0] = arr[i];
         arr[i] = temp;
 
+        // Call max heapify on the reduced heap
         heapify(arr, i, 0);
     }
 }
 
+ndondomeko printArray(title, arr) {
+    khonso.lemba(title + ": " + arr.phatikiza(", "));
+}
+
 ndondomeko doHeapSort() {
     nambala[] arr = [64,25,12,22,11];
+    khonso.lemba("Original array: " + arr.phatikiza(", "));
     heapSort(arr);
     printArray("Heap Sort", arr);
 }

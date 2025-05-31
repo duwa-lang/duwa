@@ -1,3 +1,5 @@
+tenga masamu mu "masamu";
+
 // Linear Search
 ndondomeko linearSearch(arr, x) {
     za(nambala i = 0; i < arr.kutalika(); i++) {

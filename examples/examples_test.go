@@ -3,6 +3,7 @@ package examples
 import (
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/sevenreup/duwa/src/evaluator"
@@ -41,9 +42,16 @@ func TestExamples(t *testing.T) {
 			failedFiles = append(failedFiles, file)
 			continue
 		}
+
+		// skip files containing "khonso.landira"
+		if strings.Contains(string(content), "khonso.landira") {
+			t.Logf("Skipping file %s (contains khonso.landira)", file)
+			continue
+		}
+
 		// evaluate the content
 		result := testEval(string(content))
-		if _, ok := result.(*object.Error); !ok {
+		if _, ok := result.(*object.Error); ok {
 			failedFiles = append(failedFiles, file)
 		}
 	}

@@ -11,7 +11,7 @@ var Functions = map[string]*object.LibraryFunction{}
 
 func Builtins() map[string]object.LibraryModule {
 	result := map[string]object.LibraryModule{
-		"khoso": *console.Module(),
+		"khonso": *console.Module(),
 		"masamu": *math.Module(),
 	}
 

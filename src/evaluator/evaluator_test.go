@@ -492,7 +492,7 @@ func TestMethodCalls(t *testing.T) {
 			2,
 		},
 		{
-			"nambala[] myArray = [1, 2, 3];myArray.Kankha(8);myArray[3];",
+			"nambala[] myArray = [1, 2, 3];myArray.kankha(8);myArray[3];",
 			8,
 		},
 	}

@@ -36,10 +36,12 @@ func (list *Array) Method(method string, args []Object) (Object, bool) {
 		return list.methodLength(args)
 	case "chotsaKumbuyo":
 		return list.methodPop(args)
-	case "Kankha":
+	case "kankha":
 		return list.methodPush(args)
 	case "chotsaKutsogolo":
 		return list.methodShift(args)
+	case "phatikiza":
+		return list.methodJoin(args)
 	}
 	return nil, false
 }
@@ -87,4 +89,20 @@ func (list *Array) methodPush(args []Object) (Object, bool) {
 	list.Elements = newElements
 
 	return &Integer{Value: decimal.NewFromInt(int64(newLength))}, true
+}
+
+// method=join args=[string] return={string}
+// Joins all elements of an array into a string, separated by the specified separator.
+func (list *Array) methodJoin(args []Object) (Object, bool) {
+	sep := ""
+	if len(args) > 0 {
+		if s, ok := args[0].(*String); ok {
+			sep = s.Value
+		}
+	}
+	strs := make([]string, len(list.Elements))
+	for i, e := range list.Elements {
+		strs[i] = e.String()
+	}
+	return &String{Value: strings.Join(strs, sep)}, true
 }

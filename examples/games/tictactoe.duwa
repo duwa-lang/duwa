@@ -1,3 +1,5 @@
+tenga khonso mu "khonso";
+
 mawu[] board = ["","","","","","","","",""];
 mawu currentPlayer = "X";
 nambala isRunning = zoona;

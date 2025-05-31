@@ -1,3 +1,5 @@
+tenga khonso mu "khonso";
+
 // Iterative Algorithm
 khonso.lemba("Here is the Fibonacci Series: ");
 ndondomeko fibonacci(n) {
