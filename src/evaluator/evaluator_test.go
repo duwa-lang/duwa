@@ -181,11 +181,11 @@ func TestErrorHandling(t *testing.T) {
 	}{
 		{
 			"5 + zoona;",
-			"type mismatch: INTEGER + BOOLEAN",
+			"(1:4:): type mismatch: INTEGER + BOOLEAN",
 		},
 		{
 			"5 + zoona; 5;",
-			"type mismatch: INTEGER + BOOLEAN",
+			"(1:4:): type mismatch: INTEGER + BOOLEAN",
 		},
 		{
 			"-zoona",
