@@ -148,59 +148,59 @@ ndondomeko mergeSort(arr, l, r) {
 
 
 
-// Heap Sort - Fixed Version
+// Heap Sort - This is dead, need to rewrite it
 
-ndondomeko heapify(arr, n, i) {
-    nambala largest = i;
-    nambala l = 2*i + 1;
-    nambala r = 2*i + 2;
+// ndondomeko heapify(arr, n, i) {
+//     nambala largest = i;
+//     nambala l = 2*i + 1;
+//     nambala r = 2*i + 2;
 
-    ngati (l < n && arr[l] > arr[largest]) {
-        largest = l;
-    }
+//     ngati (l < n && arr[l] > arr[largest]) {
+//         largest = l;
+//     }
 
-    ngati (r < n && arr[r] > arr[largest]) {
-        largest = r;
-    }
+//     ngati (r < n && arr[r] > arr[largest]) {
+//         largest = r;
+//     }
 
-    ngati (largest != i) {
-        nambala temp = arr[i];
-        arr[i] = arr[largest];
-        arr[largest] = temp;
+//     ngati (largest != i) {
+//         nambala temp = arr[i];
+//         arr[i] = arr[largest];
+//         arr[largest] = temp;
 
-        heapify(arr, n, largest);
-    }
-}
+//         heapify(arr, n, largest);
+//     }
+// }
 
-ndondomeko heapSort(arr) {
-    nambala n = arr.kutalika();
+// ndondomeko heapSort(arr) {
+//     nambala n = arr.kutalika();
 
-    // Build heap (rearrange array)
-    za(nambala i = masamu.pansi(n/2) - 1; i >= 0; i--) {
-        heapify(arr, n, i);
-    }
+//     // Build heap (rearrange array)
+//     za(nambala i = masamu.pansi(n/2) - 1; i >= 0; i--) {
+//         heapify(arr, n, i);
+//     }
 
-    // One by one extract an element from heap
-    za(nambala i = n-1; i > 0; i--) {  // Changed condition from i >= 0 to i > 0
-        // Move current root to end
-        nambala temp = arr[0];
-        arr[0] = arr[i];
-        arr[i] = temp;
+//     // One by one extract an element from heap
+//     za(nambala i = n-1; i > 0; i--) {  // Changed condition from i >= 0 to i > 0
+//         // Move current root to end
+//         nambala temp = arr[0];
+//         arr[0] = arr[i];
+//         arr[i] = temp;
 
-        // Call max heapify on the reduced heap
-        heapify(arr, i, 0);
-    }
-}
+//         // Call max heapify on the reduced heap
+//         heapify(arr, i, 0);
+//     }
+// }
 
-ndondomeko printArray(title, arr) {
-    khonso.lemba(title + ": " + arr.phatikiza(", "));
-}
+// ndondomeko printArray(title, arr) {
+//     khonso.lemba(title + ": " + arr.phatikiza(", "));
+// }
 
-ndondomeko doHeapSort() {
-    nambala[] arr = [64,25,12,22,11];
-    khonso.lemba("Original array: " + arr.phatikiza(", "));
-    heapSort(arr);
-    printArray("Heap Sort", arr);
-}
+// ndondomeko doHeapSort() {
+//     nambala[] arr = [64,25,12,22,11];
+//     khonso.lemba("Original array: " + arr.phatikiza(", "));
+//     heapSort(arr);
+//     printArray("Heap Sort", arr);
+// }
 
-doHeapSort();
+// doHeapSort();
