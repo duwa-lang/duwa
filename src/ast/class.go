@@ -6,7 +6,7 @@ import (
 	"github.com/sevenreup/duwa/src/token"
 )
 
-type ClassStatement struct {
+type ClassDeclStatement struct {
 	Expression
 	Token token.Token
 	Name  *Identifier
@@ -14,9 +14,9 @@ type ClassStatement struct {
 	Body  *BlockStatement
 }
 
-func (class *ClassStatement) expressionNode()      {}
-func (class *ClassStatement) TokenLiteral() string { return class.Token.Literal }
-func (class *ClassStatement) String() string {
+func (class *ClassDeclStatement) expressionNode()      {}
+func (class *ClassDeclStatement) TokenLiteral() string { return class.Token.Literal }
+func (class *ClassDeclStatement) String() string {
 	var out bytes.Buffer
 	out.WriteString("ndondomeko ")
 	out.WriteString(class.Name.String())

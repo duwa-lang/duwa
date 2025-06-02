@@ -39,11 +39,11 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		return &object.ReturnValue{Value: val}
 	case *ast.Identifier:
 		return evalIdentifier(node, env)
-	case *ast.VariableDeclarationStatement:
+	case *ast.VariableDeclStatement:
 		return evaluateDeclaration(node, env)
 	case *ast.AssigmentStatement:
 		return evaluateAssigment(node, env)
-	case *ast.FunctionLiteral:
+	case *ast.FunctionDeclStatement:
 		function := &object.Function{Parameters: node.Parameters, Env: env, Body: node.Body}
 		if node.Name != nil {
 			env.Set(node.Name.Value, function)
@@ -78,7 +78,7 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		return &object.String{Value: node.Value}
 	case *ast.PostfixExpression:
 		return evaluatePostfix(node, env)
-	case *ast.ClassStatement:
+	case *ast.ClassDeclStatement:
 		return evaluateClass(node, env)
 	case *ast.BreakStatement:
 		return evaluateBreak(node, env)
@@ -110,9 +110,8 @@ func newError(format string, a ...interface{}) *object.Error {
 }
 
 func newErrorNode(tk token.Token, format string, a ...interface{}) *object.Error {
-	return &object.Error{Message: fmt.Sprintf("(%d:%d:%s): %s", tk.Pos.Line, tk.Pos.Column, tk.File,fmt.Sprintf(format, a...))}
+	return &object.Error{Message: fmt.Sprintf("(%d:%d:%s): %s", tk.Pos.Line, tk.Pos.Column, tk.File, fmt.Sprintf(format, a...))}
 }
-
 
 func isError(obj object.Object) bool {
 	if obj != nil {

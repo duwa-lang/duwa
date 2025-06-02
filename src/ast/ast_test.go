@@ -9,7 +9,7 @@ import (
 func TestString(t *testing.T) {
 	file := &File{
 		Statements: []Statement{
-			&VariableDeclarationStatement{
+			&VariableDeclStatement{
 				Type: token.Token{Type: token.INTEGER, Literal: "nambala"},
 				Identifier: &Identifier{
 					Token: token.Token{Type: token.IDENT, Literal: "myVar"},

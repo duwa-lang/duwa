@@ -6,7 +6,7 @@ import (
 )
 
 // TODO: Handle type
-func evaluateDeclaration(node *ast.VariableDeclarationStatement, env *object.Environment) object.Object {
+func evaluateDeclaration(node *ast.VariableDeclStatement, env *object.Environment) object.Object {
 	val := Eval(node.Value, env)
 	if isError(val) {
 		return val

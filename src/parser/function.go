@@ -6,7 +6,7 @@ import (
 )
 
 func (p *Parser) parseFunctionLiteral() ast.Expression {
-	lit := &ast.FunctionLiteral{Token: p.curToken}
+	lit := &ast.FunctionDeclStatement{Token: p.curToken}
 	if !p.expectPeek(token.IDENT) {
 		return nil
 	}

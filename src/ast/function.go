@@ -2,20 +2,21 @@ package ast
 
 import (
 	"bytes"
-	"github.com/sevenreup/duwa/src/token"
 	"strings"
+
+	"github.com/sevenreup/duwa/src/token"
 )
 
-type FunctionLiteral struct {
+type FunctionDeclStatement struct {
 	Token      token.Token // The 'ndondomeko' token
 	Name       *Identifier // The name of the function
 	Parameters []*Identifier
 	Body       *BlockStatement
 }
 
-func (fl *FunctionLiteral) expressionNode()      {}
-func (fl *FunctionLiteral) TokenLiteral() string { return fl.Token.Literal }
-func (fl *FunctionLiteral) String() string {
+func (fl *FunctionDeclStatement) expressionNode()      {}
+func (fl *FunctionDeclStatement) TokenLiteral() string { return fl.Token.Literal }
+func (fl *FunctionDeclStatement) String() string {
 	var out bytes.Buffer
 	params := []string{}
 	for _, p := range fl.Parameters {

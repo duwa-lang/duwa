@@ -6,7 +6,7 @@ import (
 )
 
 func (p *Parser) classStatement() ast.Expression {
-	class := &ast.ClassStatement{Token: p.curToken}
+	class := &ast.ClassDeclStatement{Token: p.curToken}
 
 	p.nextToken()
 

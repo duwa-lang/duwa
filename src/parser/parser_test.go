@@ -205,7 +205,7 @@ func testDeclarationOrAssignmentStatement(t *testing.T, s ast.Statement, name st
 			}
 			return false
 		}
-	case *ast.VariableDeclarationStatement:
+	case *ast.VariableDeclStatement:
 		{
 			if statement.Type.Literal != varType {
 				t.Errorf("s.TokenLiteral not '%s'. got=%q", varType, statement.Type.Literal)
@@ -704,7 +704,7 @@ func TestFunctionLiteral(t *testing.T) {
 		t.Fatalf("file.Statements[0] is not ast.ExpressionStatement. got=%T",
 			file.Statements[0])
 	}
-	function, ok := stmt.Expression.(*ast.FunctionLiteral)
+	function, ok := stmt.Expression.(*ast.FunctionDeclStatement)
 	if !ok {
 		t.Fatalf("stmt.Expression is not ast.FunctionLiteral. got=%T",
 			stmt.Expression)
@@ -744,7 +744,7 @@ func TestFunctionParameter(t *testing.T) {
 		file := p.ParseFile([]byte(tt.input))
 		checkParserErrors(t, p)
 		stmt := file.Statements[0].(*ast.ExpressionStatement)
-		function := stmt.Expression.(*ast.FunctionLiteral)
+		function := stmt.Expression.(*ast.FunctionDeclStatement)
 		if len(function.Parameters) != len(tt.expectedParams) {
 			t.Errorf("length parameters wrong. want %d, got=%d\n",
 				len(tt.expectedParams), len(function.Parameters))
@@ -967,7 +967,7 @@ func TestForExpression(t *testing.T) {
 				t.Fatalf("expression.Initializer is not ast.AssigmentStatement. got=%T", expression.Initializer)
 			}
 		} else {
-			if _, ok = expression.Initializer.(*ast.VariableDeclarationStatement); !ok {
+			if _, ok = expression.Initializer.(*ast.VariableDeclStatement); !ok {
 				t.Fatalf("expression.Initializer is not ast.VariableDeclarationStatement. got=%T", expression.Initializer)
 			}
 		}
@@ -1063,7 +1063,7 @@ func TestMapExpressionsWithStringKeys(t *testing.T) {
 		checkParserErrors(t, p)
 		var mapLiteral *ast.MapExpression
 		switch stmt := file.Statements[0].(type) {
-		case *ast.VariableDeclarationStatement:
+		case *ast.VariableDeclStatement:
 			{
 				expression, ok := stmt.Value.(*ast.MapExpression)
 				if !ok {
@@ -1327,7 +1327,7 @@ func TestParsingClassExpressions(t *testing.T) {
 	file := p.ParseFile([]byte(input))
 	checkParserErrors(t, p)
 	stmt := file.Statements[0].(*ast.ExpressionStatement)
-	classStatement := stmt.Expression.(*ast.ClassStatement)
+	classStatement := stmt.Expression.(*ast.ClassDeclStatement)
 	if classStatement.Name.Value != "Munthu" {
 		t.Fatalf("stmt.Name.Value not 'Munthu'. got=%q", classStatement.Name.Value)
 	}
@@ -1335,7 +1335,7 @@ func TestParsingClassExpressions(t *testing.T) {
 		t.Fatalf("stmt.Body.Statements does not contain 1 statements. got=%d\n",
 			len(classStatement.Body.Statements))
 	}
-	bodyStmt, ok := classStatement.Body.Statements[0].(*ast.VariableDeclarationStatement)
+	bodyStmt, ok := classStatement.Body.Statements[0].(*ast.VariableDeclStatement)
 	if !ok {
 		t.Fatalf("stmt.Body.Statements[0] is not ast.VariableDeclarationStatement. got=%T",
 			classStatement.Body.Statements[0])
@@ -1386,7 +1386,7 @@ func TestInstanceCreation(t *testing.T) {
 					continue
 				}
 			}
-		case *ast.VariableDeclarationStatement:
+		case *ast.VariableDeclStatement:
 			{
 				if statement.Type.Literal != tt.expectedType {
 					t.Errorf("s.TokenLiteral not '%s'. got=%q", tt.expectedType, statement.Type.Literal)
