@@ -3,6 +3,7 @@ package http
 import (
 	"fmt"
 	"net/http"
+	"os"
 	"strconv"
 	"time"
 
@@ -92,6 +93,97 @@ func methodGET(scope *object.Environment, tok token.Token, args ...object.Object
 	return values.NULL
 }
 
+// method=fayilo args=[HTTPServer{server}, mawu{route}, mawu{directory}] return={null}
+// This method serves static files from a directory.
+//
+// `Example`
+// ```
+// http.fayilo(sevala, "/static/", "./public")
+// ```
+func methodServeFiles(scope *object.Environment, tok token.Token, args ...object.Object) object.Object {
+	if len(args) != 3 {
+		panic("http.fayilo requires three arguments (server, route, directory)")
+	}
+
+	server, ok := args[0].(*HTTPServer)
+	if !ok {
+		panic("http.fayilo first argument must be an HTTP server")
+	}
+
+	if args[1].Type() != object.STRING_OBJ {
+		panic("http.fayilo route must be a string")
+	}
+
+	if args[2].Type() != object.STRING_OBJ {
+		panic("http.fayilo directory must be a string")
+	}
+
+	route := args[1].(*object.String).Value
+	directory := args[2].(*object.String).Value
+
+	// Check if directory exists
+	if _, err := os.Stat(directory); os.IsNotExist(err) {
+		panic(fmt.Sprintf("Directory does not exist: %s", directory))
+	}
+
+	// Create file server handler
+	fileServer := http.FileServer(http.Dir(directory))
+	
+	// Strip the route prefix when serving files
+	if route == "/" {
+		server.routes[route] = fileServer.ServeHTTP
+	} else {
+		server.routes[route] = http.StripPrefix(route, fileServer).ServeHTTP
+	}
+
+	return values.NULL
+}
+
+// method=fayilo_imodzi args=[HTTPServer{server}, mawu{route}, mawu{filepath}] return={null}
+// This method serves a single file at a specific route.
+//
+// `Example`
+// ```
+// http.fayilo_imodzi(sevala, "/", "./index.html")
+// ```
+func methodServeFile(scope *object.Environment, tok token.Token, args ...object.Object) object.Object {
+	if len(args) != 3 {
+		panic("http.fayilo_imodzi requires three arguments (server, route, filepath)")
+	}
+
+	server, ok := args[0].(*HTTPServer)
+	if !ok {
+		panic("http.fayilo_imodzi first argument must be an HTTP server")
+	}
+
+	if args[1].Type() != object.STRING_OBJ {
+		panic("http.fayilo_imodzi route must be a string")
+	}
+
+	if args[2].Type() != object.STRING_OBJ {
+		panic("http.fayilo_imodzi filepath must be a string")
+	}
+
+	route := args[1].(*object.String).Value
+	filePath := args[2].(*object.String).Value
+
+	// Check if file exists
+	if _, err := os.Stat(filePath); os.IsNotExist(err) {
+		panic(fmt.Sprintf("File does not exist: %s", filePath))
+	}
+
+	// Create handler that serves the specific file
+	server.routes[route] = func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "GET" && r.Method != "HEAD" {
+			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+			return
+		}
+		http.ServeFile(w, r, filePath)
+	}
+
+	return values.NULL
+}
+
 // method=yendesa args=[HTTPServer{server}] return={null}
 // This method starts the HTTP server.
 //
@@ -139,8 +231,10 @@ func methodStartServer(scope *object.Environment, tok token.Token, args ...objec
 // It is used to create web servers and handle HTTP requests
 func Module() *object.LibraryModule {
 	return object.NewBuiltInLibraryModule("http", map[string]*object.LibraryFunction{
-		"panga": object.NewBuiltin("panga", methodCreateServer), // create server
-		"TENGA": object.NewBuiltin("TENGA", methodGET),          // add GET route
-		"yamba": object.NewBuiltin("yamba", methodStartServer),  // start server
+		"panga":        object.NewBuiltin("panga", methodCreateServer),  // create server
+		"TENGA":        object.NewBuiltin("TENGA", methodGET),           // add GET route
+		"yamba":        object.NewBuiltin("yamba", methodStartServer),   // start server
+		"fayilo":       object.NewBuiltin("fayilo", methodServeFiles),   // serve directory
+		"fayilo_imodzi": object.NewBuiltin("fayilo_imodzi", methodServeFile), // serve single file
 	})
 }

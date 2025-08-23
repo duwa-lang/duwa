@@ -1,0 +1,25 @@
+tenga http mu "http";
+
+lembanzr("Creating file server example...");
+
+// Create HTTP server on port 8080
+sevala = http.panga(8080);
+
+// Serve a single HTML file at the root
+http.fayilo_imodzi(sevala, "/", "./examples/public/index.html");
+
+// Serve static files from the public directory under /static/
+http.fayilo(sevala, "/static/", "./examples/public");
+
+lembanzr("Routes configured:");
+lembanzr("  / -> ./examples/public/index.html (single file)");
+lembanzr("  /static/* -> ./examples/public/* (directory)");
+lembanzr("");
+
+lembanzr("Starting file server on port 8080...");
+lembanzr("Visit http://localhost:8080/ to see the HTML page");
+lembanzr("Visit http://localhost:8080/static/style.css to see CSS");
+lembanzr("Visit http://localhost:8080/static/script.js to see JS");
+
+// Start the server
+http.yamba(sevala);
