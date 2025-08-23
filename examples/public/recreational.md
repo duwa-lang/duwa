@@ -129,14 +129,53 @@ Programming for the joy of programming itself - not for work, not for money, not
 
 **Here are programmers embodying these different styles:**
 
-- **Tsoding Daily**: Live exploration, building everything from scratch
-- **ThePrimeagen**: High-energy problem solving, tool optimization
-- **Casey Muratori**: Deep systems understanding, Handmade Hero
-- **Devine Lu Linvega**: Minimalist tools, constraint-based creativity
-- **Ben Eater**: Educational deep dives, building computers from breadboards
-- **Jonathan Blow**: Game development philosophy, language design
-- **Suz Hinton**: Creative hardware hacking, live coding music
-- **Dan Luu**: Deep technical investigations, performance analysis
+**Tsoding Daily** - *The Live Explorer*
+- Streams 4+ hours daily building random projects from scratch
+- Built his own text editors, programming languages, ray tracers
+- Shows complete process including failures and debugging
+- "Let's see what happens if..." approach to everything
+
+**ThePrimeagen** - *The High-Energy Problem Solver*
+- Creates CLI tools and Neovim plugins for personal workflow optimization
+- Infectious enthusiasm for dev tools and performance
+- Reacts to and critiques other developers' code/approaches
+- Makes optimization and tooling feel like extreme sports
+
+**Casey Muratori** - *The Systems Deep Diver*
+- Handmade Hero: Building a complete game from scratch on stream
+- Explains every single line of code and system design decision
+- No libraries, understanding everything from first principles
+- Demonstrates that you can build modern software without frameworks
+
+**Devine Lu Linvega** - *The Minimalist Creative*
+- Lives on a sailboat, codes minimal tools for digital art
+- Builds everything in a few hundred lines of C
+- Creates programming languages, graphics engines, music software
+- Constraint-driven creativity: what can you build with almost nothing?
+
+**Ben Eater** - *The Educational Builder*
+- Builds computers on breadboards, explains every component
+- Creates video series on how CPUs, memory, and networks actually work
+- Takes months to build what you could buy for $5
+- Makes hardware fundamentals accessible and fascinating
+
+**Jonathan Blow** - *The Philosophical Craftsperson*
+- Created indie games (Braid, The Witness) as personal artistic statements
+- Designing his own programming language (Jai) for game development
+- Critiques industry trends, advocates for craftsmanship
+- Programming as a form of intellectual and artistic expression
+
+**Suz Hinton** - *The Creative Hardware Hacker*
+- Live codes music and visuals on Twitch
+- Builds IoT projects and interactive art installations
+- Combines programming with electronics, music, and performance
+- Shows programming as a creative, interdisciplinary medium
+
+**Dan Luu** - *The Deep Technical Investigator*
+- Writes detailed blog posts investigating performance mysteries
+- Benchmarks everything: keyboards, terminals, programming languages
+- Turns curiosity about "why is X slow?" into multi-thousand word research
+- Demonstrates how recreational investigation can uncover industry-wide issues
 
 **Each represents a different path back to programming joy**
 
