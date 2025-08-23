@@ -12,6 +12,7 @@
     <style>
       .reveal .slides section {
         text-align: left;
+        padding: 40px;
       }
       .reveal h1,
       .reveal h2,
@@ -33,8 +34,20 @@
         border-left: 5px solid #42affa;
         margin: 20px 0;
       }
-      .slides section {
-        padding: 40px;
+      /* Fix content overflow */
+      .reveal .slides section {
+        overflow-y: auto;
+        max-height: 90vh;
+      }
+      .reveal li {
+        font-size: 0.85em;
+        line-height: 1.3;
+        margin: 0.2em 0;
+      }
+      .reveal ol li {
+        font-size: 0.85em;
+        line-height: 1.3;
+        margin: 0.2em 0;
       }
     </style>
   </head>
@@ -46,18 +59,95 @@
                 # The Workshop Blueprint: Recreational Programming Starter Kit
                 ## *Rediscovering the joy of coding through personal exploration*
                 
+                Note:
+                - Total presentation: 26 minutes + Q&A
+                - Props needed: Code examples for different styles, links to example creators' work, one tiny demo if feeling brave
+                - Start with energy and confidence
+                
                 ---
                 
                 ## Opening Hook
                 **"Show of hands: How many of you learned programming because it was fun? Now keep your hand up if programming still feels fun most days."**
                 
                 <div class="takeaway">
-                Quick poll reveals the gap. Transition: "Today we're reverse-engineering passion from different styles of recreational programming."
+                Quick poll reveals the gap. Transition: "Today we're exploring how to get that spark back through recreational programming."
                 </div>
+                
+                Note:
+                - 3 minutes for this section
+                - Wait for actual hands to go up, then comment on the drop-off
+                - This sets up the core problem we're solving
                 
                 ---
                 
-                # Part 1: The Recreational Programming Spectrum
+                # Part 1: What is Recreational Programming?
+                
+                Note:
+                - 4 minutes total for this entire section
+                - This foundation is crucial - don't rush it
+                
+                ---
+                
+                ## Definition
+                <div class="center">
+                Programming for the joy of programming itself - not for work, not for money, not for external requirements.
+                </div>
+                
+                Note:
+                - Emphasize "joy" - this is the key word
+                - Contrast with obligation-driven programming
+                
+                ---
+                
+                ## What it looks like:
+                - Building things because you're curious how they work
+                - Exploring new languages just to see what they feel like
+                - Solving problems that only exist in your head
+                - Creating tools for problems you don't actually have
+                - Writing code that makes you smile
+                
+                Note:
+                - Give concrete examples if possible
+                - "Makes you smile" usually gets a reaction
+                
+                ---
+                
+                ## What it's NOT:
+                - Side hustles or potential startups
+                - Skill building for career advancement (though that happens anyway)
+                - Following tutorials step-by-step
+                - Grinding through coding challenges for interviews
+                - Building what others expect you to build
+                
+                <div class="takeaway">
+                <strong>The key distinction:</strong> Internal motivation vs. external pressure
+                </div>
+                
+                Note:
+                - Be careful not to shame these activities
+                - Emphasize the "internal vs external" distinction
+                - Acknowledge that skill building happens anyway as a side effect
+                
+                ---
+                
+                ## Why it matters:
+                - Prevents burnout by reconnecting with intrinsic motivation
+                - Develops intuition through low-stakes exploration
+                - Maintains long-term passion for the craft
+                - Often leads to unexpected breakthroughs and learning
+                
+                Note:
+                - "Burnout prevention" resonates with most developers
+                - "Low-stakes" is key - no pressure to succeed
+                
+                ---
+                
+                # Part 2: The Recreational Programming Spectrum
+                
+                Note:
+                - 10 minutes for this section
+                - These are archetypes, not rigid categories
+                - People can blend multiple styles
                 
                 ---
                 
@@ -67,6 +157,10 @@
                 - Community becomes accountability and energy source
                 - Projects range from practical tools to pure experiments
                 
+                Note:
+                - Think Tsoding Daily, live coding streamers
+                - Emphasize "messy process" - this is key
+                
                 ---
                 
                 ## Style 2: The Deep Diver
@@ -74,6 +168,10 @@
                 - Builds toy versions of complex systems (compilers, databases, games)
                 - Values learning over shipping
                 - Often has multiple "educational" implementations
+                
+                Note:
+                - Casey Muratori, Ben Eater types
+                - "Learning over shipping" is crucial mindset
                 
                 ---
                 
@@ -83,6 +181,10 @@
                 - Technology serves creative vision
                 - Often blends programming with other disciplines
                 
+                Note:
+                - Processing, openFrameworks community
+                - Show examples if you have them ready
+                
                 ---
                 
                 ## Style 4: The Problem Solver
@@ -90,6 +192,10 @@
                 - Tools that solve tiny annoying problems
                 - "Good enough" solutions that work for them
                 - Often accidentally builds useful things
+                
+                Note:
+                - This resonates with most developers
+                - "Accidentally builds useful things" - many startups begin this way
                 
                 ---
                 
@@ -99,10 +205,18 @@
                 - Drawn to unusual or experimental languages
                 - Code as intellectual curiosity
                 
+                Note:
+                - Polyglot programmers
+                - Same problem, different language approach
+                
                 ---
                 
-                # Part 2: Common Patterns Across All Styles
+                # Part 3: Common Patterns Across All Styles
                 ## What they all share
+                
+                Note:
+                - 7 minutes for this section
+                - These patterns are what make recreational programming work
                 
                 ---
                 
@@ -115,6 +229,10 @@
                 <strong>Key insight:</strong> ROI doesn't apply to recreational programming
                 </div>
                 
+                Note:
+                - "Useless" in quotes - they're not really useless
+                - This permission is often the hardest thing for developers to give themselves
+                
                 ---
                 
                 ## Follow Energy, Not Plans
@@ -125,6 +243,10 @@
                 <div class="takeaway">
                 <strong>Key insight:</strong> Boredom is data, not defeat
                 </div>
+                
+                Note:
+                - This contradicts traditional project management wisdom
+                - "Boredom is data" - powerful reframe
                 
                 ---
                 
@@ -137,6 +259,10 @@
                 <strong>Key insight:</strong> Narrate your decisions
                 </div>
                 
+                Note:
+                - Even if "audience" is just your future self
+                - Process documentation is more valuable than perfect results
+                
                 ---
                 
                 ## Embrace the Learning Process
@@ -148,10 +274,18 @@
                 <strong>Key insight:</strong> Progress over perfection
                 </div>
                 
+                Note:
+                - "Beginner's mind" is a Zen concept worth explaining briefly
+                - This is counterintuitive for senior developers
+                
                 ---
                 
-                # Part 3: Your Personal Programming Playground
+                # Part 4: Your Personal Programming Playground
                 ## Setting Up for Success
+                
+                Note:
+                - 6 minutes for this section
+                - This is the practical implementation advice
                 
                 ---
                 
@@ -160,6 +294,10 @@
                 - No production concerns: minimal setup, no CI/CD pressure
                 - Quick project initialization scripts
                 - Version control optional
+                
+                Note:
+                - Emphasize "no production concerns" - this reduces friction
+                - Quick setup is crucial for maintaining momentum
                 
                 ---
                 
@@ -170,6 +308,10 @@
                 - <span class="highlight">Teaching Projects</span> (Build something while explaining it)
                 - <span class="highlight">Cross-Language Challenges</span> (Same problem, different languages)
                 
+                Note:
+                - These are starting points, not rigid rules
+                - 2-4 hours is long enough to get somewhere, short enough to not feel overwhelming
+                
                 ---
                 
                 ## The Mindset Shifts
@@ -178,10 +320,19 @@
                 - Learning over shipping
                 - Curiosity over productivity
                 
+                Note:
+                - "What if" vs "I should" is a powerful language shift
+                - These mindset shifts are often harder than the technical aspects
+                
                 ---
                 
-                # Part 4: Real Examples in the Wild
+                # Part 5: Real Examples in the Wild
                 ## Here are programmers embodying these different styles
+                
+                Note:
+                - 4 minutes for this section
+                - Have links ready if doing this live
+                - These are inspirational examples, not people to copy exactly
                 
                 ---
                 
@@ -190,6 +341,11 @@
                 - **Casey Muratori**: Deep systems understanding, Handmade Hero
                 - **Ben Eater**: Educational deep dives, building computers from breadboards
                 - **Dan Luu**: Deep technical investigations, performance analysis
+                
+                Note:
+                - Tsoding shows the "messy process" beautifully
+                - Casey's Handmade Hero is legendary for education
+                - Ben Eater makes hardware accessible
                 
                 ---
                 
@@ -202,6 +358,12 @@
                 <div class="center small">
                 <strong>Each represents a different path back to programming joy</strong>
                 </div>
+                
+                Note:
+                - Prime's energy is infectious
+                - Devine's constraints breed creativity
+                - Jonathan thinks deeply about tools and languages
+                - Suz blends multiple disciplines beautifully
                 
                 ---
                 
@@ -217,6 +379,11 @@
                 <strong>The only rule:</strong> Stop if it stops being fun.
                 </div>
                 
+                Note:
+                - 2 minutes for this section
+                - "Worst possible version" gets laughs and removes pressure
+                - Emphasize "stop if it stops being fun" - this is crucial
+                
                 ---
                 
                 ## Final Thought
@@ -224,10 +391,11 @@
                 "The goal isn't to become any of these programmers. It's to remember why you started coding and keep that curiosity alive alongside your career."
                 </div>
                 
-                <div class="center small">
-                <strong>Total: 25 minutes + Q&A</strong><br>
-                <em>Key props needed: Code examples for different styles, links to example creators' work, one tiny demo if feeling brave</em>
-                </div>
+                Note:
+                - End on this inspirational note
+                - Pause after this for effect
+                - Open to Q&A
+                - Thank audience for their energy and participation
             </textarea
           >
         </section>
@@ -237,10 +405,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/markdown/markdown.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/highlight/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/notes/notes.min.js"></script>
     <script>
       Reveal.initialize({
         hash: true,
-        plugins: [RevealMarkdown, RevealHighlight],
+        plugins: [RevealMarkdown, RevealHighlight, RevealNotes],
       });
     </script>
   </body>

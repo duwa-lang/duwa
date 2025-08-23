@@ -6,11 +6,40 @@
 ### Opening Hook (3 minutes)
 **"Show of hands: How many of you learned programming because it was fun? Now keep your hand up if programming still feels fun most days."**
 
-Quick poll reveals the gap. Transition: "Today we're reverse-engineering passion from different styles of recreational programming."
+Quick poll reveals the gap. Transition: "Today we're exploring how to get that spark back through recreational programming."
 
 ---
 
-### Part 1: The Recreational Programming Spectrum (10 minutes)
+### Part 1: What is Recreational Programming? (4 minutes)
+
+**Definition:**
+Programming for the joy of programming itself - not for work, not for money, not for external requirements.
+
+**What it looks like:**
+- Building things because you're curious how they work
+- Exploring new languages just to see what they feel like
+- Solving problems that only exist in your head
+- Creating tools for problems you don't actually have
+- Writing code that makes you smile
+
+**What it's NOT:**
+- Side hustles or potential startups
+- Skill building for career advancement (though that happens anyway)
+- Following tutorials step-by-step
+- Grinding through coding challenges for interviews
+- Building what others expect you to build
+
+**The key distinction:** Internal motivation vs. external pressure
+
+**Why it matters:**
+- Prevents burnout by reconnecting with intrinsic motivation
+- Develops intuition through low-stakes exploration
+- Maintains long-term passion for the craft
+- Often leads to unexpected breakthroughs and learning
+
+---
+
+### Part 2: The Recreational Programming Spectrum (10 minutes)
 
 **Style 1: The Live Explorer**
 - Builds in public through streams or blogs
@@ -44,7 +73,7 @@ Quick poll reveals the gap. Transition: "Today we're reverse-engineering passion
 
 ---
 
-### Part 2: Common Patterns Across All Styles (8 minutes)
+### Part 3: Common Patterns Across All Styles (7 minutes)
 
 **What they all share:**
 
@@ -70,7 +99,7 @@ Quick poll reveals the gap. Transition: "Today we're reverse-engineering passion
 
 ---
 
-### Part 3: Your Personal Programming Playground (7 minutes)
+### Part 4: Your Personal Programming Playground (6 minutes)
 
 **Setting Up for Success:**
 
@@ -96,7 +125,7 @@ Quick poll reveals the gap. Transition: "Today we're reverse-engineering passion
 
 ---
 
-### Part 4: Real Examples in the Wild (5 minutes)
+### Part 5: Real Examples in the Wild (4 minutes)
 
 **Here are programmers embodying these different styles:**
 
@@ -127,6 +156,6 @@ Quick poll reveals the gap. Transition: "Today we're reverse-engineering passion
 
 ---
 
-**Total: 25 minutes + Q&A**
+**Total: 26 minutes + Q&A**
 
 *Key props needed: Code examples for different styles, links to example creators' work, one tiny demo if feeling brave*
