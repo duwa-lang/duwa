@@ -1,25 +1,247 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Duwa HTTP Server</title>
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/black.min.css"
+    />
     <style>
-        body { font-family: Arial, sans-serif; margin: 40px; }
-        h1 { color: #333; }
-        .info { background: #f0f0f0; padding: 20px; border-radius: 8px; }
+      .reveal .slides section {
+        text-align: left;
+      }
+      .reveal h1,
+      .reveal h2,
+      .reveal h3 {
+        text-align: center;
+      }
+      .reveal .center {
+        text-align: center;
+      }
+      .reveal .small {
+        font-size: 0.8em;
+      }
+      .reveal .highlight {
+        color: #42affa;
+      }
+      .reveal .takeaway {
+        background: rgba(66, 175, 250, 0.1);
+        padding: 20px;
+        border-left: 5px solid #42affa;
+        margin: 20px 0;
+      }
+      .slides section {
+        padding: 40px;
+      }
     </style>
-</head>
-<body>
-    <h1>Welcome to Duwa HTTP Server!</h1>
-    <div class="info">
-        <p>This HTML file is being served by a Duwa language HTTP server.</p>
-        <p>Static file serving is now working! 🎉</p>
-        
-        <h3>Available endpoints:</h3>
-        <ul>
-            <li><a href="/">/ (this page)</a></li>
-            <li><a href="/static/style.css">/static/style.css</a></li>
-            <li><a href="/static/script.js">/static/script.js</a></li>
-        </ul>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section data-markdown>
+          <textarea data-template>
+                # The Workshop Blueprint: Recreational Programming Starter Kit
+                ## *Rediscovering the joy of coding through personal exploration*
+                
+                ---
+                
+                ## Opening Hook
+                **"Show of hands: How many of you learned programming because it was fun? Now keep your hand up if programming still feels fun most days."**
+                
+                <div class="takeaway">
+                Quick poll reveals the gap. Transition: "Today we're reverse-engineering passion from different styles of recreational programming."
+                </div>
+                
+                ---
+                
+                # Part 1: The Recreational Programming Spectrum
+                
+                ---
+                
+                ## Style 1: The Live Explorer
+                - Builds in public through streams or blogs
+                - Shows the messy process: dead ends, bugs, restarts
+                - Community becomes accountability and energy source
+                - Projects range from practical tools to pure experiments
+                
+                ---
+                
+                ## Style 2: The Deep Diver
+                - Obsesses over understanding how things really work
+                - Builds toy versions of complex systems (compilers, databases, games)
+                - Values learning over shipping
+                - Often has multiple "educational" implementations
+                
+                ---
+                
+                ## Style 3: The Creative Technologist
+                - Uses code as artistic medium
+                - Generative art, music synthesis, interactive installations
+                - Technology serves creative vision
+                - Often blends programming with other disciplines
+                
+                ---
+                
+                ## Style 4: The Problem Solver
+                - Scratches personal itches with code
+                - Tools that solve tiny annoying problems
+                - "Good enough" solutions that work for them
+                - Often accidentally builds useful things
+                
+                ---
+                
+                ## Style 5: The Language Explorer
+                - Constantly trying new languages and paradigms
+                - Implements same concepts across different languages
+                - Drawn to unusual or experimental languages
+                - Code as intellectual curiosity
+                
+                ---
+                
+                # Part 2: Common Patterns Across All Styles
+                ## What they all share
+                
+                ---
+                
+                ## Permission to Build "Useless" Things
+                - No business case required
+                - Curiosity is sufficient justification
+                - Failed experiments still teach valuable lessons
+                
+                <div class="takeaway">
+                <strong>Key insight:</strong> ROI doesn't apply to recreational programming
+                </div>
+                
+                ---
+                
+                ## Follow Energy, Not Plans
+                - Switch projects when excitement fades
+                - Multiple abandoned repos are exploration, not failure
+                - Boredom is data about what interests you
+                
+                <div class="takeaway">
+                <strong>Key insight:</strong> Boredom is data, not defeat
+                </div>
+                
+                ---
+                
+                ## Document the Journey
+                - Share process, not just results
+                - Teaching forces deeper understanding
+                - Creates connection with others on similar paths
+                
+                <div class="takeaway">
+                <strong>Key insight:</strong> Narrate your decisions
+                </div>
+                
+                ---
+                
+                ## Embrace the Learning Process
+                - Beginner's mind in new domains
+                - Comfortable with not knowing
+                - Process over product
+                
+                <div class="takeaway">
+                <strong>Key insight:</strong> Progress over perfection
+                </div>
+                
+                ---
+                
+                # Part 3: Your Personal Programming Playground
+                ## Setting Up for Success
+                
+                ---
+                
+                ## The Environment
+                - Dedicated "experiments" folder/repo
+                - No production concerns: minimal setup, no CI/CD pressure
+                - Quick project initialization scripts
+                - Version control optional
+                
+                ---
+                
+                ## The Approaches You Can Try
+                - <span class="highlight">Weekly Experiments</span> (2-4 hours exploring one new thing)
+                - <span class="highlight">Scratch-Built Challenges</span> (Build toy versions of tools you use)
+                - <span class="highlight">Itch-Scratching Projects</span> (Solve your own annoying problems)
+                - <span class="highlight">Teaching Projects</span> (Build something while explaining it)
+                - <span class="highlight">Cross-Language Challenges</span> (Same problem, different languages)
+                
+                ---
+                
+                ## The Mindset Shifts
+                - <span class="highlight">"What if..."</span> instead of <span class="highlight">"I should..."</span>
+                - Progress over perfection
+                - Learning over shipping
+                - Curiosity over productivity
+                
+                ---
+                
+                # Part 4: Real Examples in the Wild
+                ## Here are programmers embodying these different styles
+                
+                ---
+                
+                ## The Live Explorers & Deep Divers
+                - **Tsoding Daily**: Live exploration, building everything from scratch
+                - **Casey Muratori**: Deep systems understanding, Handmade Hero
+                - **Ben Eater**: Educational deep dives, building computers from breadboards
+                - **Dan Luu**: Deep technical investigations, performance analysis
+                
+                ---
+                
+                ## The Creative Technologists & Problem Solvers
+                - **ThePrimeagen**: High-energy problem solving, tool optimization
+                - **Devine Lu Linvega**: Minimalist tools, constraint-based creativity
+                - **Jonathan Blow**: Game development philosophy, language design
+                - **Suz Hinton**: Creative hardware hacking, live coding music
+                
+                <div class="center small">
+                <strong>Each represents a different path back to programming joy</strong>
+                </div>
+                
+                ---
+                
+                # Closing Challenge
+                ## This week, pick one experiment:
+                1. Build the worst possible version of a tool you use daily
+                2. Spend 2 hours with a language you've been curious about
+                3. Document yourself solving a small problem
+                4. Fork an interesting project and mess with it
+                5. Try live coding or streaming your process
+                
+                <div class="takeaway">
+                <strong>The only rule:</strong> Stop if it stops being fun.
+                </div>
+                
+                ---
+                
+                ## Final Thought
+                <div class="center">
+                "The goal isn't to become any of these programmers. It's to remember why you started coding and keep that curiosity alive alongside your career."
+                </div>
+                
+                <div class="center small">
+                <strong>Total: 25 minutes + Q&A</strong><br>
+                <em>Key props needed: Code examples for different styles, links to example creators' work, one tiny demo if feeling brave</em>
+                </div>
+            </textarea
+          >
+        </section>
+      </div>
     </div>
-</body>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/markdown/markdown.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/highlight/highlight.min.js"></script>
+    <script>
+      Reveal.initialize({
+        hash: true,
+        plugins: [RevealMarkdown, RevealHighlight],
+      });
+    </script>
+  </body>
 </html>
