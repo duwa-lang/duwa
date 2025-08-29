@@ -1,0 +1,10 @@
+tenga http mu "http";
+
+sevala = http.panga(8080);
+
+http.TENGA(sevala, "/hello");
+
+http.yamba(sevala);
+
+lembanzr("HTTP server started on port 8080");
+lembanzr("Visit http://localhost:8080/hello to test");

@@ -2,6 +2,7 @@ package all
 
 import (
 	"github.com/sevenreup/duwa/src/modules/console"
+	"github.com/sevenreup/duwa/src/modules/http"
 	"github.com/sevenreup/duwa/src/modules/math"
 	"github.com/sevenreup/duwa/src/object"
 )
@@ -13,6 +14,7 @@ func Builtins() map[string]object.LibraryModule {
 	result := map[string]object.LibraryModule{
 		"khonso": *console.Module(),
 		"masamu": *math.Module(),
+		"http":   *http.Module(),
 	}
 
 	return result

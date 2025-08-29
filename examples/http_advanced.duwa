@@ -1,0 +1,24 @@
+tenga http mu "http";
+
+lembanzr("Creating HTTP server example...");
+
+// Create HTTP server on port 3000
+sevala = http.panga(3000);
+
+// Add multiple TENGA routes
+http.TENGA(sevala, "/");
+http.TENGA(sevala, "/about");
+http.TENGA(sevala, "/api/status");
+http.TENGA(sevala, "/users/123");
+
+lembanzr("Added routes:");
+lembanzr("  TENGA /");
+lembanzr("  TENGA /about");
+lembanzr("  TENGA /api/status");
+lembanzr("  TENGA /users/123");
+
+lembanzr("");
+lembanzr("Starting server on port 3000...");
+
+// Start the server (this will block and keep the program running)
+http.yamba(sevala);

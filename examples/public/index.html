@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/black.min.css"
+    />
+    <style>
+      .reveal .slides section {
+        text-align: left;
+        padding: 40px;
+      }
+      .reveal h1,
+      .reveal h2,
+      .reveal h3 {
+        text-align: center;
+      }
+      .reveal .center {
+        text-align: center;
+      }
+      .reveal .small {
+        font-size: 0.8em;
+      }
+      .reveal .highlight {
+        color: #42affa;
+      }
+      .reveal .takeaway {
+        background: rgba(66, 175, 250, 0.1);
+        padding: 20px;
+        border-left: 5px solid #42affa;
+        margin: 20px 0;
+      }
+      /* Fix content overflow */
+      .reveal .slides section {
+        overflow-y: auto;
+        max-height: 90vh;
+      }
+      .reveal li {
+        font-size: 0.85em;
+        line-height: 1.3;
+        margin: 0.2em 0;
+      }
+      .reveal ol li {
+        font-size: 0.85em;
+        line-height: 1.3;
+        margin: 0.2em 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section data-markdown>
+          <textarea data-template>
+                ## Recreational Programming
+                <p style="text-align: center;">You guys are getting paid?</p>
+                
+                Note:
+                - Total presentation: 26 minutes + Q&A
+                - Props needed: Code examples for different styles, links to example creators' work, one tiny demo if feeling brave
+                - Start with energy and confidence
+                
+                ---
+                
+                ## 
+                **"Show of hands: How many of you learned programming because it was fun?"**
+               
+                
+                Note:
+                - Quick poll reveals the gap. Transition: "Today we're exploring how to get that spark back through recreational programming."
+                - 3 minutes for this section
+                - Wait for actual hands to go up, then comment on the drop-off
+                - This sets up the core problem we're solving
+                
+                ---
+                
+                # Part 1: What is Recreational Programming?
+                
+                Note:
+                - 4 minutes total for this entire section
+                - This foundation is crucial - don't rush it
+                
+                ---
+                
+                ## Definition
+                <div class="center">
+                Programming for the joy of programming itself - not for work, not for money, not for external requirements.
+                </div>
+                
+                Note:
+                - Emphasize "joy" - this is the key word
+                - Contrast with obligation-driven programming
+                
+                ---
+                
+                ## What it looks like:
+                - Building things because you're curious how they work
+                - Exploring new languages just to see what they feel like
+                - Solving problems that only exist in your head
+                - Creating tools for problems you don't actually have
+                - Writing code that makes you smile
+                
+                Note:
+                - Give concrete examples if possible
+                - "Makes you smile" usually gets a reaction
+                
+                ---
+                
+                ## What it's NOT:
+                - Side hustles or potential startups
+                - Skill building for career advancement (though that happens anyway)
+                - Following tutorials step-by-step
+                - Grinding through coding challenges for interviews
+                - Building what others expect you to build
+                
+                <div class="takeaway">
+                <strong>The key distinction:</strong> Internal motivation vs. external pressure
+                </div>
+                
+                Note:
+                - Be careful not to shame these activities
+                - Emphasize the "internal vs external" distinction
+                - Acknowledge that skill building happens anyway as a side effect
+                
+                ---
+                
+                ## Why it matters:
+                - Prevents burnout by reconnecting with intrinsic motivation
+                - Develops intuition through low-stakes exploration
+                - Maintains long-term passion for the craft
+                - Often leads to unexpected breakthroughs and learning
+                
+                Note:
+                - "Burnout prevention" resonates with most developers
+                - "Low-stakes" is key - no pressure to succeed
+                
+                ---
+                
+                # Part 2: The Recreational Programming Spectrum
+                
+                Note:
+                - 10 minutes for this section
+                - These are archetypes, not rigid categories
+                - People can blend multiple styles
+                
+                ---
+                
+                ## Style 1: The Live Explorer
+                - Builds in public through streams or blogs
+                - Shows the messy process: dead ends, bugs, restarts
+                - Community becomes accountability and energy source
+                - Projects range from practical tools to pure experiments
+                
+                Note:
+                - Think Tsoding Daily, live coding streamers
+                - Emphasize "messy process" - this is key
+                
+                ---
+                
+                ## Style 2: The Deep Diver
+                - Obsesses over understanding how things really work
+                - Builds toy versions of complex systems (compilers, databases, games)
+                - Values learning over shipping
+                - Often has multiple "educational" implementations
+                
+                Note:
+                - Casey Muratori, Ben Eater types
+                - "Learning over shipping" is crucial mindset
+                
+                ---
+                
+                ## Style 3: The Creative Technologist
+                - Uses code as artistic medium
+                - Generative art, music synthesis, interactive installations
+                - Technology serves creative vision
+                - Often blends programming with other disciplines
+                
+                Note:
+                - Processing, openFrameworks community
+                - Show examples if you have them ready
+                
+                ---
+                
+                ## Style 4: The Problem Solver
+                - Scratches personal itches with code
+                - Tools that solve tiny annoying problems
+                - "Good enough" solutions that work for them
+                - Often accidentally builds useful things
+                
+                Note:
+                - This resonates with most developers
+                - "Accidentally builds useful things" - many startups begin this way
+                
+                ---
+                
+                ## Style 5: The Language Explorer
+                - Constantly trying new languages and paradigms
+                - Implements same concepts across different languages
+                - Drawn to unusual or experimental languages
+                - Code as intellectual curiosity
+                
+                Note:
+                - Polyglot programmers
+                - Same problem, different language approach
+                
+                ---
+                
+                # Part 3: Common Patterns Across All Styles
+                ## What they all share
+                
+                Note:
+                - 7 minutes for this section
+                - These patterns are what make recreational programming work
+                
+                ---
+                
+                ## Permission to Build "Useless" Things
+                - No business case required
+                - Curiosity is sufficient justification
+                - Failed experiments still teach valuable lessons
+                
+                <div class="takeaway">
+                <strong>Key insight:</strong> ROI doesn't apply to recreational programming
+                </div>
+                
+                Note:
+                - "Useless" in quotes - they're not really useless
+                - This permission is often the hardest thing for developers to give themselves
+                
+                ---
+                
+                ## Follow Energy, Not Plans
+                - Switch projects when excitement fades
+                - Multiple abandoned repos are exploration, not failure
+                - Boredom is data about what interests you
+                
+                <div class="takeaway">
+                <strong>Key insight:</strong> Boredom is data, not defeat
+                </div>
+                
+                Note:
+                - This contradicts traditional project management wisdom
+                - "Boredom is data" - powerful reframe
+                
+                ---
+                
+                ## Document the Journey
+                - Share process, not just results
+                - Teaching forces deeper understanding
+                - Creates connection with others on similar paths
+                
+                <div class="takeaway">
+                <strong>Key insight:</strong> Narrate your decisions
+                </div>
+                
+                Note:
+                - Even if "audience" is just your future self
+                - Process documentation is more valuable than perfect results
+                
+                ---
+                
+                ## Embrace the Learning Process
+                - Beginner's mind in new domains
+                - Comfortable with not knowing
+                - Process over product
+                
+                <div class="takeaway">
+                <strong>Key insight:</strong> Progress over perfection
+                </div>
+                
+                Note:
+                - "Beginner's mind" is a Zen concept worth explaining briefly
+                - This is counterintuitive for senior developers
+                
+                ---
+                
+                # Part 4: Your Personal Programming Playground
+                ## Setting Up for Success
+                
+                Note:
+                - 6 minutes for this section
+                - This is the practical implementation advice
+                
+                ---
+                
+                ## The Environment
+                - Dedicated "experiments" folder/repo
+                - No production concerns: minimal setup, no CI/CD pressure
+                - Quick project initialization scripts
+                - Version control optional
+                
+                Note:
+                - Emphasize "no production concerns" - this reduces friction
+                - Quick setup is crucial for maintaining momentum
+                
+                ---
+                
+                ## The Approaches You Can Try
+                - <span class="highlight">Weekly Experiments</span> (2-4 hours exploring one new thing)
+                - <span class="highlight">Scratch-Built Challenges</span> (Build toy versions of tools you use)
+                - <span class="highlight">Itch-Scratching Projects</span> (Solve your own annoying problems)
+                - <span class="highlight">Teaching Projects</span> (Build something while explaining it)
+                - <span class="highlight">Cross-Language Challenges</span> (Same problem, different languages)
+                
+                Note:
+                - These are starting points, not rigid rules
+                - 2-4 hours is long enough to get somewhere, short enough to not feel overwhelming
+                
+                ---
+                
+                ## The Mindset Shifts
+                - <span class="highlight">"What if..."</span> instead of <span class="highlight">"I should..."</span>
+                - Progress over perfection
+                - Learning over shipping
+                - Curiosity over productivity
+                
+                Note:
+                - "What if" vs "I should" is a powerful language shift
+                - These mindset shifts are often harder than the technical aspects
+                
+                ---
+                
+                # Part 5: Real Examples in the Wild
+                ## Here are programmers embodying these different styles
+                
+                Note:
+                - 4 minutes for this section
+                - Have links ready if doing this live
+                - These are inspirational examples, not people to copy exactly
+                
+                ---
+                ## Zikani Nyirenda - *The Polyglot Explorer*
+
+                - Experiments across Go, Rust, Python, JavaScript, Kotlin
+                - Perfect example of "what if I built this in X language?" approach
+
+                ---
+                ## Jeremiah Chienda (liwoo) - *The Full-Stack Experimenter*
+
+                - Creates diverse projects from React components to API backends
+                - Explores different architectural patterns and frameworks
+                - Builds tools that solve real problems while learning new technologies
+                - Shows how recreational programming can span the entire tech stack
+
+                ---
+                
+                ## Tsoding Daily - *The Live Explorer*
+                - Streams 4+ hours daily building random projects from scratch
+                - Built his own text editors, programming languages, ray tracers
+                - Shows complete process including failures and debugging
+                - "Let's see what happens if..." approach to everything
+                
+                Note:
+                - Tsoding shows the "messy process" beautifully
+                - Emphasize the fearless experimentation
+                
+                ---
+                
+                ## ThePrimeagen - *The High-Energy Problem Solver*
+                - Creates CLI tools and Neovim plugins for personal workflow optimization
+                - Infectious enthusiasm for dev tools and performance
+                - Reacts to and critiques other developers' code/approaches
+                - Makes optimization and tooling feel like extreme sports
+                
+                Note:
+                - Prime's energy is infectious
+                - He makes mundane dev tools exciting
+                
+                ---
+                
+                ## Casey Muratori - *The Systems Deep Diver*
+                - Handmade Hero: Building a complete game from scratch on stream
+                - Explains every single line of code and system design decision
+                - No libraries, understanding everything from first principles
+                - Demonstrates that you can build modern software without frameworks
+                
+                Note:
+                - Casey's Handmade Hero is legendary for education
+                - First principles approach is inspiring
+                
+                ---
+                
+                ## Devine Lu Linvega - *The Minimalist Creative*
+                - Lives on a sailboat, codes minimal tools for digital art
+                - Builds everything in a few hundred lines of C
+                - Creates programming languages, graphics engines, music software
+                - Constraint-driven creativity: what can you build with almost nothing?
+                
+                Note:
+                - Devine's constraints breed creativity
+                - Living on a sailboat adds romantic appeal
+                
+                ---
+                
+                ## Ben Eater - *The Educational Builder*
+                - Builds computers on breadboards, explains every component
+                - Creates video series on how CPUs, memory, and networks actually work
+                - Takes months to build what you could buy for $5
+                - Makes hardware fundamentals accessible and fascinating
+                
+                Note:
+                - Ben makes hardware accessible to software developers
+                - "Takes months to build what costs $5" gets laughs
+                
+                ---
+                
+                ## Jonathan Blow - *The Philosophical Craftsperson*
+                - Created indie games (Braid, The Witness) as personal artistic statements
+                - Designing his own programming language (Jai) for game development
+                - Critiques industry trends, advocates for craftsmanship
+                - Programming as a form of intellectual and artistic expression
+                
+                Note:
+                - Jonathan thinks deeply about tools and languages
+                - Programming as art resonates with many
+                
+                ---
+                
+                ## Suz Hinton - *The Creative Hardware Hacker*
+                - Live codes music and visuals on Twitch
+                - Builds IoT projects and interactive art installations
+                - Combines programming with electronics, music, and performance
+                - Shows programming as a creative, interdisciplinary medium
+                
+                Note:
+                - Suz blends multiple disciplines beautifully
+                - Live coding music is fascinating to most people
+                
+                ---
+                
+                ## Dan Luu - *The Deep Technical Investigator*
+                - Writes detailed blog posts investigating performance mysteries
+                - Benchmarks everything: keyboards, terminals, programming languages
+                - Turns curiosity about "why is X slow?" into multi-thousand word research
+                - Demonstrates how recreational investigation can uncover industry-wide issues
+                
+                <div class="center small">
+                <strong>Each represents a different path back to programming joy</strong>
+                </div>
+                
+                Note:
+                - Dan turns curiosity into deep research
+                - Shows how recreational work can have industry impact
+                
+                ---
+                
+                ## Closing Challenge
+                Pick one experiment:
+                1. Build the worst possible version of a tool you use daily
+                2. Spend 2 hours with a language you've been curious about
+                3. Document yourself solving a small problem
+                4. Fork an interesting project and mess with it
+                5. Try live coding or streaming your process
+                
+                <div class="takeaway">
+                <strong>The only rule:</strong> Stop if it stops being fun.
+                </div>
+                
+                Note:
+                - 2 minutes for this section
+                - "Worst possible version" gets laughs and removes pressure
+                - Emphasize "stop if it stops being fun" - this is crucial
+                
+                ---
+                
+                ## Final Thought
+                <div class="center">
+                "The goal isn't to become any of these programmers. It's to remember why you started coding and keep that curiosity alive alongside your career."
+                </div>
+                
+                Note:
+                - End on this inspirational note
+                - Pause after this for effect
+                - Open to Q&A
+                - Thank audience for their energy and participation
+            </textarea
+          >
+        </section>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/markdown/markdown.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/highlight/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/notes/notes.min.js"></script>
+    <script>
+      Reveal.initialize({
+        hash: true,
+        plugins: [RevealMarkdown, RevealHighlight, RevealNotes],
+      });
+    </script>
+  </body>
+</html>
