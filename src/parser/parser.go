@@ -163,7 +163,6 @@ func (p *Parser) ParseFile(value []byte) *ast.File {
 			}
 		}
 		p.nextToken()
-
 	}
 
 	return file

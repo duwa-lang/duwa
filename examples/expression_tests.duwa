@@ -1,0 +1,72 @@
+// Test file demonstrating complex expression support in Duwa parser
+
+// Test 1: Simple identifier condition
+nambala started = zoona;
+ngati(started){
+    lembanzr("Test 1 PASSED: Simple identifier condition");
+}
+
+// Test 2: Method call condition (simulating with function)
+ndondomeko isKeyPressed(key) {
+    bweza zoona;
+}
+
+ngati(isKeyPressed(32)){
+    lembanzr("Test 2 PASSED: Function call in condition");
+}
+
+// Test 3: Logical OR operator
+nambala x = 5;
+nambala y = 10;
+ngati(x > 10 || y > 5){
+    lembanzr("Test 3 PASSED: Logical OR operator");
+}
+
+// Test 4: Logical AND operator
+ngati(x > 0 && y > 0){
+    lembanzr("Test 4 PASSED: Logical AND operator");
+}
+
+// Test 5: Complex nested condition
+nambala width = 800;
+nambala height = 600;
+nambala playerX = 400;
+nambala playerY = 300;
+
+ngati(playerX >= 0 && playerX <= width && playerY >= 0 && playerY <= height){
+    lembanzr("Test 5 PASSED: Complex nested conditions");
+}
+
+// Test 6: Negation with logical operators
+nambala paused = bodza;
+ngati(!paused && started){
+    lembanzr("Test 6 PASSED: Negation with logical AND");
+}
+
+// Test 7: Grouped conditions
+nambala z = 0;
+ngati((x > 3 && y < 20) || z == 0){
+    lembanzr("Test 7 PASSED: Grouped conditions");
+}
+
+// Test 8: No spaces version
+ngati(x>0&&y>0){
+    lembanzr("Test 8 PASSED: No spaces in condition");
+}
+
+// Test 9: While loop with complex condition
+nambala counter = 0;
+pamene(counter < 5 && started){
+    counter = counter + 1;
+}
+ngati(counter == 5){
+    lembanzr("Test 9 PASSED: While with complex condition");
+}
+
+// Test 10: Array access in condition
+nambala[] arr = [1, 2, 3];
+ngati(arr[0] > 0 || arr[1] > 0){
+    lembanzr("Test 10 PASSED: Array access in condition");
+}
+
+lembanzr("\nAll expression tests completed successfully!");

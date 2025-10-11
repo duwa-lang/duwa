@@ -12,7 +12,8 @@ func (p *Parser) parseReturnStatement() *ast.ReturnStatement {
 		stmt.ReturnValue = &ast.NullLiteral{
 			Token: p.curToken,
 		}
-		p.nextToken()
+		// Don't advance past the semicolon - leave curToken at the last token of the statement
+		// The caller (parseBlockStatement) will advance to the next statement
 	} else {
 		stmt.ReturnValue = p.parseExpression(LOWEST)
 		if p.peekTokenIs(token.SEMICOLON) {
