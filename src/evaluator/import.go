@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 
 	"github.com/duwa-lang/duwa/src/ast"
-	"github.com/duwa-lang/duwa/src/modules/all"
+	"github.com/duwa-lang/duwa/src/modules"
 	"github.com/duwa-lang/duwa/src/object"
 	"github.com/duwa-lang/duwa/src/parser"
 )
@@ -36,7 +36,7 @@ func evaluateImportStatement(node *ast.ImportStatement, env *object.Environment)
 }
 
 func handleStdImport(filePath string, node *ast.ImportStatement, env *object.Environment) object.Object {
-	module, ok := all.ImportModule(filePath)
+	module, ok := modules.ImportModule(filePath)
 	if !ok {
 		return newError("%d:%d:%s: runtime error: %s", node.Token.Pos.Line, node.Token.Pos.Column, node.Token.File, "Failed to import std moduler")
 	}
@@ -117,5 +117,5 @@ func isStdImport(path string) bool {
 	if filepath.Ext(path) == ".duwa" {
 		path = path[:len(path)-len(".duwa")]
 	}
-	return all.IsValidModuleImport(path)
+	return modules.IsValidModuleImport(path)
 }

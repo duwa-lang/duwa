@@ -1,4 +1,4 @@
-package all
+package modules
 
 import (
 	"github.com/duwa-lang/duwa/src/modules/console"
