@@ -1,0 +1,20 @@
+tenga masamu mu "masamu";
+
+// Test accessing PI constant
+lembanzr("PI: ");
+lembanzr(masamu.PI);
+
+// Test accessing E constant
+lembanzr("E: ");
+lembanzr(masamu.E);
+
+// Test using properties in calculations
+nambala radius = 5;
+nambala circumference = 2 * masamu.PI * radius;
+lembanzr("Circumference with radius 5: ");
+lembanzr(circumference);
+
+// Test using E in calculations
+nambala eSquared = masamu.E * masamu.E;
+lembanzr("E squared: ");
+lembanzr(eSquared);

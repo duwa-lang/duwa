@@ -1,11 +1,13 @@
 package object
 
+import "maps"
+
 const LIBRARY_MODULE = "LIBRARY_MODULE"
 
 type LibraryModule struct {
-	Name    string
-	globals []Object
-	Methods map[string]*LibraryFunction
+	Name       string
+	Methods    map[string]*LibraryFunction
+	Properties map[string]Object
 }
 
 func (libraryModule *LibraryModule) String() string {
@@ -22,12 +24,26 @@ func (libraryModule *LibraryModule) Method(method string, args []Object) (Object
 
 func NewBuiltInLibraryModule(name string, contents map[string]*LibraryFunction) *LibraryModule {
 	methods := map[string]*LibraryFunction{}
-	for k, v := range contents {
-		methods[k] = v
-	}
+	maps.Copy(methods, contents)
 	m := &LibraryModule{
-		Name:    name,
-		Methods: methods,
+		Name:       name,
+		Methods:    methods,
+		Properties: map[string]Object{},
+	}
+	return m
+}
+
+func NewBuiltInLibraryModuleWithProperties(name string, methods map[string]*LibraryFunction, properties map[string]Object) *LibraryModule {
+	methodsCopy := map[string]*LibraryFunction{}
+	maps.Copy(methodsCopy, methods)
+
+	propertiesCopy := map[string]Object{}
+	maps.Copy(propertiesCopy, properties)
+
+	m := &LibraryModule{
+		Name:       name,
+		Methods:    methodsCopy,
+		Properties: propertiesCopy,
 	}
 	return m
 }

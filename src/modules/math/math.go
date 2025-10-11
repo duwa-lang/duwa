@@ -1,6 +1,8 @@
 package math
 
 import (
+	"math"
+
 	"github.com/duwa-lang/duwa/src/object"
 	"github.com/duwa-lang/duwa/src/token"
 	"github.com/shopspring/decimal"
@@ -104,10 +106,17 @@ func methodFloor(scope *object.Environment, tok token.Token, args ...object.Obje
 // It contains functions for performing mathematical operations
 // It is used to perform mathematical calculations
 func Module() *object.LibraryModule {
-	return object.NewBuiltInLibraryModule("masamu", map[string]*object.LibraryFunction{
+	methods := map[string]*object.LibraryFunction{
 		"yochepa": object.NewBuiltin("yochepa", methodMathMin),
 		"sqrt":    object.NewBuiltin("sqrt", methodMathSqrt),
 		"round":   object.NewBuiltin("round", methodRound),
 		"pansi":   object.NewBuiltin("pansi", methodFloor),
-	})
+	}
+
+	properties := map[string]object.Object{
+		"PI": &object.Integer{Value: decimal.NewFromFloat(math.Pi)},
+		"E":  &object.Integer{Value: decimal.NewFromFloat(math.E)},
+	}
+
+	return object.NewBuiltInLibraryModuleWithProperties("masamu", methods, properties)
 }
