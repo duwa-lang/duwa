@@ -1,8 +1,11 @@
 package evaluator
 
 import (
+	"strings"
+
 	"github.com/duwa-lang/duwa/src/ast"
 	"github.com/duwa-lang/duwa/src/object"
+	"github.com/duwa-lang/duwa/src/runtime"
 	"github.com/duwa-lang/duwa/src/token"
 )
 
@@ -19,22 +22,66 @@ func evaluateFunctionCall(node *ast.CallExpression, env *object.Environment) obj
 }
 
 func applyFunction(tok token.Token, fn object.Object, args []object.Object, env *object.Environment) object.Object {
+	// Prepare function name and arguments for observation
+	functionName := tok.Literal
+	argStrs := make([]string, len(args))
+	for i, arg := range args {
+		argStrs[i] = arg.String()
+	}
+	argsStr := strings.Join(argStrs, ", ")
+
+	// Notify observers before function call
+	env.NotifyObservers(runtime.EventFunctionCall, map[string]interface{}{
+		"function": functionName,
+		"args":     argsStr,
+	})
+
+	// Push call frame
+	env.PushCallFrame(runtime.CallFrame{
+		FunctionName: functionName,
+		Location: runtime.Location{
+			File:   tok.File,
+			Line:   tok.Pos.Line,
+			Column: tok.Pos.Column,
+		},
+		Locals: map[string]string{},
+	})
+
+	var result object.Object
+
 	switch fn := fn.(type) {
 	case *object.LibraryFunction:
-		if result := fn.Function(env, tok, args...); result != nil {
-			return result
+		if res := fn.Function(env, tok, args...); res != nil {
+			result = res
+		} else {
+			result = nil
 		}
-		return nil
 	case *object.Function:
-		return fn.Evaluate(env, args)
+		result = fn.Evaluate(env, args)
 	case *object.Class:
 		if tok.Literal != fn.Name.TokenLiteral() {
-			return newError("class name mismatch: expected %s, got %s", fn.Name.TokenLiteral(), tok.Literal)
+			result = newError("class name mismatch: expected %s, got %s", fn.Name.TokenLiteral(), tok.Literal)
+		} else {
+			result = fn.CreateInstance(tok.Literal, args)
 		}
-		return fn.CreateInstance(tok.Literal, args)
 	default:
-		return newError("not a function: %s", fn.Type())
+		result = newError("not a function: %s", fn.Type())
 	}
+
+	// Pop call frame
+	env.PopCallFrame()
+
+	// Notify observers after function return
+	resultStr := "null"
+	if result != nil {
+		resultStr = result.String()
+	}
+	env.NotifyObservers(runtime.EventFunctionReturn, map[string]interface{}{
+		"function": functionName,
+		"result":   resultStr,
+	})
+
+	return result
 }
 
 func extendFunctionEnv(

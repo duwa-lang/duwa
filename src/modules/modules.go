@@ -2,6 +2,7 @@ package modules
 
 import (
 	"github.com/duwa-lang/duwa/src/modules/console"
+	"github.com/duwa-lang/duwa/src/modules/debug"
 	"github.com/duwa-lang/duwa/src/modules/math"
 	"github.com/duwa-lang/duwa/src/object"
 	"maps"
@@ -14,6 +15,7 @@ func Builtins() map[string]object.LibraryModule {
 	result := map[string]object.LibraryModule{
 		"khonso": *console.Module(),
 		"masamu": *math.Module(),
+		"debug":  *debug.Module(),
 	}
 
 	return result
