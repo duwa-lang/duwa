@@ -1,8 +1,8 @@
 package evaluator
 
 import (
-	"github.com/sevenreup/duwa/src/ast"
-	"github.com/sevenreup/duwa/src/object"
+	"github.com/duwa-lang/duwa/src/ast"
+	"github.com/duwa-lang/duwa/src/object"
 )
 
 func evalExpressions(

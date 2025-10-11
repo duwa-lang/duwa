@@ -1,9 +1,9 @@
 package all
 
 import (
-	"github.com/sevenreup/duwa/src/modules/console"
-	"github.com/sevenreup/duwa/src/modules/math"
-	"github.com/sevenreup/duwa/src/object"
+	"github.com/duwa-lang/duwa/src/modules/console"
+	"github.com/duwa-lang/duwa/src/modules/math"
+	"github.com/duwa-lang/duwa/src/object"
 )
 
 var Modules = map[string]*object.LibraryModule{}

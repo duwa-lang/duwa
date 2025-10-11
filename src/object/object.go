@@ -1,8 +1,8 @@
 package object
 
 import (
-	"github.com/sevenreup/duwa/src/ast"
-	"github.com/sevenreup/duwa/src/token"
+	"github.com/duwa-lang/duwa/src/ast"
+	"github.com/duwa-lang/duwa/src/token"
 )
 
 var evaluator func(node ast.Node, env *Environment) Object

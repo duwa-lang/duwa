@@ -6,9 +6,9 @@ import (
 	"log/slog"
 	"os"
 
-	"github.com/sevenreup/duwa/src/duwa"
-	"github.com/sevenreup/duwa/src/object"
-	"github.com/sevenreup/duwa/src/runtime/native"
+	"github.com/duwa-lang/duwa/src/duwa"
+	"github.com/duwa-lang/duwa/src/object"
+	"github.com/duwa-lang/duwa/src/runtime/native"
 
 	"github.com/spf13/cobra"
 )

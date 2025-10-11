@@ -1,6 +1,6 @@
 package evaluator
 
-import "github.com/sevenreup/duwa/src/object"
+import "github.com/duwa-lang/duwa/src/object"
 
 func evalStringInfixExpression(
 	operator string,

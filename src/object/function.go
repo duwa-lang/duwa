@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"strings"
 
-	"github.com/sevenreup/duwa/src/ast"
+	"github.com/duwa-lang/duwa/src/ast"
 )
 
 const FUNCTION_OBJ = "FUNCTION"

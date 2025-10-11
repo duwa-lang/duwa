@@ -1,6 +1,6 @@
 package values
 
-import "github.com/sevenreup/duwa/src/object"
+import "github.com/duwa-lang/duwa/src/object"
 
 var (
 	NULL     = &object.Null{}

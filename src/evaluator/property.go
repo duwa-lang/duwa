@@ -1,9 +1,9 @@
 package evaluator
 
 import (
-	"github.com/sevenreup/duwa/src/ast"
-	"github.com/sevenreup/duwa/src/object"
-	"github.com/sevenreup/duwa/src/values"
+	"github.com/duwa-lang/duwa/src/ast"
+	"github.com/duwa-lang/duwa/src/object"
+	"github.com/duwa-lang/duwa/src/values"
 )
 
 func evaluateProperty(node *ast.PropertyExpression, env *object.Environment) object.Object {

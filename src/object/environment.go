@@ -3,8 +3,8 @@ package object
 import (
 	"log/slog"
 
-	"github.com/sevenreup/duwa/src/runtime"
-	"github.com/sevenreup/duwa/src/runtime/native"
+	"github.com/duwa-lang/duwa/src/runtime"
+	"github.com/duwa-lang/duwa/src/runtime/native"
 )
 
 func NewEnclosedEnvironment(outer *Environment) *Environment {

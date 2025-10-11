@@ -7,7 +7,7 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/sevenreup/duwa/src/cli/utils"
+	"github.com/duwa-lang/duwa/src/cli/utils"
 )
 
 // Markdown generation templates

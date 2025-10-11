@@ -1,8 +1,8 @@
 package math
 
 import (
-	"github.com/sevenreup/duwa/src/object"
-	"github.com/sevenreup/duwa/src/token"
+	"github.com/duwa-lang/duwa/src/object"
+	"github.com/duwa-lang/duwa/src/token"
 	"github.com/shopspring/decimal"
 )
 

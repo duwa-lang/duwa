@@ -1,9 +1,9 @@
 package evaluator
 
 import (
-	"github.com/sevenreup/duwa/src/ast"
-	"github.com/sevenreup/duwa/src/object"
-	"github.com/sevenreup/duwa/src/values"
+	"github.com/duwa-lang/duwa/src/ast"
+	"github.com/duwa-lang/duwa/src/object"
+	"github.com/duwa-lang/duwa/src/values"
 )
 
 func evaluateAssigment(node *ast.AssigmentStatement, env *object.Environment) object.Object {

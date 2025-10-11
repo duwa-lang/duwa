@@ -6,11 +6,11 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/sevenreup/duwa/src/evaluator"
-	"github.com/sevenreup/duwa/src/object"
-	"github.com/sevenreup/duwa/src/parser"
-	"github.com/sevenreup/duwa/src/utils"
-	"github.com/sevenreup/duwa/src/utils/environment"
+	"github.com/duwa-lang/duwa/src/evaluator"
+	"github.com/duwa-lang/duwa/src/object"
+	"github.com/duwa-lang/duwa/src/parser"
+	"github.com/duwa-lang/duwa/src/utils"
+	"github.com/duwa-lang/duwa/src/utils/environment"
 	"github.com/shopspring/decimal"
 )
 

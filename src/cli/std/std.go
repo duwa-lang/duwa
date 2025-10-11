@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/sevenreup/duwa/src/cli/utils"
+	"github.com/duwa-lang/duwa/src/cli/utils"
 )
 
 const (

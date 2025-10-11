@@ -1,7 +1,7 @@
 package parser
 
 import (
-	"github.com/sevenreup/duwa/src/ast"
+	"github.com/duwa-lang/duwa/src/ast"
 )
 
 func (parser *Parser) breakStatement() ast.Expression {

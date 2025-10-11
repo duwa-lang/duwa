@@ -9,9 +9,9 @@ import (
 	"runtime"
 	"syscall/js"
 
-	"github.com/sevenreup/duwa/src/duwa"
-	"github.com/sevenreup/duwa/src/object"
-	"github.com/sevenreup/duwa/src/runtime/wasm"
+	"github.com/duwa-lang/duwa/src/duwa"
+	"github.com/duwa-lang/duwa/src/object"
+	"github.com/duwa-lang/duwa/src/runtime/wasm"
 )
 
 var compiler *duwa.Duwa

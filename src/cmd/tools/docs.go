@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/sevenreup/duwa/src/cli/docs"
+	"github.com/duwa-lang/duwa/src/cli/docs"
 	"github.com/spf13/cobra"
 )
 

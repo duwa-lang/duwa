@@ -4,10 +4,10 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/sevenreup/duwa/src/ast"
-	"github.com/sevenreup/duwa/src/modules/all"
-	"github.com/sevenreup/duwa/src/object"
-	"github.com/sevenreup/duwa/src/parser"
+	"github.com/duwa-lang/duwa/src/ast"
+	"github.com/duwa-lang/duwa/src/modules/all"
+	"github.com/duwa-lang/duwa/src/object"
+	"github.com/duwa-lang/duwa/src/parser"
 )
 
 var imported map[string]*object.Environment

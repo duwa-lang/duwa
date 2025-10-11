@@ -3,7 +3,7 @@ package lexer
 import (
 	"testing"
 
-	"github.com/sevenreup/duwa/src/token"
+	"github.com/duwa-lang/duwa/src/token"
 )
 
 func TestNextToken(t *testing.T) {

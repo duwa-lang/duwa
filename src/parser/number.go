@@ -2,7 +2,8 @@ package parser
 
 import (
 	"fmt"
-	"github.com/sevenreup/duwa/src/ast"
+
+	"github.com/duwa-lang/duwa/src/ast"
 	"github.com/shopspring/decimal"
 )
 

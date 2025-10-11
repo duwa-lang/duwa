@@ -1,7 +1,7 @@
 package lsp
 
 import (
-	parserpkg "github.com/sevenreup/duwa/src/parser"
+	parserpkg "github.com/duwa-lang/duwa/src/parser"
 )
 
 var parserDW = parserpkg.NewParser()

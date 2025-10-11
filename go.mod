@@ -1,4 +1,4 @@
-module github.com/sevenreup/duwa
+module github.com/duwa-lang/duwa
 
 go 1.23.0
 
