@@ -62,6 +62,11 @@ func evaluateInstanceMethod(node *ast.MethodExpression, receiverInstance *object
 	}
 
 	if method, ok := method.(*object.Function); ok {
+		// Validate argument count
+		if len(arguments) != len(method.Parameters) {
+			return newError("%d:%d:%s: runtime error: argument count mismatch for method %s: expected %d arguments, got %d",
+				node.Token.Pos.Line, node.Token.Pos.Column, node.Token.File, name, len(method.Parameters), len(arguments))
+		}
 		extendedEnv := extendFunctionEnv(method, arguments)
 		return Eval(method.Body, extendedEnv)
 	} else {
@@ -73,6 +78,12 @@ func evaluatePackageMethod(node *ast.MethodExpression, receiver *object.Package,
 	function, err := receiver.GetPackageFunction(name)
 	if err != nil {
 		return newError("%d:%d:%s: runtime error: %s", node.Token.Pos.Line, node.Token.Pos.Column, node.Token.File, err.Error())
+	}
+
+	// Validate argument count
+	if len(arguments) != len(function.Parameters) {
+		return newError("%d:%d:%s: runtime error: argument count mismatch for function %s: expected %d arguments, got %d",
+			node.Token.Pos.Line, node.Token.Pos.Column, node.Token.File, name, len(function.Parameters), len(arguments))
 	}
 
 	evaluated := Eval(function.Body, extendFunctionEnv(function, arguments))
