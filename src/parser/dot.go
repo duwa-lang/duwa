@@ -24,5 +24,12 @@ func (parser *Parser) dotExpression(left ast.Expression) ast.Expression {
 	}
 
 	// Property
-	return &ast.PropertyExpression{Token: parser.curToken, Left: left, Property: parser.parseExpression(currentPrecedence)}
+	propertyExp := &ast.PropertyExpression{Token: parser.curToken, Left: left, Property: parser.parseExpression(currentPrecedence)}
+
+	// Check if this is a property assignment
+	if parser.peekTokenIs(token.ASSIGN) {
+		return parser.handlePropertyAssignment(propertyExp)
+	}
+
+	return propertyExp
 }

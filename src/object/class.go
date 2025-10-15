@@ -17,7 +17,21 @@ func (c *Class) String() string {
 }
 
 func (c *Class) CreateInstance(method string, args []Object) Object {
-	instance := &Instance{Class: c, Env: c.Env}
+	// Create a new environment for each instance
+	// Each instance gets its own environment with methods accessible via the class
+	instanceEnv := CopyEnvironmentDefaults(c.Env)
+
+	// Copy ALL properties and methods from the class to the instance
+	// This ensures each instance has its own environment without shared references
+	classProps := c.Env.All()
+	for name, value := range classProps {
+		instanceEnv.SetLocal(name, value)
+	}
+
+	// Set outer to class env so inherited methods/properties can still be found if needed
+	instanceEnv.outer = c.Env
+
+	instance := &Instance{Class: c, Env: instanceEnv}
 
 	if ok := c.Env.Has("constructor"); ok {
 		result := instance.Call("constructor", args)

@@ -11,6 +11,9 @@ func evaluateDeclaration(node *ast.VariableDeclarationStatement, env *object.Env
 	if isError(val) {
 		return val
 	}
-	env.Set(node.Identifier.Value, val)
+	// Use SetLocal to ensure the variable is created in the current scope
+	// This is critical for class properties - they should be in the class environment,
+	// not delegated to outer scopes
+	env.SetLocal(node.Identifier.Value, val)
 	return nil
 }

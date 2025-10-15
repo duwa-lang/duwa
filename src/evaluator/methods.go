@@ -67,7 +67,12 @@ func evaluateInstanceMethod(node *ast.MethodExpression, receiverInstance *object
 			return newError("%d:%d:%s: runtime error: argument count mismatch for method %s: expected %d arguments, got %d",
 				node.Token.Pos.Line, node.Token.Pos.Column, node.Token.File, name, len(method.Parameters), len(arguments))
 		}
-		extendedEnv := extendFunctionEnv(method, arguments)
+		// Create environment for method execution that extends the INSTANCE environment
+		// This ensures that property assignments in the method affect this specific instance
+		extendedEnv := object.NewEnclosedEnvironment(receiverInstance.Env)
+		for paramIdx, param := range method.Parameters {
+			extendedEnv.Set(param.Value, arguments[paramIdx])
+		}
 		return Eval(method.Body, extendedEnv)
 	} else {
 		return newError("not a method: %s", name)

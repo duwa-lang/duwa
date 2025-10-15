@@ -53,3 +53,25 @@ func (p *Parser) handleIndexAssigment(indexExp *ast.IndexExpression) *ast.Assigm
 
 	return statement
 }
+
+func (p *Parser) handlePropertyAssignment(propertyExp *ast.PropertyExpression) *ast.AssigmentStatement {
+	statement := &ast.AssigmentStatement{
+		Identifier: propertyExp,
+	}
+
+	p.nextToken()
+
+	if !p.curTokenIs(token.ASSIGN) {
+		return nil
+	}
+
+	p.nextToken()
+
+	statement.Value = p.parseExpression(LOWEST)
+
+	if p.peekTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
+
+	return statement
+}

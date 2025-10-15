@@ -27,7 +27,14 @@ func (i *Instance) Call(method string, args []Object) Object {
 		return NewError("Could not call instance method %s for %s", method, i.Class.Name.String())
 	}
 
-	methodEnv := createNewMethodInstanceEnvironment(methodFunction, args)
+	// Create environment for method execution that extends the INSTANCE environment
+	// This ensures that property assignments in the method affect this specific instance
+	methodEnv := NewEnclosedEnvironment(i.Env)
+	for paramIdx, param := range methodFunction.Parameters {
+		if len(args) > paramIdx {
+			methodEnv.Set(param.Value, args[paramIdx])
+		}
+	}
 	return evaluator(methodFunction.Body, methodEnv)
 }
 

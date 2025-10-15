@@ -92,6 +92,18 @@ func (e *Environment) Set(name string, val Object) Object {
 	return val
 }
 
+func (e *Environment) SetLocal(name string, val Object) Object {
+	e.store[name] = val
+
+	// Notify observers of variable change
+	e.NotifyObservers(runtime.EventVariableSet, map[string]interface{}{
+		"name":  name,
+		"value": val.String(),
+	})
+
+	return val
+}
+
 func (e *Environment) Has(name string) bool {
 	_, ok := e.store[name]
 	if !ok && e.outer != nil {
