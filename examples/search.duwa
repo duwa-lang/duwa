@@ -147,21 +147,37 @@ doInterpolationSearch();
 
 // Exponential Search
 
+// Binary search helper with range parameters
+ndondomeko binarySearchRange(arr, left, right, x) {
+    pamene (left <= right) {
+        nambala mid = masamu.pansi(left + (right - left) / 2);
+        ngati (arr[mid] == x) {
+            bweza mid;
+        }
+        ngati (arr[mid] < x) {
+            left = mid + 1;
+        } kapena {
+            right = mid - 1;
+        }
+    }
+    bweza -1;
+}
+
 ndondomeko exponentialSearch(arr, n, x) {
     // If x is present at first location itself
     ngati (arr[0] == x) {
         bweza 0;
     }
- 
+
     // Find range for binary search by
     // repeated doubling
     nambala i = 1;
     pamene (i < n && arr[i] <= x) {
         i = i * 2;
     }
- 
+
     // Call binary search for the found range.
-    bweza binarySearch(arr, i / 2, masamu.yochepa(i, n), x);
+    bweza binarySearchRange(arr, i / 2, masamu.yochepa(i, n) - 1, x);
 }
 
 ndondomeko doExponentialSearch() {
