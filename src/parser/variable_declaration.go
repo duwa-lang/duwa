@@ -8,7 +8,8 @@ import (
 func (p *Parser) parseVariableDeclarationStatement() *ast.VariableDeclarationStatement {
 	stmt := &ast.VariableDeclarationStatement{Type: p.curToken}
 
-	if p.peekTokenIs(token.OPENING_BRACKET) {
+	// Handle multi-dimensional array type declarations (e.g., nambala[][], nambala[][][])
+	for p.peekTokenIs(token.OPENING_BRACKET) {
 		p.nextToken()
 		if !p.peekTokenIs(token.CLOSING_BRACKET) {
 			return nil
