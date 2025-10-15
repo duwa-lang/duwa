@@ -1,6 +1,7 @@
 package duwa
 
 import (
+	"errors"
 	"log"
 	"os"
 	"path/filepath"
@@ -53,4 +54,13 @@ func (c *Duwa) registerEvaluator() {
 
 func (c *Duwa) Call(function string, args []object.Object) object.Object {
 	return c.Environment.Call(function, args)
+}
+
+
+func (c *Duwa) CallE(function string, args []object.Object) (object.Object, error) {
+	result := c.Environment.Call(function, args)
+	if errObj, ok := result.(*object.Error); ok {
+		return nil, errors.New(errObj.Message)
+	}
+	return result, nil
 }

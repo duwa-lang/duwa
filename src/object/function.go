@@ -2,6 +2,7 @@ package object
 
 import (
 	"bytes"
+	"fmt"
 	"strings"
 
 	"github.com/duwa-lang/duwa/src/ast"
@@ -37,6 +38,14 @@ func (i *Function) Method(method string, args []Object) (Object, bool) {
 }
 
 func (function *Function) Evaluate(env *Environment, args []Object) Object {
+	// Check argument count matches parameter count
+	if len(args) != len(function.Parameters) {
+		return &Error{
+			Message: fmt.Sprintf("runtime error: argument count mismatch: expected %d arguments, got %d",
+				len(function.Parameters), len(args)),
+		}
+	}
+
 	extendedEnv := extendFunctionEnv(env, function, args)
 	evaluated := evaluator(function.Body, extendedEnv)
 	return unwrapReturnValue(evaluated)
@@ -47,6 +56,7 @@ func extendFunctionEnv(
 	fn *Function,
 	args []Object,
 ) *Environment {
+	// Arguments are already validated in Evaluate, so safe to access
 	for paramIdx, param := range fn.Parameters {
 		env.Set(param.Value, args[paramIdx])
 	}

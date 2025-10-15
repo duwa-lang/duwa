@@ -1,6 +1,7 @@
 package object
 
 import (
+	"errors"
 	"log/slog"
 
 	"github.com/duwa-lang/duwa/src/runtime"
@@ -129,6 +130,14 @@ func (e *Environment) Call(function string, args []Object) Object {
 	}
 
 	return NewError("function not found: %s", function)
+}
+
+func (e *Environment) CallE(function string, args []Object) (Object, error) {
+	result := e.Call(function, args)
+	if errObj, ok := result.(*Error); ok {
+		return nil, errors.New(errObj.Message)
+	}
+	return result, nil
 }
 
 // PushCallFrame adds a new frame to the call stack
