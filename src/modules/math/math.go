@@ -2,6 +2,7 @@ package math
 
 import (
 	"math"
+	"math/rand"
 
 	"github.com/duwa-lang/duwa/src/object"
 	"github.com/duwa-lang/duwa/src/token"
@@ -101,16 +102,29 @@ func methodFloor(scope *object.Environment, tok token.Token, args ...object.Obje
 	return &object.Integer{Value: number1.Value.Floor()}
 }
 
+// method=chisawawa args=[] return={number}
+// This method returns a random number between 0 and 1.
+//
+// `Example`
+// ```
+// masamu.chisawawa() # returns a random number like 0.5432
+// ```
+func methodRandom(scope *object.Environment, tok token.Token, args ...object.Object) object.Object {
+	randomValue := rand.Float64()
+	return &object.Integer{Value: decimal.NewFromFloat(randomValue)}
+}
+
 // library=masamu
 // This is the math module
 // It contains functions for performing mathematical operations
 // It is used to perform mathematical calculations
 func Module() *object.LibraryModule {
 	methods := map[string]*object.LibraryFunction{
-		"yochepa": object.NewBuiltin("yochepa", methodMathMin),
-		"sqrt":    object.NewBuiltin("sqrt", methodMathSqrt),
-		"round":   object.NewBuiltin("round", methodRound),
-		"pansi":   object.NewBuiltin("pansi", methodFloor),
+		"yochepa":   object.NewBuiltin("yochepa", methodMathMin),
+		"sqrt":      object.NewBuiltin("sqrt", methodMathSqrt),
+		"round":     object.NewBuiltin("round", methodRound),
+		"pansi":     object.NewBuiltin("pansi", methodFloor),
+		"chisawawa": object.NewBuiltin("chisawawa", methodRandom),
 	}
 
 	properties := map[string]object.Object{
