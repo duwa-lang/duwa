@@ -3,9 +3,9 @@ package parser
 import (
 	"fmt"
 
-	"github.com/sevenreup/duwa/src/ast"
-	"github.com/sevenreup/duwa/src/lexer"
-	"github.com/sevenreup/duwa/src/token"
+	"github.com/duwa-lang/duwa/src/ast"
+	"github.com/duwa-lang/duwa/src/lexer"
+	"github.com/duwa-lang/duwa/src/token"
 )
 
 type (
@@ -163,7 +163,6 @@ func (p *Parser) ParseFile(value []byte) *ast.File {
 			}
 		}
 		p.nextToken()
-
 	}
 
 	return file

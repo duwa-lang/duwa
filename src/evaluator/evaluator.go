@@ -3,10 +3,10 @@ package evaluator
 import (
 	"fmt"
 
-	"github.com/sevenreup/duwa/src/ast"
-	"github.com/sevenreup/duwa/src/object"
-	"github.com/sevenreup/duwa/src/token"
-	"github.com/sevenreup/duwa/src/values"
+	"github.com/duwa-lang/duwa/src/ast"
+	"github.com/duwa-lang/duwa/src/object"
+	"github.com/duwa-lang/duwa/src/token"
+	"github.com/duwa-lang/duwa/src/values"
 )
 
 type Evaluator func(node ast.Node, env *object.Environment) object.Object
@@ -110,9 +110,8 @@ func newError(format string, a ...interface{}) *object.Error {
 }
 
 func newErrorNode(tk token.Token, format string, a ...interface{}) *object.Error {
-	return &object.Error{Message: fmt.Sprintf("(%d:%d:%s): %s", tk.Pos.Line, tk.Pos.Column, tk.File,fmt.Sprintf(format, a...))}
+	return &object.Error{Message: fmt.Sprintf("(%d:%d:%s): %s", tk.Pos.Line, tk.Pos.Column, tk.File, fmt.Sprintf(format, a...))}
 }
-
 
 func isError(obj object.Object) bool {
 	if obj != nil {

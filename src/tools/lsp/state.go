@@ -3,7 +3,7 @@ package lsp
 import (
 	"sync"
 
-	"github.com/sevenreup/duwa/src/parser"
+	"github.com/duwa-lang/duwa/src/parser"
 	"github.com/tliron/kutil/problems"
 
 	"go.lsp.dev/protocol"

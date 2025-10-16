@@ -1,8 +1,8 @@
 package evaluator
 
 import (
-	"github.com/sevenreup/duwa/src/object"
-	"github.com/sevenreup/duwa/src/values"
+	"github.com/duwa-lang/duwa/src/object"
+	"github.com/duwa-lang/duwa/src/values"
 )
 
 func evalPrefixExpression(operator string, right object.Object) object.Object {

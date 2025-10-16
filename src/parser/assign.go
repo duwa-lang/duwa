@@ -1,8 +1,8 @@
 package parser
 
 import (
-	"github.com/sevenreup/duwa/src/ast"
-	"github.com/sevenreup/duwa/src/token"
+	"github.com/duwa-lang/duwa/src/ast"
+	"github.com/duwa-lang/duwa/src/token"
 )
 
 func (p *Parser) parseAssignmentStatement() *ast.AssigmentStatement {
@@ -46,6 +46,28 @@ func (p *Parser) handleIndexAssigment(indexExp *ast.IndexExpression) *ast.Assigm
 	statement.Value = p.parseExpression(LOWEST)
 
 	p.previousIndex = nil
+
+	if p.peekTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
+
+	return statement
+}
+
+func (p *Parser) handlePropertyAssignment(propertyExp *ast.PropertyExpression) *ast.AssigmentStatement {
+	statement := &ast.AssigmentStatement{
+		Identifier: propertyExp,
+	}
+
+	p.nextToken()
+
+	if !p.curTokenIs(token.ASSIGN) {
+		return nil
+	}
+
+	p.nextToken()
+
+	statement.Value = p.parseExpression(LOWEST)
 
 	if p.peekTokenIs(token.SEMICOLON) {
 		p.nextToken()

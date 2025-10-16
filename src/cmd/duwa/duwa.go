@@ -6,9 +6,10 @@ import (
 	"log/slog"
 	"os"
 
-	"github.com/sevenreup/duwa/src/duwa"
-	"github.com/sevenreup/duwa/src/object"
-	"github.com/sevenreup/duwa/src/runtime/native"
+	"github.com/duwa-lang/duwa/src/duwa"
+	"github.com/duwa-lang/duwa/src/object"
+	"github.com/duwa-lang/duwa/src/runtime"
+	"github.com/duwa-lang/duwa/src/runtime/native"
 
 	"github.com/spf13/cobra"
 )
@@ -19,8 +20,10 @@ var (
 	commit  = "unknown"
 	date    = "unknown"
 
-	// Verbose flag
+	// Flags
 	verbose bool
+	debug   bool
+	trace   bool
 )
 
 var rootCmd = &cobra.Command{
@@ -42,7 +45,21 @@ var runCmd = &cobra.Command{
 
 		logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
 		console := native.NewConsole()
-		duwa := duwa.New(object.New(logger, console))
+		env := object.New(logger, console)
+
+		// Enable debugging if requested
+		if debug || trace {
+			if debug {
+				debugObserver := runtime.NewDebuggerObserver(logger, verbose)
+				env.ObserverManager.Register(debugObserver)
+			}
+			if trace {
+				traceObserver := runtime.NewTraceObserver(logger)
+				env.ObserverManager.Register(traceObserver)
+			}
+		}
+
+		duwa := duwa.New(env)
 		value := duwa.RunFile(filepath)
 		if value != nil {
 			if object.IsError(value) {
@@ -63,8 +80,10 @@ var versionCmd = &cobra.Command{
 }
 
 func init() {
-	// Add verbose flag to run command
+	// Add flags to run command
 	runCmd.Flags().BoolVarP(&verbose, "verbose", "v", false, "verbose output")
+	runCmd.Flags().BoolVarP(&debug, "debug", "d", false, "enable debug mode")
+	runCmd.Flags().BoolVarP(&trace, "trace", "t", false, "enable function call tracing")
 
 	// Add subcommands
 	rootCmd.AddCommand(runCmd)

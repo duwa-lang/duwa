@@ -4,8 +4,8 @@ import (
 	"context"
 	"log"
 
-	"github.com/sevenreup/duwa/src/tools/lsp"
-	"github.com/sevenreup/duwa/src/tools/lsp/transport"
+	"github.com/duwa-lang/duwa/src/tools/lsp"
+	"github.com/duwa-lang/duwa/src/tools/lsp/transport"
 	"go.uber.org/zap"
 
 	"github.com/spf13/cobra"

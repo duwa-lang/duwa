@@ -1,8 +1,8 @@
 package parser
 
 import (
-	"github.com/sevenreup/duwa/src/ast"
-	"github.com/sevenreup/duwa/src/token"
+	"github.com/duwa-lang/duwa/src/ast"
+	"github.com/duwa-lang/duwa/src/token"
 )
 
 func (p *Parser) parseReturnStatement() *ast.ReturnStatement {
@@ -12,7 +12,8 @@ func (p *Parser) parseReturnStatement() *ast.ReturnStatement {
 		stmt.ReturnValue = &ast.NullLiteral{
 			Token: p.curToken,
 		}
-		p.nextToken()
+		// Don't advance past the semicolon - leave curToken at the last token of the statement
+		// The caller (parseBlockStatement) will advance to the next statement
 	} else {
 		stmt.ReturnValue = p.parseExpression(LOWEST)
 		if p.peekTokenIs(token.SEMICOLON) {

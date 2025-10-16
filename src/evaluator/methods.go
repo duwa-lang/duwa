@@ -1,9 +1,9 @@
 package evaluator
 
 import (
-	"github.com/sevenreup/duwa/src/ast"
-	"github.com/sevenreup/duwa/src/object"
-	"github.com/sevenreup/duwa/src/values"
+	"github.com/duwa-lang/duwa/src/ast"
+	"github.com/duwa-lang/duwa/src/object"
+	"github.com/duwa-lang/duwa/src/values"
 )
 
 func evaluateMethod(node *ast.MethodExpression, env *object.Environment) object.Object {
@@ -62,7 +62,17 @@ func evaluateInstanceMethod(node *ast.MethodExpression, receiverInstance *object
 	}
 
 	if method, ok := method.(*object.Function); ok {
-		extendedEnv := extendFunctionEnv(method, arguments)
+		// Validate argument count
+		if len(arguments) != len(method.Parameters) {
+			return newError("%d:%d:%s: runtime error: argument count mismatch for method %s: expected %d arguments, got %d",
+				node.Token.Pos.Line, node.Token.Pos.Column, node.Token.File, name, len(method.Parameters), len(arguments))
+		}
+		// Create environment for method execution that extends the INSTANCE environment
+		// This ensures that property assignments in the method affect this specific instance
+		extendedEnv := object.NewEnclosedEnvironment(receiverInstance.Env)
+		for paramIdx, param := range method.Parameters {
+			extendedEnv.Set(param.Value, arguments[paramIdx])
+		}
 		return Eval(method.Body, extendedEnv)
 	} else {
 		return newError("not a method: %s", name)
@@ -73,6 +83,12 @@ func evaluatePackageMethod(node *ast.MethodExpression, receiver *object.Package,
 	function, err := receiver.GetPackageFunction(name)
 	if err != nil {
 		return newError("%d:%d:%s: runtime error: %s", node.Token.Pos.Line, node.Token.Pos.Column, node.Token.File, err.Error())
+	}
+
+	// Validate argument count
+	if len(arguments) != len(function.Parameters) {
+		return newError("%d:%d:%s: runtime error: argument count mismatch for function %s: expected %d arguments, got %d",
+			node.Token.Pos.Line, node.Token.Pos.Column, node.Token.File, name, len(function.Parameters), len(arguments))
 	}
 
 	evaluated := Eval(function.Body, extendFunctionEnv(function, arguments))

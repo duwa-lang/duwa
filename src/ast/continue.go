@@ -1,6 +1,6 @@
 package ast
 
-import "github.com/sevenreup/duwa/src/token"
+import "github.com/duwa-lang/duwa/src/token"
 
 type ContinueStatement struct {
 	Token token.Token

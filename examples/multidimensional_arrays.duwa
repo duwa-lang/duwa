@@ -1,0 +1,87 @@
+// Multi-Dimensional Arrays Example
+// This file demonstrates the multi-dimensional array support in Duwa
+
+lembanzr("=== Multi-Dimensional Arrays in Duwa ===");
+lembanzr("");
+
+// 1. Creating a 2D array (matrix)
+lembanzr("1. Creating a 3x3 matrix:");
+nambala[][] matrix = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+];
+lembanzr("   Matrix created successfully");
+
+// 2. Accessing elements
+lembanzr("");
+lembanzr("2. Accessing matrix elements:");
+lembanzr("   matrix[0][0] = ", matrix[0][0]);
+lembanzr("   matrix[1][1] = ", matrix[1][1]);
+lembanzr("   matrix[2][2] = ", matrix[2][2]);
+
+// 3. Accessing entire rows
+lembanzr("");
+lembanzr("3. Accessing entire row:");
+nambala[] row1 = matrix[1];
+lembanzr("   Row 1: [", row1[0], ", ", row1[1], ", ", row1[2], "]");
+
+// 4. Modifying elements
+lembanzr("");
+lembanzr("4. Modifying matrix:");
+matrix[0][0] = 100;
+matrix[2][2] = 900;
+lembanzr("   matrix[0][0] = ", matrix[0][0]);
+lembanzr("   matrix[2][2] = ", matrix[2][2]);
+
+// 5. 3D array (cube)
+lembanzr("");
+lembanzr("5. Creating a 3D array:");
+nambala[][][] cube = [
+    [[1, 2], [3, 4]],
+    [[5, 6], [7, 8]]
+];
+lembanzr("   cube[0][0][0] = ", cube[0][0][0]);
+lembanzr("   cube[1][1][1] = ", cube[1][1][1]);
+
+// 6. Jagged arrays (arrays with different lengths)
+lembanzr("");
+lembanzr("6. Jagged arrays:");
+nambala[][] jagged = [
+    [1],
+    [2, 3],
+    [4, 5, 6]
+];
+lembanzr("   jagged[0] length: ", jagged[0].kutalika());
+lembanzr("   jagged[1] length: ", jagged[1].kutalika());
+lembanzr("   jagged[2] length: ", jagged[2].kutalika());
+
+// 7. Iterating through a 2D array
+lembanzr("");
+lembanzr("7. Iterating through 2D array:");
+nambala[][] data = [[1, 2], [3, 4], [5, 6]];
+nambala sum = 0;
+nambala i = 0;
+pamene (i < data.kutalika()) {
+    nambala j = 0;
+    nambala[] row = data[i];
+    pamene (j < row.kutalika()) {
+        sum = sum + row[j];
+        j = j + 1;
+    }
+    i = i + 1;
+}
+lembanzr("   Sum of all elements: ", sum);
+
+// 8. Using array methods with nested arrays
+lembanzr("");
+lembanzr("8. Array methods on nested arrays:");
+nambala[][] arrayForMethods = [[1, 2, 3]];
+nambala[] firstRow = arrayForMethods[0];
+lembanzr("   Original length: ", firstRow.kutalika());
+firstRow.kankha(4);
+lembanzr("   After push: ", firstRow.kutalika());
+lembanzr("   New element: ", firstRow[3]);
+
+lembanzr("");
+lembanzr("=== All examples completed successfully! ===");

@@ -1,9 +1,11 @@
-package all
+package modules
 
 import (
-	"github.com/sevenreup/duwa/src/modules/console"
-	"github.com/sevenreup/duwa/src/modules/math"
-	"github.com/sevenreup/duwa/src/object"
+	"github.com/duwa-lang/duwa/src/modules/console"
+	"github.com/duwa-lang/duwa/src/modules/debug"
+	"github.com/duwa-lang/duwa/src/modules/math"
+	"github.com/duwa-lang/duwa/src/object"
+	"maps"
 )
 
 var Modules = map[string]*object.LibraryModule{}
@@ -13,19 +15,26 @@ func Builtins() map[string]object.LibraryModule {
 	result := map[string]object.LibraryModule{
 		"khonso": *console.Module(),
 		"masamu": *math.Module(),
+		"debug":  *debug.Module(),
 	}
 
 	return result
 }
 
 func init() {
-	for k, v := range console.Builtins() {
-		Functions[k] = v
-	}
+	maps.Copy(Functions, console.Builtins())
 	modules := Builtins()
 	for k, v := range modules {
 		Modules[k] = &v
 	}
+}
+
+func RegisterModule(name string, module *object.LibraryModule) {
+	Modules[name] = module
+}
+
+func RegisterFunction(name string, function *object.LibraryFunction) {
+	Functions[name] = function
 }
 
 func ImportModule(path string) (object.Object, bool) {

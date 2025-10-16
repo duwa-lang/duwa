@@ -3,7 +3,7 @@ package ast
 import (
 	"bytes"
 
-	"github.com/sevenreup/duwa/src/token"
+	"github.com/duwa-lang/duwa/src/token"
 )
 
 type ClassStatement struct {

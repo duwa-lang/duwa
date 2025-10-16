@@ -1,9 +1,9 @@
 package evaluator
 
 import (
-	"github.com/sevenreup/duwa/src/ast"
-	"github.com/sevenreup/duwa/src/object"
-	"github.com/sevenreup/duwa/src/values"
+	"github.com/duwa-lang/duwa/src/ast"
+	"github.com/duwa-lang/duwa/src/object"
+	"github.com/duwa-lang/duwa/src/values"
 )
 
 func evaluateAssigment(node *ast.AssigmentStatement, env *object.Environment) object.Object {
@@ -16,6 +16,8 @@ func evaluateAssigment(node *ast.AssigmentStatement, env *object.Environment) ob
 		return evaluateIdentifierAssignment(smt, val, env)
 	case *ast.IndexExpression:
 		return evaluateIndexAssignment(smt, val, env)
+	case *ast.PropertyExpression:
+		return evaluatePropertyAssignment(smt, val, env)
 	}
 	return nil
 }
@@ -31,7 +33,7 @@ func evaluateIndexAssignment(node *ast.IndexExpression, val object.Object, env *
 
 	left, ok := l.(*object.Array)
 	if !ok {
-		return newError("index operator not supported: %s", left.Type())
+		return newError("index operator not supported: %s", l.Type())
 	}
 
 	idx := int(index.(*object.Integer).Value.IntPart())
@@ -52,4 +54,24 @@ func evaluateIndexAssignment(node *ast.IndexExpression, val object.Object, env *
 	elements[idx] = val
 
 	return nil
+}
+
+func evaluatePropertyAssignment(node *ast.PropertyExpression, val object.Object, env *object.Environment) object.Object {
+	left := Eval(node.Left, env)
+
+	if isError(left) {
+		return left
+	}
+
+	switch receiver := left.(type) {
+	case *object.Instance:
+		property := node.Property.(*ast.Identifier)
+		// Set the property directly in the instance's environment store
+		// This ensures each instance has its own property values
+		receiver.Env.SetLocal(property.Value, val)
+		return nil
+	default:
+		return newError("%d:%d:%s: runtime error: cannot assign property on %s",
+			node.Token.Pos.Line, node.Token.Pos.Column, node.Token.File, left.Type())
+	}
 }

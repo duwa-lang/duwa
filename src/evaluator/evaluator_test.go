@@ -4,11 +4,11 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/sevenreup/duwa/src/object"
-	"github.com/sevenreup/duwa/src/parser"
-	"github.com/sevenreup/duwa/src/utils"
-	"github.com/sevenreup/duwa/src/utils/environment"
-	"github.com/sevenreup/duwa/src/values"
+	"github.com/duwa-lang/duwa/src/object"
+	"github.com/duwa-lang/duwa/src/parser"
+	"github.com/duwa-lang/duwa/src/utils"
+	"github.com/duwa-lang/duwa/src/utils/environment"
+	"github.com/duwa-lang/duwa/src/values"
 	"github.com/shopspring/decimal"
 )
 
@@ -181,11 +181,11 @@ func TestErrorHandling(t *testing.T) {
 	}{
 		{
 			"5 + zoona;",
-			"(1:4:): type mismatch: INTEGER + BOOLEAN",
+			"(1:3:): type mismatch: INTEGER + BOOLEAN",
 		},
 		{
 			"5 + zoona; 5;",
-			"(1:4:): type mismatch: INTEGER + BOOLEAN",
+			"(1:3:): type mismatch: INTEGER + BOOLEAN",
 		},
 		{
 			"-zoona",
@@ -647,5 +647,157 @@ func TestImport(t *testing.T) {
 		} else {
 			utils.TestNullObject(t, evaluated)
 		}
+	}
+}
+
+func TestFunctionArgumentCountValidation(t *testing.T) {
+	tests := []struct {
+		name            string
+		input           string
+		expectedMessage string
+	}{
+		{
+			name: "Too few arguments - 0 instead of 2",
+			input: `
+				ndondomeko add(a, b) {
+					bweza a + b;
+				}
+				add();
+			`,
+			expectedMessage: "runtime error: argument count mismatch: expected 2 arguments, got 0",
+		},
+		{
+			name: "Too few arguments - 1 instead of 2",
+			input: `
+				ndondomeko add(a, b) {
+					bweza a + b;
+				}
+				add(5);
+			`,
+			expectedMessage: "runtime error: argument count mismatch: expected 2 arguments, got 1",
+		},
+		{
+			name: "Too many arguments - 3 instead of 2",
+			input: `
+				ndondomeko add(a, b) {
+					bweza a + b;
+				}
+				add(1, 2, 3);
+			`,
+			expectedMessage: "runtime error: argument count mismatch: expected 2 arguments, got 3",
+		},
+		{
+			name: "Too few arguments - 0 instead of 1",
+			input: `
+				ndondomeko square(x) {
+					bweza x * x;
+				}
+				square();
+			`,
+			expectedMessage: "runtime error: argument count mismatch: expected 1 arguments, got 0",
+		},
+		{
+			name: "Too many arguments - 2 instead of 1",
+			input: `
+				ndondomeko square(x) {
+					bweza x * x;
+				}
+				square(5, 10);
+			`,
+			expectedMessage: "runtime error: argument count mismatch: expected 1 arguments, got 2",
+		},
+		{
+			name: "Too many arguments for no-parameter function",
+			input: `
+				ndondomeko greet() {
+					bweza "Hello";
+				}
+				greet(5);
+			`,
+			expectedMessage: "runtime error: argument count mismatch: expected 0 arguments, got 1",
+		},
+		{
+			name: "Nested function call with argument mismatch",
+			input: `
+				ndondomeko outer(x) {
+					ndondomeko inner(a, b) {
+						bweza a + b;
+					}
+					bweza inner(x);
+				}
+				outer(5);
+			`,
+			expectedMessage: "runtime error: argument count mismatch: expected 2 arguments, got 1",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			evaluated := testEval(tt.input)
+			errObj, ok := evaluated.(*object.Error)
+			if !ok {
+				t.Fatalf("expected error object, got=%T(%+v)", evaluated, evaluated)
+			}
+			if errObj.Message != tt.expectedMessage {
+				t.Errorf("wrong error message.\nexpected=%q\ngot=%q",
+					tt.expectedMessage, errObj.Message)
+			}
+		})
+	}
+}
+
+func TestFunctionArgumentCountSuccess(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    string
+		expected int64
+	}{
+		{
+			name: "No parameters, no arguments",
+			input: `
+				ndondomeko greet() {
+					bweza 42;
+				}
+				greet();
+			`,
+			expected: 42,
+		},
+		{
+			name: "One parameter, one argument",
+			input: `
+				ndondomeko square(x) {
+					bweza x * x;
+				}
+				square(5);
+			`,
+			expected: 25,
+		},
+		{
+			name: "Two parameters, two arguments",
+			input: `
+				ndondomeko add(a, b) {
+					bweza a + b;
+				}
+				add(3, 7);
+			`,
+			expected: 10,
+		},
+		{
+			name: "Three parameters, three arguments",
+			input: `
+				ndondomeko add3(a, b, c) {
+					bweza a + b + c;
+				}
+				add3(1, 2, 3);
+			`,
+			expected: 6,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			evaluated := testEval(tt.input)
+			utils.TestIntegerObject(t, evaluated, decimal.NewFromInt(tt.expected))
+		})
 	}
 }

@@ -1,0 +1,35 @@
+tenga debug mu "debug";
+
+// Test basic debugging functionality
+nambala x = 5;
+nambala y = 10;
+
+// Print all variables
+lembanzr("=== Variables in scope ===");
+debug.lembaVars();
+
+// Test function to demonstrate call stack
+ndondomeko phatikiza(a, b) {
+    lembanzr("Inside phatikiza function");
+    debug.stackTrace();
+    bweza a + b;
+}
+
+// Call the function
+lembanzr("\n=== Calling phatikiza ===");
+nambala result = phatikiza(x, y);
+lembanzr("Result: ");
+lembanzr(result);
+
+// Test inspect functionality
+lembanzr("\n=== Inspecting values ===");
+lembanzr(debug.funso(x));
+lembanzr(debug.funso(result));
+
+// Check if debugging is enabled
+lembanzr("\n=== Debug status ===");
+ngati (debug.zimitsidwa()) {
+    lembanzr("Debugging is ENABLED");
+} kapena {
+    lembanzr("Debugging is DISABLED");
+}

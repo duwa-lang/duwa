@@ -8,7 +8,7 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/sevenreup/duwa/src/token"
+	"github.com/duwa-lang/duwa/src/token"
 )
 
 type Lexer struct {
@@ -244,6 +244,7 @@ func (l *Lexer) ReadString() token.Token {
 
 func (l *Lexer) ReadNumber(current rune) token.Token {
 	number := string(current)
+	hasDecimal := false
 	for {
 		r, _, err := l.r.ReadRune()
 		if err != nil {
@@ -256,8 +257,19 @@ func (l *Lexer) ReadNumber(current rune) token.Token {
 		l.pos.Column++
 		if unicode.IsDigit(r) {
 			number += string(r)
+		} else if r == '.' && !hasDecimal {
+			nextRune := l.Peek()
+			if unicode.IsDigit(nextRune) {
+				hasDecimal = true
+				number += string(r)
+			} else {
+				l.r.UnreadRune()
+				l.pos.Column--
+				break
+			}
 		} else {
 			l.r.UnreadRune()
+			l.pos.Column--
 			break
 		}
 	}

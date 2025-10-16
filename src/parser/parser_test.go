@@ -6,8 +6,8 @@ import (
 
 	"github.com/shopspring/decimal"
 
-	"github.com/sevenreup/duwa/src/ast"
-	"github.com/sevenreup/duwa/src/token"
+	"github.com/duwa-lang/duwa/src/ast"
+	"github.com/duwa-lang/duwa/src/token"
 )
 
 func checkParserErrors(t *testing.T, p *Parser) {

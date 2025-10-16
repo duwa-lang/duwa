@@ -2,8 +2,9 @@ package ast
 
 import (
 	"bytes"
-	"github.com/sevenreup/duwa/src/token"
 	"strings"
+
+	"github.com/duwa-lang/duwa/src/token"
 )
 
 type ArrayLiteral struct {
