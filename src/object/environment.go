@@ -93,6 +93,10 @@ func (e *Environment) Set(name string, val Object) Object {
 }
 
 func (e *Environment) SetLocal(name string, val Object) Object {
+	if val == nil {
+		return NewError("cannot set nil value for variable: %s", name)
+	}
+
 	e.store[name] = val
 
 	// Notify observers of variable change
