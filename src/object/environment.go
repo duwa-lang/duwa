@@ -18,7 +18,7 @@ func NewEnclosedEnvironment(outer *Environment) *Environment {
 
 func NewDefaultEnvironment() *Environment {
 	logger := slog.Default()
-	store := make(map[string]Object)
+	store := make(map[string]Object, 16)
 	console := native.NewConsole()
 	return &Environment{
 		store:           store,
@@ -26,13 +26,13 @@ func NewDefaultEnvironment() *Environment {
 		Logger:          logger,
 		Console:         console,
 		ObserverManager: runtime.NewObserverManager(),
-		callStack:       make([]runtime.CallFrame, 0),
+		callStack:       make([]runtime.CallFrame, 0, 8),
 	}
 }
 
 func CopyEnvironmentDefaults(outer *Environment) *Environment {
 	return &Environment{
-		store:           make(map[string]Object),
+		store:           make(map[string]Object, 8),
 		outer:           nil,
 		Logger:          outer.Logger,
 		Console:         outer.Console,
@@ -42,14 +42,14 @@ func CopyEnvironmentDefaults(outer *Environment) *Environment {
 }
 
 func New(logger *slog.Logger, console runtime.Console) *Environment {
-	s := make(map[string]Object)
+	s := make(map[string]Object, 16)
 	return &Environment{
 		store:           s,
 		outer:           nil,
 		Logger:          logger,
 		Console:         console,
 		ObserverManager: runtime.NewObserverManager(),
-		callStack:       make([]runtime.CallFrame, 0),
+		callStack:       make([]runtime.CallFrame, 0, 8),
 	}
 }
 
@@ -61,7 +61,6 @@ type Environment struct {
 	Logger  *slog.Logger
 	Console runtime.Console
 
-	// Debugging and observation
 	ObserverManager *runtime.ObserverManager
 	callStack       []runtime.CallFrame
 }
@@ -75,7 +74,6 @@ func (e *Environment) Get(name string) (Object, bool) {
 }
 
 func (e *Environment) Set(name string, val Object) Object {
-	// TODO: Make sure we dont accidentally mutate data that is not in the current scope
 	_, ok := e.store[name]
 	if !ok && e.outer != nil {
 		e.outer.Set(name, val)
@@ -83,11 +81,12 @@ func (e *Environment) Set(name string, val Object) Object {
 	}
 	e.store[name] = val
 
-	// Notify observers of variable change
-	e.NotifyObservers(runtime.EventVariableSet, map[string]interface{}{
-		"name":  name,
-		"value": val.String(),
-	})
+	if e.ObserverManager != nil && e.ObserverManager.HasObservers() {
+		e.NotifyObservers(runtime.EventVariableSet, map[string]interface{}{
+			"name":  name,
+			"value": val.String(),
+		})
+	}
 
 	return val
 }
@@ -99,11 +98,12 @@ func (e *Environment) SetLocal(name string, val Object) Object {
 
 	e.store[name] = val
 
-	// Notify observers of variable change
-	e.NotifyObservers(runtime.EventVariableSet, map[string]interface{}{
-		"name":  name,
-		"value": val.String(),
-	})
+	if e.ObserverManager != nil && e.ObserverManager.HasObservers() {
+		e.NotifyObservers(runtime.EventVariableSet, map[string]interface{}{
+			"name":  name,
+			"value": val.String(),
+		})
+	}
 
 	return val
 }
@@ -156,26 +156,24 @@ func (e *Environment) CallE(function string, args []Object) (Object, error) {
 	return result, nil
 }
 
-// PushCallFrame adds a new frame to the call stack
 func (e *Environment) PushCallFrame(frame runtime.CallFrame) {
-	e.callStack = append(e.callStack, frame)
+	if e.ObserverManager != nil && e.ObserverManager.HasObservers() {
+		e.callStack = append(e.callStack, frame)
+	}
 }
 
-// PopCallFrame removes the top frame from the call stack
 func (e *Environment) PopCallFrame() {
 	if len(e.callStack) > 0 {
 		e.callStack = e.callStack[:len(e.callStack)-1]
 	}
 }
 
-// GetCallStack returns a copy of the current call stack
 func (e *Environment) GetCallStack() []runtime.CallFrame {
 	stack := make([]runtime.CallFrame, len(e.callStack))
 	copy(stack, e.callStack)
 	return stack
 }
 
-// GetCurrentFrame returns the current call frame (top of stack)
 func (e *Environment) GetCurrentFrame() *runtime.CallFrame {
 	if len(e.callStack) > 0 {
 		return &e.callStack[len(e.callStack)-1]
@@ -183,7 +181,6 @@ func (e *Environment) GetCurrentFrame() *runtime.CallFrame {
 	return nil
 }
 
-// NotifyObservers sends an event to all registered observers
 func (e *Environment) NotifyObservers(eventType runtime.EventType, data map[string]interface{}) {
 	if e.ObserverManager != nil && e.ObserverManager.HasObservers() {
 		event := runtime.Event{

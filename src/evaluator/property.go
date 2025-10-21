@@ -38,17 +38,13 @@ func evaluateLibraryModuleProperty(node *ast.PropertyExpression, module *object.
 func evaluateInstanceProperty(node *ast.PropertyExpression, instance *object.Instance) object.Object {
 	property := node.Property.(*ast.Identifier)
 
-	if instance.Env.Has(property.Value) {
-		val, _ := instance.Env.Get(property.Value)
+	if val, ok := instance.Env.Get(property.Value); ok {
 		return val
 	}
 
-	if instance.Class.Env.Has(property.Value) {
-		val, _ := instance.Class.Env.Get(property.Value)
+	if val, ok := instance.Class.Env.Get(property.Value); ok {
 		return val
 	}
 
-	// If the property is not found in the instance or the class, return NULL
-	instance.Env.Set(property.Value, values.NULL)
 	return values.NULL
 }

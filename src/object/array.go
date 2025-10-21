@@ -1,7 +1,6 @@
 package object
 
 import (
-	"bytes"
 	"strings"
 
 	"github.com/shopspring/decimal"
@@ -19,13 +18,14 @@ type Array struct {
 func (ao *Array) Type() ObjectType { return ARRAY_OBJ }
 
 func (ao *Array) String() string {
-	var out bytes.Buffer
-	elements := []string{}
-	for _, e := range ao.Elements {
-		elements = append(elements, e.String())
-	}
+	var out strings.Builder
 	out.WriteString("[")
-	out.WriteString(strings.Join(elements, ", "))
+	for i, e := range ao.Elements {
+		if i > 0 {
+			out.WriteString(", ")
+		}
+		out.WriteString(e.String())
+	}
 	out.WriteString("]")
 	return out.String()
 }
@@ -79,16 +79,8 @@ func (list *Array) methodShift(_ []Object) (Object, bool) {
 // method=Kankha args=[any] return={number}
 // Adds one or more elements to the end of an array and returns the new length of the array.
 func (list *Array) methodPush(args []Object) (Object, bool) {
-	length := len(list.Elements)
-	newLength := length + 1
-
-	newElements := make([]Object, newLength)
-	copy(newElements, list.Elements)
-	newElements[length] = args[0]
-
-	list.Elements = newElements
-
-	return &Integer{Value: decimal.NewFromInt(int64(newLength))}, true
+	list.Elements = append(list.Elements, args[0])
+	return &Integer{Value: decimal.NewFromInt(int64(len(list.Elements)))}, true
 }
 
 // method=join args=[string] return={string}

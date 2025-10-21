@@ -22,30 +22,31 @@ func evaluateFunctionCall(node *ast.CallExpression, env *object.Environment) obj
 }
 
 func applyFunction(tok token.Token, fn object.Object, args []object.Object, env *object.Environment) object.Object {
-	// Prepare function name and arguments for observation
-	functionName := tok.Literal
-	argStrs := make([]string, len(args))
-	for i, arg := range args {
-		argStrs[i] = arg.String()
+	hasObservers := env.ObserverManager != nil && env.ObserverManager.HasObservers()
+
+	if hasObservers {
+		functionName := tok.Literal
+		argStrs := make([]string, len(args))
+		for i, arg := range args {
+			argStrs[i] = arg.String()
+		}
+		argsStr := strings.Join(argStrs, ", ")
+
+		env.NotifyObservers(runtime.EventFunctionCall, map[string]any{
+			"function": functionName,
+			"args":     argsStr,
+		})
+
+		env.PushCallFrame(runtime.CallFrame{
+			FunctionName: functionName,
+			Location: runtime.Location{
+				File:   tok.File,
+				Line:   tok.Pos.Line,
+				Column: tok.Pos.Column,
+			},
+			Locals: map[string]string{},
+		})
 	}
-	argsStr := strings.Join(argStrs, ", ")
-
-	// Notify observers before function call
-	env.NotifyObservers(runtime.EventFunctionCall, map[string]interface{}{
-		"function": functionName,
-		"args":     argsStr,
-	})
-
-	// Push call frame
-	env.PushCallFrame(runtime.CallFrame{
-		FunctionName: functionName,
-		Location: runtime.Location{
-			File:   tok.File,
-			Line:   tok.Pos.Line,
-			Column: tok.Pos.Column,
-		},
-		Locals: map[string]string{},
-	})
 
 	var result object.Object
 
@@ -68,18 +69,18 @@ func applyFunction(tok token.Token, fn object.Object, args []object.Object, env 
 		result = newError("not a function: %s", fn.Type())
 	}
 
-	// Pop call frame
-	env.PopCallFrame()
+	if hasObservers {
+		env.PopCallFrame()
 
-	// Notify observers after function return
-	resultStr := "null"
-	if result != nil {
-		resultStr = result.String()
+		resultStr := "null"
+		if result != nil {
+			resultStr = result.String()
+		}
+		env.NotifyObservers(runtime.EventFunctionReturn, map[string]interface{}{
+			"function": tok.Literal,
+			"result":   resultStr,
+		})
 	}
-	env.NotifyObservers(runtime.EventFunctionReturn, map[string]interface{}{
-		"function": functionName,
-		"result":   resultStr,
-	})
 
 	return result
 }
@@ -90,7 +91,6 @@ func extendFunctionEnv(
 ) *object.Environment {
 	env := object.NewEnclosedEnvironment(fn.Env)
 
-	// Arguments are validated before calling this function, safe to access
 	for paramIdx, param := range fn.Parameters {
 		env.Set(param.Value, args[paramIdx])
 	}

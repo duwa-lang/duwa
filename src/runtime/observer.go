@@ -4,7 +4,6 @@ import (
 	"github.com/duwa-lang/duwa/src/ast"
 )
 
-// EventType represents different types of runtime events
 type EventType string
 
 const (
@@ -17,7 +16,6 @@ const (
 	EventError          EventType = "error"
 )
 
-// Event represents a runtime event with associated data
 type Event struct {
 	Type     EventType
 	Node     ast.Node
@@ -25,60 +23,53 @@ type Event struct {
 	Location Location
 }
 
-// Location represents a source code location
 type Location struct {
 	File   string
 	Line   int
 	Column int
 }
 
-// CallFrame represents a single frame in the call stack
 type CallFrame struct {
 	FunctionName string
 	Location     Location
-	Locals       map[string]string // variable name -> value representation
+	Locals       map[string]string
 }
 
-// RuntimeObserver is an interface for observing runtime events
 type RuntimeObserver interface {
-	// OnEvent is called when a runtime event occurs
 	OnEvent(event Event)
-
-	// Name returns the name of this observer
 	Name() string
-
-	// Enabled returns whether this observer is currently active
 	Enabled() bool
 }
 
-// ObserverManager manages multiple runtime observers
 type ObserverManager struct {
-	observers []RuntimeObserver
+	observers      []RuntimeObserver
+	hasObservers   bool
+	needsRecompute bool
 }
 
-// NewObserverManager creates a new observer manager
 func NewObserverManager() *ObserverManager {
 	return &ObserverManager{
-		observers: make([]RuntimeObserver, 0),
+		observers:      make([]RuntimeObserver, 0),
+		hasObservers:   false,
+		needsRecompute: false,
 	}
 }
 
-// Register adds a new observer
 func (om *ObserverManager) Register(observer RuntimeObserver) {
 	om.observers = append(om.observers, observer)
+	om.needsRecompute = true
 }
 
-// Unregister removes an observer by name
 func (om *ObserverManager) Unregister(name string) {
 	for i, obs := range om.observers {
 		if obs.Name() == name {
 			om.observers = append(om.observers[:i], om.observers[i+1:]...)
+			om.needsRecompute = true
 			return
 		}
 	}
 }
 
-// Notify sends an event to all enabled observers
 func (om *ObserverManager) Notify(event Event) {
 	for _, observer := range om.observers {
 		if observer.Enabled() {
@@ -87,12 +78,22 @@ func (om *ObserverManager) Notify(event Event) {
 	}
 }
 
-// HasObservers returns true if there are any enabled observers
 func (om *ObserverManager) HasObservers() bool {
-	for _, observer := range om.observers {
-		if observer.Enabled() {
-			return true
-		}
+	if len(om.observers) == 0 {
+		om.hasObservers = false
+		return false
 	}
-	return false
+
+	if om.needsRecompute {
+		om.hasObservers = false
+		for _, observer := range om.observers {
+			if observer.Enabled() {
+				om.hasObservers = true
+				break
+			}
+		}
+		om.needsRecompute = false
+	}
+
+	return om.hasObservers
 }
