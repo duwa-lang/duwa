@@ -181,11 +181,11 @@ func TestErrorHandling(t *testing.T) {
 	}{
 		{
 			"5 + zoona;",
-			"(1:3:): type mismatch: INTEGER + BOOLEAN",
+			"type mismatch: INTEGER + BOOLEAN",
 		},
 		{
 			"5 + zoona; 5;",
-			"(1:3:): type mismatch: INTEGER + BOOLEAN",
+			"type mismatch: INTEGER + BOOLEAN",
 		},
 		{
 			"-zoona",
@@ -224,7 +224,7 @@ func TestErrorHandling(t *testing.T) {
 		},
 		{
 			`{"dzina": "Maliko"}[ndondomeko d(x) { x }];`,
-			"1:20:: runtime error: unusable as map key: FUNCTION",
+			"unusable as map key: FUNCTION",
 		},
 	}
 	for _, tt := range tests {

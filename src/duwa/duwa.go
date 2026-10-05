@@ -31,7 +31,7 @@ func (c *Duwa) RunFile(filePath string) object.Object {
 		log.Fatal(err)
 	}
 	c.Environment.SetDirectory(filepath.Dir(filePath))
-	return c.run(file)
+	return c.runAt(file, filepath.Base(filePath))
 }
 
 func (c *Duwa) Run(data string) object.Object {
@@ -39,10 +39,20 @@ func (c *Duwa) Run(data string) object.Object {
 }
 
 func (c *Duwa) run(data []byte) object.Object {
-	parser := parser.NewParser()
-	file := parser.ParseFile(data)
-	if len(parser.Errors()) != 0 {
-		utils.PrintParserErrors(c.Environment.Logger, parser.Errors())
+	p := parser.NewParser()
+	file := p.ParseFile(data)
+	if len(p.Errors()) != 0 {
+		utils.PrintParserErrors(c.Environment.Logger, p.Errors())
+		return nil
+	}
+	return evaluator.Eval(file, c.Environment)
+}
+
+func (c *Duwa) runAt(data []byte, filename string) object.Object {
+	p := parser.NewParser()
+	file := p.ParseFileAt(data, filename)
+	if len(p.Errors()) != 0 {
+		utils.PrintParserErrors(c.Environment.Logger, p.Errors())
 		return nil
 	}
 	return evaluator.Eval(file, c.Environment)

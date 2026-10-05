@@ -110,7 +110,12 @@ func newError(format string, a ...interface{}) *object.Error {
 }
 
 func newErrorNode(tk token.Token, format string, a ...interface{}) *object.Error {
-	return &object.Error{Message: fmt.Sprintf("(%d:%d:%s): %s", tk.Pos.Line, tk.Pos.Column, tk.File, fmt.Sprintf(format, a...))}
+	return &object.Error{
+		Message: fmt.Sprintf(format, a...),
+		Line:    tk.Pos.Line,
+		Column:  tk.Pos.Column,
+		File:    tk.File,
+	}
 }
 
 func isError(obj object.Object) bool {

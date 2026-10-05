@@ -41,6 +41,6 @@ func evalInfixExpression(
 		return newErrorNode(node.Token, "type mismatch: %s %s %s",
 			left.Type(), operator, right.Type())
 	}
-	return newError("unknown operator: %s %s %s",
+	return newErrorNode(node.Token, "unknown operator: %s %s %s",
 		left.Type(), operator, right.Type())
 }
