@@ -44,7 +44,7 @@ func evaluateMapIndex(node *ast.IndexExpression, left, index object.Object) obje
 	key, ok := index.(object.Mappable)
 
 	if !ok {
-		return newError("%d:%d:%s: runtime error: unusable as map key: %s", node.Token.Pos.Line, node.Token.Pos.Column, node.Token.File, index.Type())
+		return newErrorNode(node.Token, "unusable as map key: %s", index.Type())
 	}
 
 	pair, ok := mapObject.Pairs[key.MapKey()]

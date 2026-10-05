@@ -143,6 +143,11 @@ func (p *Parser) nextToken() {
 	p.peekToken = p.l.NextToken()
 }
 
+func (p *Parser) ParseFileAt(value []byte, filename string) *ast.File {
+	p.l.SetFile(filename)
+	return p.ParseFile(value)
+}
+
 func (p *Parser) ParseFile(value []byte) *ast.File {
 	p.l.Handle(value)
 
@@ -199,7 +204,8 @@ func (parser *Parser) registerPostfix(tokenType token.TokenType, fn postfixParse
 }
 
 func (p *Parser) noPrefixParseFnError(t token.TokenType) {
-	msg := fmt.Sprintf("no prefix parse function for %s found", t)
+	msg := fmt.Sprintf("%d:%d: syntax error: unexpected token %s",
+		p.curToken.Pos.Line, p.curToken.Pos.Column, t)
 	p.errors = append(p.errors, msg)
 }
 

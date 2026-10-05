@@ -16,7 +16,7 @@ func evalIdentifier(
 
 	val, ok := env.Get(node.Value)
 	if !ok {
-		return newError("identifier not found: " + node.Value)
+		return newErrorNode(node.Token, "identifier not found: %s", node.Value)
 	}
 
 	return val

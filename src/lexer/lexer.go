@@ -12,8 +12,9 @@ import (
 )
 
 type Lexer struct {
-	r   *bufio.Reader
-	pos token.Position
+	r    *bufio.Reader
+	pos  token.Position
+	file string
 }
 
 type TokenInfo struct {
@@ -26,6 +27,10 @@ func NewLexel() *Lexer {
 	return &Lexer{}
 }
 
+func (l *Lexer) SetFile(name string) {
+	l.file = name
+}
+
 func (l *Lexer) Handle(value []byte) {
 	l.r = bufio.NewReader(bytes.NewReader(value))
 	l.pos = token.Position{Line: 1, Column: 0}
@@ -36,7 +41,7 @@ func (l *Lexer) NextToken() token.Token {
 		r, _, err := l.r.ReadRune()
 		if err != nil {
 			if err == io.EOF {
-				return newToken(l.pos, token.EOF, "")
+				return l.newToken(l.pos, token.EOF, "")
 			}
 			fmt.Println("failed", l.pos.Line, l.pos.Column)
 			panic(err)
@@ -47,31 +52,31 @@ func (l *Lexer) NextToken() token.Token {
 		case '\n':
 			l.resetPosition()
 		case ';':
-			return newToken(l.pos, token.SEMICOLON, ";")
+			return l.newToken(l.pos, token.SEMICOLON, ";")
 		case '"', '\'':
 			return l.ReadString()
 		case '+':
 			nextRune := l.Peek()
 			if nextRune == '+' {
 				l.Next()
-				return newToken(l.pos, token.PLUS_PLUS, "++")
+				return l.newToken(l.pos, token.PLUS_PLUS, "++")
 			} else if nextRune == '=' {
 				l.Next()
-				return newToken(l.pos, token.PLUS_EQUAL, "+=")
+				return l.newToken(l.pos, token.PLUS_EQUAL, "+=")
 			}
-			return newToken(l.pos, token.PLUS, "+")
+			return l.newToken(l.pos, token.PLUS, "+")
 		case '-':
 			nextRune := l.Peek()
 			if nextRune == '-' {
 				l.Next()
-				return newToken(l.pos, token.MINUS_MINUS, "--")
+				return l.newToken(l.pos, token.MINUS_MINUS, "--")
 			} else if nextRune == '=' {
 				l.Next()
-				return newToken(l.pos, token.MINUS_EQUAL, "-=")
+				return l.newToken(l.pos, token.MINUS_EQUAL, "-=")
 			}
-			return newToken(l.pos, token.MINUS, "-")
+			return l.newToken(l.pos, token.MINUS, "-")
 		case ':':
-			return newToken(l.pos, token.COLON, ":")
+			return l.newToken(l.pos, token.COLON, ":")
 		case '/':
 			nextRune := l.Peek()
 			if nextRune == '/' {
@@ -84,7 +89,7 @@ func (l *Lexer) NextToken() token.Token {
 					r, _, err := l.r.ReadRune()
 					if err != nil {
 						if err == io.EOF {
-							return newToken(l.pos, token.EOF, "")
+							return l.newToken(l.pos, token.EOF, "")
 						}
 						panic(err)
 					}
@@ -99,78 +104,78 @@ func (l *Lexer) NextToken() token.Token {
 					builder.WriteString(string(r))
 				}
 				builder.WriteString("*/")
-				newToken(l.pos, token.MULTILINE_COMMENT, builder.String())
+				l.newToken(l.pos, token.MULTILINE_COMMENT, builder.String())
 			} else if nextRune == '=' {
 				l.Next()
-				return newToken(l.pos, token.SLASH_EQUAL, "/=")
+				return l.newToken(l.pos, token.SLASH_EQUAL, "/=")
 			} else {
-				return newToken(l.pos, token.SLASH, "/")
+				return l.newToken(l.pos, token.SLASH, "/")
 			}
 		case '{':
-			return newToken(l.pos, token.OPENING_BRACE, "{")
+			return l.newToken(l.pos, token.OPENING_BRACE, "{")
 		case '}':
-			return newToken(l.pos, token.CLOSING_BRACE, "}")
+			return l.newToken(l.pos, token.CLOSING_BRACE, "}")
 		case '(':
-			return newToken(l.pos, token.OPENING_PAREN, "(")
+			return l.newToken(l.pos, token.OPENING_PAREN, "(")
 		case ')':
-			return newToken(l.pos, token.CLOSING_PAREN, ")")
+			return l.newToken(l.pos, token.CLOSING_PAREN, ")")
 		case '[':
-			return newToken(l.pos, token.OPENING_BRACKET, "[")
+			return l.newToken(l.pos, token.OPENING_BRACKET, "[")
 		case ']':
-			return newToken(l.pos, token.CLOSING_BRACKET, "]")
+			return l.newToken(l.pos, token.CLOSING_BRACKET, "]")
 		case '.':
-			return newToken(l.pos, token.FULL_STOP, ".")
+			return l.newToken(l.pos, token.FULL_STOP, ".")
 		case ',':
-			return newToken(l.pos, token.COMMA, ",")
+			return l.newToken(l.pos, token.COMMA, ",")
 		case '=':
 			nextRune := l.Peek()
 			if nextRune == '=' {
 				l.Next()
-				return newToken(l.pos, token.EQUAL_TO, "==")
+				return l.newToken(l.pos, token.EQUAL_TO, "==")
 			}
-			return newToken(l.pos, token.ASSIGN, "=")
+			return l.newToken(l.pos, token.ASSIGN, "=")
 		case '>':
 			nextRune := l.Peek()
 			if nextRune == '=' {
 				l.Next()
-				return newToken(l.pos, token.GREATER_THAN_OR_EQUAL_TO, ">=")
+				return l.newToken(l.pos, token.GREATER_THAN_OR_EQUAL_TO, ">=")
 			}
-			return newToken(l.pos, token.GREATER_THAN, ">")
+			return l.newToken(l.pos, token.GREATER_THAN, ">")
 		case '<':
 			nextRune := l.Peek()
 			if nextRune == '=' {
 				l.Next()
-				return newToken(l.pos, token.LESS_THAN_OR_EQUAL_TO, "<=")
+				return l.newToken(l.pos, token.LESS_THAN_OR_EQUAL_TO, "<=")
 			}
-			return newToken(l.pos, token.LESS_THAN, "<")
+			return l.newToken(l.pos, token.LESS_THAN, "<")
 		case '!':
 			nextRune := l.Peek()
 			if nextRune == '=' {
 				l.Next()
-				return newToken(l.pos, token.NOT_EQUAL_TO, "!=")
+				return l.newToken(l.pos, token.NOT_EQUAL_TO, "!=")
 			}
-			return newToken(l.pos, token.BANG, "!")
+			return l.newToken(l.pos, token.BANG, "!")
 		case '*':
 			nextRune := l.Peek()
 			if nextRune == '=' {
 				l.Next()
-				return newToken(l.pos, token.STAR_EQUAL, "*=")
+				return l.newToken(l.pos, token.STAR_EQUAL, "*=")
 			}
-			return newToken(l.pos, token.ASTERISK, "*")
+			return l.newToken(l.pos, token.ASTERISK, "*")
 		case '&':
 			nextRune := l.Peek()
 			if nextRune == '&' {
 				l.Next()
-				return newToken(l.pos, token.AND_AND, "&&")
+				return l.newToken(l.pos, token.AND_AND, "&&")
 			}
-			return newToken(l.pos, token.AMPERSAND, "&")
+			return l.newToken(l.pos, token.AMPERSAND, "&")
 		case '|':
 			nextRune := l.Peek()
 			if nextRune == '|' {
 				l.Next()
-				return newToken(l.pos, token.OR_OR, "||")
+				return l.newToken(l.pos, token.OR_OR, "||")
 			}
-			return newToken(l.pos, token.OR, "|")
+			return l.newToken(l.pos, token.OR, "|")
 		default:
 			if unicode.IsSpace(r) {
 				continue
@@ -179,7 +184,7 @@ func (l *Lexer) NextToken() token.Token {
 			} else if unicode.IsDigit(r) {
 				return l.ReadNumber(r)
 			}
-			return newToken(l.pos, token.STR, string(r))
+			return l.newToken(l.pos, token.STR, string(r))
 		}
 	}
 }
@@ -206,7 +211,7 @@ func (l *Lexer) ReadComment() token.Token {
 		r, _, err := l.r.ReadRune()
 		if err != nil {
 			if err == io.EOF {
-				return newToken(l.pos, token.EOF, "")
+				return l.newToken(l.pos, token.EOF, "")
 			}
 			panic(err)
 		}
@@ -219,7 +224,7 @@ func (l *Lexer) ReadComment() token.Token {
 			rawString += string(r)
 		}
 	}
-	return newToken(newPos, token.COMMENT, rawString)
+	return l.newToken(newPos, token.COMMENT, rawString)
 }
 
 func (l *Lexer) ReadString() token.Token {
@@ -228,7 +233,7 @@ func (l *Lexer) ReadString() token.Token {
 		r, _, err := l.r.ReadRune()
 		if err != nil {
 			if err == io.EOF {
-				return newToken(l.pos, token.EOF, "")
+				return l.newToken(l.pos, token.EOF, "")
 			}
 			panic(err)
 		}
@@ -239,7 +244,7 @@ func (l *Lexer) ReadString() token.Token {
 			rawString += string(r)
 		}
 	}
-	return newToken(l.pos, token.STR, rawString)
+	return l.newToken(l.pos, token.STR, rawString)
 }
 
 func (l *Lexer) ReadNumber(current rune) token.Token {
@@ -273,7 +278,7 @@ func (l *Lexer) ReadNumber(current rune) token.Token {
 			break
 		}
 	}
-	return newToken(l.pos, token.INT, number)
+	return l.newToken(l.pos, token.INT, number)
 }
 
 func (l *Lexer) ReadIdentifier(current rune) token.Token {
@@ -295,7 +300,7 @@ func (l *Lexer) ReadIdentifier(current rune) token.Token {
 			break
 		}
 	}
-	return newToken(l.pos, token.LookupIdent(identifier), identifier)
+	return l.newToken(l.pos, token.LookupIdent(identifier), identifier)
 }
 
 func validIdentifierSymbol(symbol rune) bool {
@@ -307,9 +312,8 @@ func (l *Lexer) resetPosition() {
 	l.pos.Column = 0
 }
 
-func newToken(pos token.Position, tokenType token.TokenType, ch string) token.Token {
-	// TODO: Add file name
-	return token.Token{Type: tokenType, Literal: ch, Pos: pos, File: ""}
+func (l *Lexer) newToken(pos token.Position, tokenType token.TokenType, ch string) token.Token {
+	return token.Token{Type: tokenType, Literal: ch, Pos: pos, File: l.file}
 }
 
 func (l *Lexer) AccumTokens() []TokenInfo {

@@ -31,8 +31,7 @@ func evaluateLibraryModuleProperty(node *ast.PropertyExpression, module *object.
 	}
 
 	// Property not found in module
-	return newError("%d:%d:%s: runtime error: undefined property %s for library module %s",
-		node.Token.Pos.Line, node.Token.Pos.Column, node.Token.File, property.Value, module.Name)
+	return newErrorNode(node.Token, "undefined property %s for library module %s", property.Value, module.Name)
 }
 
 func evaluateInstanceProperty(node *ast.PropertyExpression, instance *object.Instance) object.Object {

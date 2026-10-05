@@ -33,7 +33,7 @@ func evaluateMethod(node *ast.MethodExpression, env *object.Environment) object.
 			return applyFunction(node.Token, function, arguments, env)
 		}
 
-		return newError("%d:%d:%s: runtime error: undefined library %s for Library %s", node.Token.Pos.Line, node.Token.Pos.Column, node.Token.File, method.Value, receiver.Name)
+		return newErrorNode(node.Token, "undefined library %s for Library %s", method.Value, receiver.Name)
 	case *object.Instance:
 		method := node.Method.(*ast.Identifier)
 		evaluated := evaluateInstanceMethod(node, receiver, method.Value, arguments)
@@ -47,7 +47,7 @@ func evaluateMethod(node *ast.MethodExpression, env *object.Environment) object.
 		return evaluatePackageMethod(node, receiver, node.Method.(*ast.Identifier).Value, arguments)
 	default:
 		if !found {
-			return newError("%d:%d:%s: runtime error: undefined method %s for %s", node.Token.Pos.Line, node.Token.Pos.Column, node.Token.File, node.Method.(*ast.Identifier).Value, node.Left.String())
+			return newErrorNode(node.Token, "undefined method %s for %s", node.Method.(*ast.Identifier).Value, node.Left.String())
 		}
 	}
 
@@ -58,14 +58,14 @@ func evaluateInstanceMethod(node *ast.MethodExpression, receiverInstance *object
 	method, ok := receiverInstance.Class.Env.Get(name)
 
 	if !ok {
-		return newError("%d:%d:%s: runtime error: undefined instance method %s for class %s", node.Token.Pos.Line, node.Token.Pos.Column, node.Token.File, name, receiverInstance.Class.Name.Value)
+		return newErrorNode(node.Token, "undefined instance method %s for class %s", name, receiverInstance.Class.Name.Value)
 	}
 
 	if method, ok := method.(*object.Function); ok {
 		// Validate argument count
 		if len(arguments) != len(method.Parameters) {
-			return newError("%d:%d:%s: runtime error: argument count mismatch for method %s: expected %d arguments, got %d",
-				node.Token.Pos.Line, node.Token.Pos.Column, node.Token.File, name, len(method.Parameters), len(arguments))
+			return newErrorNode(node.Token, "argument count mismatch for method %s: expected %d arguments, got %d",
+				name, len(method.Parameters), len(arguments))
 		}
 		// Create environment for method execution that extends the INSTANCE environment
 		// This ensures that property assignments in the method affect this specific instance
@@ -75,20 +75,20 @@ func evaluateInstanceMethod(node *ast.MethodExpression, receiverInstance *object
 		}
 		return Eval(method.Body, extendedEnv)
 	} else {
-		return newError("not a method: %s", name)
+		return newErrorNode(node.Token, "not a method: %s", name)
 	}
 }
 
 func evaluatePackageMethod(node *ast.MethodExpression, receiver *object.Package, name string, arguments []object.Object) object.Object {
 	function, err := receiver.GetPackageFunction(name)
 	if err != nil {
-		return newError("%d:%d:%s: runtime error: %s", node.Token.Pos.Line, node.Token.Pos.Column, node.Token.File, err.Error())
+		return newErrorNode(node.Token, "%s", err.Error())
 	}
 
 	// Validate argument count
 	if len(arguments) != len(function.Parameters) {
-		return newError("%d:%d:%s: runtime error: argument count mismatch for function %s: expected %d arguments, got %d",
-			node.Token.Pos.Line, node.Token.Pos.Column, node.Token.File, name, len(function.Parameters), len(arguments))
+		return newErrorNode(node.Token, "argument count mismatch for function %s: expected %d arguments, got %d",
+			name, len(function.Parameters), len(arguments))
 	}
 
 	evaluated := Eval(function.Body, extendFunctionEnv(function, arguments))

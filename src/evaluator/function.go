@@ -61,12 +61,12 @@ func applyFunction(tok token.Token, fn object.Object, args []object.Object, env 
 		result = fn.Evaluate(env, args)
 	case *object.Class:
 		if tok.Literal != fn.Name.TokenLiteral() {
-			result = newError("class name mismatch: expected %s, got %s", fn.Name.TokenLiteral(), tok.Literal)
+			result = newErrorNode(tok, "class name mismatch: expected %s, got %s", fn.Name.TokenLiteral(), tok.Literal)
 		} else {
 			result = fn.CreateInstance(tok.Literal, args)
 		}
 	default:
-		result = newError("not a function: %s", fn.Type())
+		result = newErrorNode(tok, "not a function: %s", fn.Type())
 	}
 
 	if hasObservers {

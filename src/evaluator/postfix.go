@@ -12,11 +12,11 @@ func evaluatePostfix(node *ast.PostfixExpression, env *object.Environment) objec
 		value, ok := env.Get(node.Token.Literal)
 
 		if !ok {
-			return newError("%d:%d:%s: runtime error: identifier not found: %s", node.Token.Pos.Line, node.Token.Pos.Column, node.Token.File, node.Token.Literal)
+			return newErrorNode(node.Token, "identifier not found: %s", node.Token.Literal)
 		}
 
 		if value.Type() != object.INTEGER_OBJ {
-			return newError("%d:%d:%s: runtime error: identifier is not a number: %s", node.Token.Pos.Line, node.Token.Pos.Column, node.Token.File, node.Token.Literal)
+			return newErrorNode(node.Token, "identifier is not a number: %s", node.Token.Literal)
 		}
 
 		one := decimal.NewFromInt(1)
@@ -32,11 +32,11 @@ func evaluatePostfix(node *ast.PostfixExpression, env *object.Environment) objec
 		value, ok := env.Get(node.Token.Literal)
 
 		if !ok {
-			return newError("%d:%d:%s: runtime error: identifier not found: %s", node.Token.Pos.Line, node.Token.Pos.Column, node.Token.File, node.Token.Literal)
+			return newErrorNode(node.Token, "identifier not found: %s", node.Token.Literal)
 		}
 
 		if value.Type() != object.INTEGER_OBJ {
-			return newError("%d:%d:%s: runtime error: identifier is not a number: %s", node.Token.Pos.Line, node.Token.Pos.Column, node.Token.File, node.Token.Literal)
+			return newErrorNode(node.Token, "identifier is not a number: %s", node.Token.Literal)
 		}
 
 		one := decimal.NewFromInt(1)
@@ -49,6 +49,6 @@ func evaluatePostfix(node *ast.PostfixExpression, env *object.Environment) objec
 
 		return newValue
 	default:
-		return newError("%d:%d:%s: runtime error: unknown operator: %s", node.Token.Pos.Line, node.Token.Pos.Column, node.Token.File, node.Operator)
+		return newErrorNode(node.Token, "unknown operator: %s", node.Operator)
 	}
 }

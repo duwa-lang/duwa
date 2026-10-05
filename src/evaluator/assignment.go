@@ -40,7 +40,7 @@ func evaluateIndexAssignment(node *ast.IndexExpression, val object.Object, env *
 	elements := left.Elements
 
 	if idx < 0 {
-		return newError("%d:%d:%s: runtime error: index out of range: %d", node.Token.Pos.Line, node.Token.Pos.Column, node.Token.File, idx)
+		return newErrorNode(node.Token, "index out of range: %d", idx)
 	}
 
 	if idx >= len(elements) {
@@ -71,7 +71,6 @@ func evaluatePropertyAssignment(node *ast.PropertyExpression, val object.Object,
 		receiver.Env.SetLocal(property.Value, val)
 		return nil
 	default:
-		return newError("%d:%d:%s: runtime error: cannot assign property on %s",
-			node.Token.Pos.Line, node.Token.Pos.Column, node.Token.File, left.Type())
+		return newErrorNode(node.Token, "cannot assign property on %s", left.Type())
 	}
 }

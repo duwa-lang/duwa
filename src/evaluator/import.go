@@ -38,7 +38,7 @@ func evaluateImportStatement(node *ast.ImportStatement, env *object.Environment)
 func handleStdImport(filePath string, node *ast.ImportStatement, env *object.Environment) object.Object {
 	module, ok := modules.ImportModule(filePath)
 	if !ok {
-		return newError("%d:%d:%s: runtime error: %s", node.Token.Pos.Line, node.Token.Pos.Column, node.Token.File, "Failed to import std moduler")
+		return newErrorNode(node.Token, "failed to import std module")
 	}
 
 	env.Set(filePath, module)
@@ -49,17 +49,17 @@ func handleStdImport(filePath string, node *ast.ImportStatement, env *object.Env
 func evaluateFile(filePath string, node *ast.ImportStatement, env *object.Environment) object.Object {
 	source, err := os.ReadFile(filePath)
 	if err != nil {
-		return newError("%d:%d:%s: runtime error: %s", node.Token.Pos.Line, node.Token.Pos.Column, node.Token.File, err.Error())
+		return newErrorNode(node.Token, "%s", err.Error())
 	}
 
 	parser := parser.NewParser()
-	file := parser.ParseFile([]byte(source))
+	file := parser.ParseFileAt([]byte(source), filepath.Base(filePath))
 
 	if len(parser.Errors()) != 0 {
 		for _, err := range parser.Errors() {
 			env.Logger.Error(err)
 		}
-		return newError("%d:%d:%s: runtime error: %s", node.Token.Pos.Line, node.Token.Pos.Column, node.Token.File, parser.Errors()[0])
+		return newErrorNode(node.Token, "%s", parser.Errors()[0])
 	}
 
 	newEnvironment := object.CopyEnvironmentDefaults(env)
@@ -82,13 +82,13 @@ func addImportToEnvironment(node *ast.ImportStatement, env *object.Environment, 
 			value, ok := newEnvironment.Get(export.Value)
 
 			if !ok {
-				return newError("%d:%d:%s: runtime error: %s is not exported", node.Token.Pos.Line, node.Token.Pos.Column, node.Token.File, export.Value)
+				return newErrorNode(node.Token, "%s is not exported", export.Value)
 			}
 
 			env.Set(alias, value)
 		}
 	} else {
-		return newError("%d:%d:%s: runtime error: invalid import type %s", node.Token.Pos.Line, node.Token.Pos.Column, node.Token.File, node.Type)
+		return newErrorNode(node.Token, "invalid import type %s", node.Type)
 	}
 
 	return nil
